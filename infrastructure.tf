@@ -41,7 +41,7 @@ resource "digitalocean_kubernetes_cluster" "foreign_language_reader" {
 }
 
 module "infrastructure" {
-  source             = "./infrastructure/terraform"
+  source             = "./terraform"
   cluster_name       = digitalocean_kubernetes_cluster.foreign_language_reader.name
   digitalocean_token = var.digitalocean_token
 }
