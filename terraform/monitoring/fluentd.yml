@@ -1,0 +1,7 @@
+elasticsearch:
+  auth:
+    enabled: true
+    user: fluentd
+  host: logs-es-http.logging.svc.cluster.local
+  scheme: https
+  sslVerify: false
