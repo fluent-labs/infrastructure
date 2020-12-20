@@ -4,7 +4,7 @@ terraform {
     organization = "foreign-language-reader"
 
     workspaces {
-      name = "foreign-language-reader"
+      name = "infrastructure"
     }
   }
 }
