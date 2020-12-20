@@ -35,13 +35,13 @@ resource "digitalocean_kubernetes_cluster" "foreign_language_reader" {
     name       = "worker-pool"
     size       = "s-2vcpu-4gb"
     auto_scale = true
-    min_nodes  = 3
-    max_nodes  = 6
+    min_nodes  = 1
+    max_nodes  = 3
   }
 }
 
-module "infrastructure" {
-  source             = "./terraform"
-  cluster_name       = digitalocean_kubernetes_cluster.foreign_language_reader.name
-  digitalocean_token = var.digitalocean_token
-}
+# module "infrastructure" {
+#   source             = "./terraform"
+#   cluster_name       = digitalocean_kubernetes_cluster.foreign_language_reader.name
+#   digitalocean_token = var.digitalocean_token
+# }
