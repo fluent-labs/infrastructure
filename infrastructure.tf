@@ -51,6 +51,11 @@ resource "digitalocean_kubernetes_cluster" "foreign_language_reader" {
   }
 }
 
+resource "digitalocean_container_registry" "api_registry" {
+  name                   = "foreign-language-reader-api"
+  subscription_tier_slug = "starter"
+}
+
 # module "infrastructure" {
 #   source             = "./terraform"
 #   cluster_name       = digitalocean_kubernetes_cluster.foreign_language_reader.name
