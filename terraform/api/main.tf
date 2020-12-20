@@ -1,9 +1,14 @@
-data "digitalocean_kubernetes_cluster" "foreign_language_reader" {
-  name = var.cluster_name
+terraform {
+  required_providers {
+    digitalocean = {
+      source  = "digitalocean/digitalocean"
+      version = "2.3.0"
+    }
+  }
 }
 
-data "digitalocean_database_cluster" "api_mysql" {
-  name = var.database_name
+data "digitalocean_kubernetes_cluster" "foreign_language_reader" {
+  name = var.cluster_name
 }
 
 resource "kubernetes_service" "api" {
@@ -16,7 +21,7 @@ resource "kubernetes_service" "api" {
       app = "api"
     }
     port {
-      port = 4000
+      port = 9000
     }
     type = "ClusterIP"
   }
@@ -60,86 +65,12 @@ resource "kubernetes_deployment" "api" {
       }
 
       spec {
-
-        init_container {
-          image   = local.api_image
-          name    = "migrate-database"
-          command = ["bin/api", "eval", "'Api.Release.migrate'"]
-
-          env {
-            name = "DATABASE_URL"
-            value_from {
-              secret_key_ref {
-                name = "api-database-credentials"
-                key  = "connection_string"
-              }
-            }
-          }
-
-          env {
-            name = "SECRET_KEY_BASE"
-            value_from {
-              secret_key_ref {
-                name = "api-secret-key-base"
-                key  = "secret_key_base"
-              }
-            }
-          }
-
-          # Needed to keep from crashing the job
-          env {
-            name  = "AUTH_TOKEN"
-            value = "none"
-          }
-
-          env {
-            name  = "LANGUAGE_SERVICE_URL"
-            value = "none"
-          }
-
-        }
-
         container {
-          image = local.api_image
+          image = "registry.digitalocean.com/foreign-language-reader-api/api:latest"
           name  = "api"
 
-          env {
-            name = "AUTH_TOKEN"
-            value_from {
-              secret_key_ref {
-                name = "local-connection-token"
-                key  = "local_connection_token"
-              }
-            }
-          }
-
-          env {
-            name = "DATABASE_URL"
-            value_from {
-              secret_key_ref {
-                name = "api-database-credentials"
-                key  = "connection_string"
-              }
-            }
-          }
-
-          env {
-            name  = "LANGUAGE_SERVICE_URL"
-            value = "http://language-service.${var.env}.svc.cluster.local:8000"
-          }
-
-          env {
-            name = "SECRET_KEY_BASE"
-            value_from {
-              secret_key_ref {
-                name = "api-secret-key-base"
-                key  = "secret_key_base"
-              }
-            }
-          }
-
           port {
-            container_port = 4000
+            container_port = 9000
           }
 
           resources {
@@ -154,7 +85,7 @@ resource "kubernetes_deployment" "api" {
           liveness_probe {
             http_get {
               path = "/health"
-              port = 4000
+              port = 9000
             }
 
             initial_delay_seconds = 60
@@ -165,8 +96,8 @@ resource "kubernetes_deployment" "api" {
 
           readiness_probe {
             http_get {
-              path = "/health"
-              port = 4000
+              path = "/readiness"
+              port = 9000
             }
 
             initial_delay_seconds = 60
@@ -189,40 +120,40 @@ resource "kubernetes_deployment" "api" {
   }
 
   # The deployment will not come up without the database connection
-  depends_on = [
-    digitalocean_database_user.api_user,
-    digitalocean_database_db.api_database,
-    kubernetes_secret.api_database_credentials
-  ]
+  # depends_on = [
+  #   digitalocean_database_user.api_user,
+  #   digitalocean_database_db.api_database,
+  #   kubernetes_secret.api_database_credentials
+  # ]
 }
 
 # Configure database
 
-resource "digitalocean_database_user" "api_user" {
-  cluster_id = data.digitalocean_database_cluster.api_mysql.id
-  name       = "api-${var.env}"
-}
+# resource "digitalocean_database_user" "api_user" {
+#   cluster_id = data.digitalocean_database_cluster.api_mysql.id
+#   name       = "api-${var.env}"
+# }
 
-resource "digitalocean_database_db" "api_database" {
-  cluster_id = data.digitalocean_database_cluster.api_mysql.id
-  name       = "foreign-language-reader-${var.env}"
-}
+# resource "digitalocean_database_db" "api_database" {
+#   cluster_id = data.digitalocean_database_cluster.api_mysql.id
+#   name       = "foreign-language-reader-${var.env}"
+# }
 
-resource "kubernetes_secret" "api_database_credentials" {
-  metadata {
-    name      = "api-database-credentials"
-    namespace = var.env
-  }
+# resource "kubernetes_secret" "api_database_credentials" {
+#   metadata {
+#     name      = "api-database-credentials"
+#     namespace = var.env
+#   }
 
-  data = {
-    username          = digitalocean_database_user.api_user.name
-    password          = digitalocean_database_user.api_user.password
-    host              = data.digitalocean_database_cluster.api_mysql.private_host
-    port              = data.digitalocean_database_cluster.api_mysql.port
-    database          = digitalocean_database_db.api_database.name
-    connection_string = "ecto://${digitalocean_database_user.api_user.name}:${digitalocean_database_user.api_user.password}@${data.digitalocean_database_cluster.api_mysql.private_host}:${data.digitalocean_database_cluster.api_mysql.port}/${digitalocean_database_db.api_database.name}"
-  }
-}
+#   data = {
+#     username          = digitalocean_database_user.api_user.name
+#     password          = digitalocean_database_user.api_user.password
+#     host              = data.digitalocean_database_cluster.api_mysql.private_host
+#     port              = data.digitalocean_database_cluster.api_mysql.port
+#     database          = digitalocean_database_db.api_database.name
+#     connection_string = "ecto://${digitalocean_database_user.api_user.name}:${digitalocean_database_user.api_user.password}@${data.digitalocean_database_cluster.api_mysql.private_host}:${data.digitalocean_database_cluster.api_mysql.port}/${digitalocean_database_db.api_database.name}"
+#   }
+# }
 
 # Secret key base powers encryption at rest for the database
 
