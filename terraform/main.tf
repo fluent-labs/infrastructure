@@ -39,7 +39,7 @@ provider "helm" {
 
 # Service container registries
 module "container_registries" {
-  source                = "./container_registries"
+  source = "./container_registries"
 }
 
 # Mysql database to store user context.
