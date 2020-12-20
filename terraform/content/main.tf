@@ -31,14 +31,14 @@ resource "aws_s3_bucket" "definitions" {
   acl    = "private"
 }
 
-resource "helm_release" "zeppelin" {
-  name       = "zeppelin"
-  repository = "https://kubernetes-charts.storage.googleapis.com"
-  chart      = "zeppelin"
-  version    = "1.1.1"
-  namespace  = "content"
+# resource "helm_release" "zeppelin" {
+#   name       = "zeppelin"
+#   repository = "https://kubernetes-charts.storage.googleapis.com"
+#   chart      = "zeppelin"
+#   version    = "1.1.1"
+#   namespace  = "content"
 
-  depends_on = [
-    kubernetes_namespace.content
-  ]
-}
+#   depends_on = [
+#     kubernetes_namespace.content
+#   ]
+# }

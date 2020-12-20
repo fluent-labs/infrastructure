@@ -33,28 +33,28 @@ module "container_registries" {
 }
 
 # Mysql database to store user context.
-module "database" {
-  source       = "./database"
-  cluster_name = var.cluster_name
-  node_count   = 1
-  size         = "db-s-1vcpu-1gb"
-}
+# module "database" {
+#   source       = "./database"
+#   cluster_name = var.cluster_name
+#   node_count   = 1
+#   size         = "db-s-1vcpu-1gb"
+# }
 
 # Static content served to users
 
-module "frontend" {
-  source       = "./static_bucket"
-  domain       = digitalocean_domain.main.name
-  subdomain    = "www"
-  deploy_users = [aws_iam_user.github.name]
-}
+# module "frontend" {
+#   source       = "./static_bucket"
+#   domain       = digitalocean_domain.main.name
+#   subdomain    = "www"
+#   deploy_users = [aws_iam_user.github.name]
+# }
 
-module "storybook" {
-  source       = "./static_bucket"
-  domain       = digitalocean_domain.main.name
-  subdomain    = "storybook"
-  deploy_users = [aws_iam_user.github.name]
-}
+# module "storybook" {
+#   source       = "./static_bucket"
+#   domain       = digitalocean_domain.main.name
+#   subdomain    = "storybook"
+#   deploy_users = [aws_iam_user.github.name]
+# }
 
 # QA environment
 
@@ -68,14 +68,14 @@ resource "kubernetes_namespace" "qa" {
   }
 }
 
-module "api_qa" {
-  source        = "./api"
-  cluster_name  = var.cluster_name
-  database_name = module.database.database_name
-  env           = "qa"
-  min_replicas  = 1
-  max_replicas  = 1
-}
+# module "api_qa" {
+#   source        = "./api"
+#   cluster_name  = var.cluster_name
+#   database_name = module.database.database_name
+#   env           = "qa"
+#   min_replicas  = 1
+#   max_replicas  = 1
+# }
 
 # Production environment
 
@@ -89,14 +89,14 @@ resource "kubernetes_namespace" "prod" {
   }
 }
 
-module "api" {
-  source        = "./api"
-  cluster_name  = var.cluster_name
-  database_name = module.database.database_name
-  env           = "prod"
-  min_replicas  = 2
-  max_replicas  = 10
-}
+# module "api" {
+#   source        = "./api"
+#   cluster_name  = var.cluster_name
+#   database_name = module.database.database_name
+#   env           = "prod"
+#   min_replicas  = 2
+#   max_replicas  = 10
+# }
 
 # Content infrastructure
 # Spark jobs that scrape wiktionary for definitions
@@ -108,9 +108,9 @@ module "content" {
 }
 
 # Contains logging and monitoring configuration
-module "monitoring" {
-  source = "./monitoring"
-}
+# module "monitoring" {
+#   source = "./monitoring"
+# }
 
 # Ingress
 # Handles traffic going in to the cluster
@@ -179,25 +179,6 @@ resource "aws_iam_access_key" "github" {
 
 resource "aws_iam_user" "github" {
   name = "foreign-language-reader-github"
-}
-
-# Token used for connecting between services
-resource "random_password" "local_connection_token" {
-  length  = 64
-  special = true
-}
-
-resource "kubernetes_secret" "local_connection_token" {
-  for_each = toset(["default", "content"])
-
-  metadata {
-    name      = "local-connection-token"
-    namespace = each.value
-  }
-
-  data = {
-    local_connection_token = random_password.local_connection_token.result
-  }
 }
 
 # TLS
