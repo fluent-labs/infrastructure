@@ -22,11 +22,6 @@ terraform {
 
 variable "digitalocean_token" {}
 
-provider "aws" {
-  profile = "default"
-  region  = "us-west-2"
-}
-
 provider "digitalocean" {
   token = var.digitalocean_token
 }

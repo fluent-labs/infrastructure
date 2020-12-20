@@ -40,8 +40,6 @@ provider "helm" {
 # Service container registries
 module "container_registries" {
   source                = "./container_registries"
-  push_users            = [aws_iam_user.github.name]
-  kubernetes_namespaces = ["qa", "prod", "content"]
 }
 
 # Mysql database to store user context.
@@ -181,16 +179,6 @@ resource "kubernetes_ingress" "foreign_language_reader_ingress" {
 
 resource "digitalocean_domain" "main" {
   name = "foreignlanguagereader.com"
-}
-
-# Deploy user for github actions
-# Will be given ECR push and S3 sync access
-resource "aws_iam_access_key" "github" {
-  user = aws_iam_user.github.name
-}
-
-resource "aws_iam_user" "github" {
-  name = "foreign-language-reader-github"
 }
 
 # TLS

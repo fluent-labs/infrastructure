@@ -1,9 +1,3 @@
-data "aws_caller_identity" "current" {}
-
-locals {
-  api_image = "${data.aws_caller_identity.current.account_id}.dkr.ecr.us-west-2.amazonaws.com/foreign-language-reader-api:latest"
-}
-
 data "digitalocean_kubernetes_cluster" "foreign_language_reader" {
   name = var.cluster_name
 }
@@ -66,9 +60,6 @@ resource "kubernetes_deployment" "api" {
       }
 
       spec {
-        image_pull_secrets {
-          name = "aws-registry"
-        }
 
         init_container {
           image   = local.api_image
