@@ -100,11 +100,11 @@ resource "kubernetes_namespace" "prod" {
 }
 
 module "api" {
-  source        = "./api"
-  cluster_name  = var.cluster_name
-  env           = "prod"
-  min_replicas  = 1
-  max_replicas  = 10
+  source       = "./api"
+  cluster_name = var.cluster_name
+  env          = "prod"
+  min_replicas = 1
+  max_replicas = 10
 }
 
 # Content infrastructure
