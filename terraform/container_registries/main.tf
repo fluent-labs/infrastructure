@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    digitalocean = {
+      source  = "digitalocean/digitalocean"
+      version = "2.3.0"
+    }
+  }
+}
+
 # Container registries for use in this app.
 
 # module "api_registry" {
