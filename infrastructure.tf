@@ -22,11 +22,6 @@ terraform {
 
 variable "digitalocean_token" {}
 
-provider "aws" {
-  profile = "default"
-  region  = "us-west-2"
-}
-
 provider "digitalocean" {
   token = var.digitalocean_token
 }
@@ -51,8 +46,8 @@ resource "digitalocean_kubernetes_cluster" "foreign_language_reader" {
   }
 }
 
-# module "infrastructure" {
-#   source             = "./terraform"
-#   cluster_name       = digitalocean_kubernetes_cluster.foreign_language_reader.name
-#   digitalocean_token = var.digitalocean_token
-# }
+module "infrastructure" {
+  source             = "./terraform"
+  cluster_name       = digitalocean_kubernetes_cluster.foreign_language_reader.name
+  digitalocean_token = var.digitalocean_token
+}
