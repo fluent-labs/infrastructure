@@ -28,7 +28,7 @@ provider "acme" {
 resource "digitalocean_kubernetes_cluster" "foreign_language_reader" {
   name    = "foreign-language-reader"
   region  = "sfo2"
-  version = "1.16.6-do.2"
+  version = "1.19.3-do.2"
   tags    = ["prod"]
 
   node_pool {
