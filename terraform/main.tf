@@ -99,14 +99,13 @@ resource "kubernetes_namespace" "prod" {
   }
 }
 
-# module "api" {
-#   source        = "./api"
-#   cluster_name  = var.cluster_name
-#   database_name = module.database.database_name
-#   env           = "prod"
-#   min_replicas  = 2
-#   max_replicas  = 10
-# }
+module "api" {
+  source        = "./api"
+  cluster_name  = var.cluster_name
+  env           = "prod"
+  min_replicas  = 1
+  max_replicas  = 10
+}
 
 # Content infrastructure
 # Spark jobs that scrape wiktionary for definitions
