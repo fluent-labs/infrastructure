@@ -9,9 +9,9 @@ terraform {
 
 resource "helm_release" "nginx_ingress" {
   name       = "nginx-ingress"
-  repository = "https://kubernetes-charts.storage.googleapis.com/"
-  chart      = "nginx-ingress"
-  version    = "1.33.0"
+  repository = "https://helm.nginx.com/stable"
+  chart      = "nginx/nginx-ingress"
+  version    = "0.7.1"
 }
 
 # Use this to get the load balancer external IP for DNS configuration
