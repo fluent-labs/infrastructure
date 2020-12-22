@@ -65,8 +65,12 @@ resource "kubernetes_deployment" "api" {
       }
 
       spec {
+        image_pull_secrets {
+          name = "regcred"
+        }
+
         container {
-          image = "registry.digitalocean.com/foreign-language-reader-api/api:latest"
+          image = "lkjaero/foreign-language-reader-api:latest"
           name  = "api"
 
           port {
