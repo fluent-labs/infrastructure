@@ -145,33 +145,33 @@ module "nginx_ingress" {
   namespace       = "prod"
 }
 
-resource "kubernetes_ingress" "foreign_language_reader_ingress" {
-  metadata {
-    name = "foreign-language-reader-ingress"
-    annotations = {
-      "kubernetes.io/ingress.class"             = "nginx"
-      "nginx.ingress.kubernetes.io/enable-cors" = "true"
-    }
-  }
+# resource "kubernetes_ingress" "foreign_language_reader_ingress" {
+#   metadata {
+#     name = "foreign-language-reader-ingress"
+#     annotations = {
+#       "kubernetes.io/ingress.class"             = "nginx"
+#       "nginx.ingress.kubernetes.io/enable-cors" = "true"
+#     }
+#   }
 
-  spec {
-    tls {
-      secret_name = "nginx-certificate"
-    }
+#   spec {
+#     tls {
+#       secret_name = "nginx-certificate"
+#     }
 
-    rule {
-      host = "kibana.foreignlanguagereader.com"
-      http {
-        path {
-          backend {
-            service_name = "kibana-kibana"
-            service_port = 5601
-          }
-        }
-      }
-    }
-  }
-}
+#     rule {
+#       host = "kibana.foreignlanguagereader.com"
+#       http {
+#         path {
+#           backend {
+#             service_name = "kibana-kibana"
+#             service_port = 5601
+#           }
+#         }
+#       }
+#     }
+#   }
+# }
 
 resource "kubernetes_ingress" "prod_ingress" {
   metadata {
