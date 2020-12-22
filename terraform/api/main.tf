@@ -87,6 +87,26 @@ resource "kubernetes_deployment" "api" {
             }
           }
 
+          env {
+            name = "WEBSTER_LEARNERS_KEY"
+            value_from {
+              secret_key_ref {
+                name = "webster"
+                key  = "learners"
+              }
+            }
+          }
+
+          env {
+            name = "WEBSTER_SPANISH_KEY"
+            value_from {
+              secret_key_ref {
+                name = "webster"
+                key  = "spanish"
+              }
+            }
+          }
+
           resources {
             limits {
               memory = "500Mi"
