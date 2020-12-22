@@ -11,3 +11,7 @@ variable "private_key_pem" {}
 variable "certificate_pem" {}
 
 variable "issuer_pem" {}
+
+variable "namespace" {
+  description = "The kubernetes namespace to install in"
+}
