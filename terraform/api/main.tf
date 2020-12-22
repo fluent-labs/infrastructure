@@ -73,6 +73,16 @@ resource "kubernetes_deployment" "api" {
             container_port = 9000
           }
 
+          env {
+            name = "APPLICATION_SECRET"
+            value_from {
+              secret_key_ref {
+                name = "application-secret"
+                key  = "application_secret"
+              }
+            }
+          }
+
           resources {
             limits {
               memory = "500Mi"
@@ -157,18 +167,18 @@ resource "kubernetes_deployment" "api" {
 
 # Secret key base powers encryption at rest for the database
 
-resource "random_password" "api_secret_key_base" {
+resource "random_password" "application_secret" {
   length  = 64
   special = true
 }
 
-resource "kubernetes_secret" "api_secret_key_base" {
+resource "kubernetes_secret" "application-secret" {
   metadata {
-    name      = "api-secret-key-base"
+    name      = "application-secret"
     namespace = var.env
   }
 
   data = {
-    secret_key_base = random_password.api_secret_key_base.result
+    application_secret = random_password.application_secret.result
   }
 }
