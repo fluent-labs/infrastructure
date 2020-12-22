@@ -12,6 +12,7 @@ resource "helm_release" "nginx_ingress" {
   repository = "https://helm.nginx.com/stable"
   chart      = "nginx-ingress"
   version    = "0.7.1"
+  namespace  = var.namespace
 }
 
 # Use this to get the load balancer external IP for DNS configuration
@@ -24,7 +25,8 @@ data "kubernetes_service" "nginx" {
 
 resource "kubernetes_secret" "nginx_certificate" {
   metadata {
-    name = "nginx-certificate"
+    name      = "nginx-certificate"
+    namespace = var.namespace
   }
 
   data = {

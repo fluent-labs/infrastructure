@@ -125,22 +125,62 @@ module "content" {
 # Handles traffic going in to the cluster
 # Proxies everything through a load balancer and nginx
 
-module "nginx_ingress" {
+# module "nginx_ingress_logging" {
+#   source          = "./nginx_ingress"
+#   domain          = digitalocean_domain.main.name
+#   subdomains      = ["kibana"]
+#   private_key_pem = acme_certificate.certificate.private_key_pem
+#   certificate_pem = acme_certificate.certificate.certificate_pem
+#   issuer_pem      = acme_certificate.certificate.issuer_pem
+#   namespace       = "default"
+# }
+
+module "nginx_ingress_prod" {
   source          = "./nginx_ingress"
   domain          = digitalocean_domain.main.name
-  subdomains      = ["api", "kibana"]
+  subdomains      = ["api"]
   private_key_pem = acme_certificate.certificate.private_key_pem
   certificate_pem = acme_certificate.certificate.certificate_pem
   issuer_pem      = acme_certificate.certificate.issuer_pem
+  namespace       = "prod"
 }
 
-resource "kubernetes_ingress" "foreign_language_reader_ingress" {
+# resource "kubernetes_ingress" "foreign_language_reader_ingress" {
+#   metadata {
+#     name = "foreign-language-reader-ingress"
+#     annotations = {
+#       "kubernetes.io/ingress.class"             = "nginx"
+#       "nginx.ingress.kubernetes.io/enable-cors" = "true"
+#     }
+#   }
+
+#   spec {
+#     tls {
+#       secret_name = "nginx-certificate"
+#     }
+
+#     rule {
+#       host = "kibana.foreignlanguagereader.com"
+#       http {
+#         path {
+#           backend {
+#             service_name = "kibana-kibana"
+#             service_port = 5601
+#           }
+#         }
+#       }
+#     }
+#   }
+# }
+
+resource "kubernetes_ingress" "prod_ingress" {
   metadata {
     name = "foreign-language-reader-ingress"
     annotations = {
       "kubernetes.io/ingress.class"             = "nginx"
       "nginx.ingress.kubernetes.io/enable-cors" = "true"
     }
+    namespace = "prod"
   }
 
   spec {
@@ -154,25 +194,14 @@ resource "kubernetes_ingress" "foreign_language_reader_ingress" {
         path {
           backend {
             service_name = "api"
-            service_port = 4000
-          }
-        }
-      }
-    }
-
-    rule {
-      host = "kibana.foreignlanguagereader.com"
-      http {
-        path {
-          backend {
-            service_name = "kibana-kibana"
-            service_port = 5601
+            service_port = 9000
           }
         }
       }
     }
   }
 }
+
 
 # Shared resources for the cluster go down here.
 
