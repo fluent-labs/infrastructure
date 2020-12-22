@@ -19,6 +19,7 @@ resource "helm_release" "nginx_ingress" {
 data "kubernetes_service" "nginx" {
   metadata {
     name = "nginx-ingress-nginx-ingress"
+    namespace = var.namespace
   }
   depends_on = [helm_release.nginx_ingress]
 }
