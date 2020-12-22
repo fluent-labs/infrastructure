@@ -8,17 +8,17 @@ terraform {
 }
 
 resource "digitalocean_container_registry" "api_registry" {
-  name                   = "foreign-language-reader-api"
-  subscription_tier_slug = "starter"
+  name                   = "foreign-language-reader"
+  subscription_tier_slug = "basic"
 }
 
 resource "digitalocean_container_registry_docker_credentials" "api" {
   registry_name = digitalocean_container_registry.api_registry.name
 }
 
-resource "kubernetes_secret" "api" {
+resource "kubernetes_secret" "registry" {
   metadata {
-    name = "docker-cfg-api"
+    name = "docker-cfg"
   }
 
   data = {
