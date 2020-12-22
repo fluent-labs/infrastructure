@@ -125,17 +125,17 @@ module "content" {
 # Handles traffic going in to the cluster
 # Proxies everything through a load balancer and nginx
 
-module "nginx_ingress" {
-  source          = "./nginx_ingress"
-  domain          = digitalocean_domain.main.name
-  subdomains      = ["kibana"]
-  private_key_pem = acme_certificate.certificate.private_key_pem
-  certificate_pem = acme_certificate.certificate.certificate_pem
-  issuer_pem      = acme_certificate.certificate.issuer_pem
-  namespace       = "default"
-}
+# module "nginx_ingress_logging" {
+#   source          = "./nginx_ingress"
+#   domain          = digitalocean_domain.main.name
+#   subdomains      = ["kibana"]
+#   private_key_pem = acme_certificate.certificate.private_key_pem
+#   certificate_pem = acme_certificate.certificate.certificate_pem
+#   issuer_pem      = acme_certificate.certificate.issuer_pem
+#   namespace       = "default"
+# }
 
-module "nginx_ingress" {
+module "nginx_ingress_prod" {
   source          = "./nginx_ingress"
   domain          = digitalocean_domain.main.name
   subdomains      = ["api"]
