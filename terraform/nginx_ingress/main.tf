@@ -18,7 +18,7 @@ resource "helm_release" "nginx_ingress" {
 # Use this to get the load balancer external IP for DNS configuration
 data "kubernetes_service" "nginx" {
   metadata {
-    name = "nginx-ingress-nginx-ingress"
+    name      = "nginx-ingress-nginx-ingress"
     namespace = var.namespace
   }
   depends_on = [helm_release.nginx_ingress]
