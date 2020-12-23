@@ -1,9 +1,10 @@
 # Required for horizontal pod autoscaling to work
+# TODO update this location when a new home for this chart is found.
 resource "helm_release" "metrics_server" {
   name       = "metrics-server"
   repository = "https://kubernetes-charts.storage.googleapis.com"
   chart      = "metrics-server"
-  version    = "2.10.1"
+  version    = "2.11.4"
 }
 
 # Logging configuration
@@ -27,9 +28,9 @@ resource "random_password" "fluent_elasticsearch_password" {
 
 resource "helm_release" "fluentd_elasticsearch" {
   name       = "fluentd"
-  repository = "https://kiwigrid.github.io"
+  repository = "https://kokuwaio.github.io/helm-charts"
   chart      = "fluentd-elasticsearch"
-  version    = "6.2.2"
+  version    = "11.6.2"
   namespace  = "logging"
 
   values = [file("${path.module}/fluentd.yml")]
