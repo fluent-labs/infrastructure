@@ -107,6 +107,21 @@ resource "kubernetes_deployment" "api" {
             }
           }
 
+          env {
+            name = "ELASTICSEARCH_PASSWORD"
+            value_from {
+              secret_key_ref {
+                name = "elasticsearch_credentials"
+                key  = "password"
+              }
+            }
+          }
+
+          env {
+            name  = "ENVIRONMENT"
+            value = var.env
+          }
+
           resources {
             limits {
               memory = "500Mi"
@@ -204,5 +219,21 @@ resource "kubernetes_secret" "application-secret" {
 
   data = {
     application_secret = random_password.application_secret.result
+  }
+}
+
+resource "random_password" "elasticsearch_password" {
+  length  = 64
+  special = true
+}
+
+resource "kubernetes_secret" "elasticsearch-credentials" {
+  metadata {
+    name      = "elasticsearch_credentials"
+    namespace = var.env
+  }
+
+  data = {
+    password = random_password.elasticsearch_password.result
   }
 }
