@@ -117,9 +117,9 @@ module "content" {
 }
 
 # Contains logging and monitoring configuration
-# module "monitoring" {
-#   source = "./monitoring"
-# }
+module "monitoring" {
+  source = "./monitoring"
+}
 
 # Ingress
 # Handles traffic going in to the cluster
