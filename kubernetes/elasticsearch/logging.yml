@@ -4,7 +4,7 @@ metadata:
   name: logs
   namespace: logging
 spec:
-  version: 7.6.2
+  version: 7.10.1
   nodeSets:
   - name: logs
     count: 1
