@@ -1,11 +1,11 @@
 # Required for horizontal pod autoscaling to work
 # TODO update this location when a new home for this chart is found.
-resource "helm_release" "metrics_server" {
-  name       = "metrics-server"
-  repository = "https://kubernetes-charts.storage.googleapis.com"
-  chart      = "metrics-server"
-  version    = "2.11.4"
-}
+# resource "helm_release" "metrics_server" {
+#   name       = "metrics-server"
+#   repository = "https://kubernetes-charts.storage.googleapis.com"
+#   chart      = "metrics-server"
+#   version    = "2.11.4"
+# }
 
 # Logging configuration
 # Every node has a log collection agent that posts logs to elasticsearch
