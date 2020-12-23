@@ -111,7 +111,7 @@ resource "kubernetes_deployment" "api" {
             name = "ELASTICSEARCH_PASSWORD"
             value_from {
               secret_key_ref {
-                name = "elasticsearch_credentials"
+                name = "elasticsearch-credentials"
                 key  = "password"
               }
             }
@@ -227,9 +227,9 @@ resource "random_password" "elasticsearch_password" {
   special = true
 }
 
-resource "kubernetes_secret" "elasticsearch-credentials" {
+resource "kubernetes_secret" "elasticsearch_credentials" {
   metadata {
-    name      = "elasticsearch_credentials"
+    name      = "elasticsearch-credentials"
     namespace = var.env
   }
 
