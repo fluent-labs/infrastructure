@@ -137,7 +137,7 @@ resource "kubernetes_deployment" "api" {
               port = 9000
             }
 
-            initial_delay_seconds = 60
+            initial_delay_seconds = 30
             period_seconds        = 10
             timeout_seconds       = 5
             failure_threshold     = 5
@@ -149,7 +149,7 @@ resource "kubernetes_deployment" "api" {
               port = 9000
             }
 
-            initial_delay_seconds = 60
+            initial_delay_seconds = 30
             period_seconds        = 10
             timeout_seconds       = 5
             failure_threshold     = 5
