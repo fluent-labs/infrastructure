@@ -142,7 +142,7 @@ resource "kubernetes_ingress" "prod_ingress" {
 
   spec {
     tls {
-      hosts = [ "api.foreignlanguagereader.com" ]
+      hosts       = [ "api.foreignlanguagereader.com" ]
       secret_name = "nginx-certificate"
     }
 
