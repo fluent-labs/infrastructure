@@ -8,3 +8,10 @@ spec:
   count: 1
   elasticsearchRef:
     name: logs
+  http:
+    tls:
+      certificate:
+        secretName: logging-tls-cert
+    service:
+      spec:
+        type: LoadBalancer
