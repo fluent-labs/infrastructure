@@ -37,11 +37,6 @@ provider "helm" {
   }
 }
 
-# Service container registries
-module "container_registries" {
-  source = "./container_registries"
-}
-
 # Mysql database to store user context.
 # module "database" {
 #   source       = "./database"
@@ -147,6 +142,7 @@ resource "kubernetes_ingress" "prod_ingress" {
 
   spec {
     tls {
+      hosts       = ["api.foreignlanguagereader.com"]
       secret_name = "nginx-certificate"
     }
 
