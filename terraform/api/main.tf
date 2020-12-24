@@ -118,8 +118,8 @@ resource "kubernetes_deployment" "api" {
           }
 
           volume_mount {
-            mount_path = "/etc/es_truststore"
-            name       = "es_truststore"
+            mount_path = "/etc/estruststore"
+            name       = "estruststore"
             read_only  = true
           }
 
@@ -163,7 +163,7 @@ resource "kubernetes_deployment" "api" {
         }
 
         volume {
-          name = "es_truststore"
+          name = "estruststore"
           secret {
             secret_name = "elasticsearch-truststore"
           }
