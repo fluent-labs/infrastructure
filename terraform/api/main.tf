@@ -117,6 +117,16 @@ resource "kubernetes_deployment" "api" {
             }
           }
 
+          env {
+            name = "TRUSTSTORE_PASSWORD"
+            value_from {
+              secret_key_ref {
+                name = "elasticsearch-credentials"
+                key  = "truststore"
+              }
+            }
+          }
+
           volume_mount {
             mount_path = "/etc/estruststore"
             name       = "estruststore"
@@ -240,6 +250,11 @@ resource "random_password" "elasticsearch_password" {
   special = true
 }
 
+resource "random_password" "truststore_password" {
+  length  = 32
+  special = true
+}
+
 resource "kubernetes_secret" "elasticsearch_credentials" {
   metadata {
     name      = "elasticsearch-credentials"
@@ -247,6 +262,7 @@ resource "kubernetes_secret" "elasticsearch_credentials" {
   }
 
   data = {
-    password = random_password.elasticsearch_password.result
+    password   = random_password.elasticsearch_password.result
+    truststore = random_password.truststore_password.result
   }
 }
