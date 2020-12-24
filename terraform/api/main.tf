@@ -117,6 +117,12 @@ resource "kubernetes_deployment" "api" {
             }
           }
 
+          volume_mount {
+            mount_path = "/etc/es_truststore"
+            name       = "es_truststore"
+            read_only  = true
+          }
+
           env {
             name  = "ENVIRONMENT"
             value = var.env
@@ -153,6 +159,13 @@ resource "kubernetes_deployment" "api" {
             period_seconds        = 10
             timeout_seconds       = 5
             failure_threshold     = 5
+          }
+        }
+
+        volume {
+          name = "es_truststore"
+          secret {
+            secret_name = "elasticsearch-truststore"
           }
         }
       }
