@@ -252,7 +252,7 @@ resource "random_password" "elasticsearch_password" {
 
 resource "random_password" "truststore_password" {
   length  = 32
-  special = true
+  special = false
 }
 
 resource "kubernetes_secret" "elasticsearch_credentials" {
