@@ -5,6 +5,12 @@ metadata:
   namespace: content
 spec:
   version: 7.10.1
+  http:
+    tls:
+      selfSignedCertificate:
+        subjectAltNames:
+        - dns: content-es-http.content.svc.cluster.local
+        - dns: localhost
   nodeSets:
   - name: content
     count: 1
