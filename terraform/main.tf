@@ -47,19 +47,19 @@ provider "helm" {
 
 # Static content served to users
 
-# module "frontend" {
-#   source       = "./static_bucket"
-#   domain       = digitalocean_domain.main.name
-#   subdomain    = "www"
-#   deploy_users = [aws_iam_user.github.name]
-# }
+module "frontend" {
+  source       = "./static_bucket"
+  domain       = digitalocean_domain.main.name
+  subdomain    = "www"
+  deploy_users = [aws_iam_user.github.name]
+}
 
-# module "storybook" {
-#   source       = "./static_bucket"
-#   domain       = digitalocean_domain.main.name
-#   subdomain    = "storybook"
-#   deploy_users = [aws_iam_user.github.name]
-# }
+module "storybook" {
+  source       = "./static_bucket"
+  domain       = digitalocean_domain.main.name
+  subdomain    = "storybook"
+  deploy_users = [aws_iam_user.github.name]
+}
 
 # QA environment
 
@@ -165,6 +165,15 @@ resource "kubernetes_ingress" "prod_ingress" {
 
 resource "digitalocean_domain" "main" {
   name = "foreignlanguagereader.com"
+}
+
+# Frontend deploy user
+resource "aws_iam_access_key" "github" {
+  user = aws_iam_user.github.name
+}
+
+resource "aws_iam_user" "github" {
+  name = "foreign-language-reader-github"
 }
 
 # TLS
