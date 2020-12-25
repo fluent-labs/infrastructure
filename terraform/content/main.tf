@@ -31,6 +31,31 @@ resource "aws_s3_bucket" "content" {
   acl    = "private"
 }
 
+# S3 Credentials for Spark
+
+resource "aws_iam_access_key" "spark" {
+  user = aws_iam_user.spark.name
+}
+
+resource "aws_iam_user" "spark" {
+  name = "spark"
+}
+
+resource "kubernetes_secret" "spark_s3_creds" {
+  metadata {
+    name      = "spark-s3-creds"
+    namespace = "content"
+  }
+
+  data = {
+    access_key = aws_iam_access_key.spark.id
+    secret_key = aws_iam_access_key.spark.secret
+  }
+
+  depends_on = [
+    kubernetes_namespace.content
+  ]
+}
 # resource "helm_release" "zeppelin" {
 #   name       = "zeppelin"
 #   repository = "https://kubernetes-charts.storage.googleapis.com"
