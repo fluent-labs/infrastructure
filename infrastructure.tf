@@ -30,6 +30,11 @@ provider "acme" {
   server_url = "https://acme-v02.api.letsencrypt.org/directory"
 }
 
+provider "aws" {
+  profile = "default"
+  region  = "us-west-2"
+}
+
 # Held here so that Helm and K8s providers can be initialized to work on this cluster
 resource "digitalocean_kubernetes_cluster" "foreign_language_reader" {
   name    = "foreign-language-reader"
