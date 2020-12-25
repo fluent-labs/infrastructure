@@ -127,9 +127,14 @@ resource "kubernetes_deployment" "api" {
             }
           }
 
+          env {
+            name  = "GOOGLE_APPLICATION_CREDENTIALS"
+            value = "/etc/flrcredentials/gcloud-creds.json"
+          }
+
           volume_mount {
-            mount_path = "/etc/estruststore"
-            name       = "estruststore"
+            mount_path = "/etc/flrcredentials"
+            name       = "flrcredentials"
             read_only  = true
           }
 
@@ -173,9 +178,9 @@ resource "kubernetes_deployment" "api" {
         }
 
         volume {
-          name = "estruststore"
+          name = "flrcredentials"
           secret {
-            secret_name = "elasticsearch-truststore"
+            secret_name = "credentials"
           }
         }
       }
