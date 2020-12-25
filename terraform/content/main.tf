@@ -15,7 +15,7 @@ resource "kubernetes_namespace" "content" {
 resource "helm_release" "spark" {
   name       = "spark"
   repository = "https://googlecloudplatform.github.io/spark-on-k8s-operator"
-  chart      = "sparkoperator"
+  chart      = "spark-operator"
   version    = "1.0.5"
   namespace  = "content"
 
