@@ -167,6 +167,15 @@ resource "digitalocean_domain" "main" {
   name = "foreignlanguagereader.com"
 }
 
+# Frontend deploy user
+resource "aws_iam_access_key" "github" {
+  user = aws_iam_user.github.name
+}
+
+resource "aws_iam_user" "github" {
+  name = "foreign-language-reader-github"
+}
+
 # TLS
 
 resource "tls_private_key" "tls_private_key" {
