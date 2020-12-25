@@ -47,19 +47,19 @@ provider "helm" {
 
 # Static content served to users
 
-# module "frontend" {
-#   source       = "./static_bucket"
-#   domain       = digitalocean_domain.main.name
-#   subdomain    = "www"
-#   deploy_users = [aws_iam_user.github.name]
-# }
+module "frontend" {
+  source       = "./static_bucket"
+  domain       = digitalocean_domain.main.name
+  subdomain    = "www"
+  deploy_users = [aws_iam_user.github.name]
+}
 
-# module "storybook" {
-#   source       = "./static_bucket"
-#   domain       = digitalocean_domain.main.name
-#   subdomain    = "storybook"
-#   deploy_users = [aws_iam_user.github.name]
-# }
+module "storybook" {
+  source       = "./static_bucket"
+  domain       = digitalocean_domain.main.name
+  subdomain    = "storybook"
+  deploy_users = [aws_iam_user.github.name]
+}
 
 # QA environment
 
