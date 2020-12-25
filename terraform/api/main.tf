@@ -129,12 +129,12 @@ resource "kubernetes_deployment" "api" {
 
           env {
             name  = "GOOGLE_APPLICATION_CREDENTIALS"
-            value = "/app/credentials/gcloud-creds.json"
+            value = "/etc/flrcredentials/gcloud-creds.json"
           }
 
           volume_mount {
-            mount_path = "/app/credentials"
-            name       = "credentials"
+            mount_path = "/etc/flrcredentials"
+            name       = "flrcredentials"
             read_only  = true
           }
 
@@ -178,7 +178,7 @@ resource "kubernetes_deployment" "api" {
         }
 
         volume {
-          name = "credentials"
+          name = "flrcredentials"
           secret {
             secret_name = "credentials"
           }
