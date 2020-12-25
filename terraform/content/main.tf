@@ -26,8 +26,8 @@ resource "helm_release" "spark" {
 
 # Content buckets for spark to read
 
-resource "aws_s3_bucket" "definitions" {
-  bucket = "foreign-language-reader-definitions"
+resource "aws_s3_bucket" "content" {
+  bucket = "foreign-language-reader-content"
   acl    = "private"
 }
 
