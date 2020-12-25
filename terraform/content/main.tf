@@ -56,6 +56,29 @@ resource "kubernetes_secret" "spark_s3_creds" {
     kubernetes_namespace.content
   ]
 }
+
+data "aws_iam_policy_document" "spark_read" {
+  statement {
+    actions   = ["s3:GetBucketLocation", "s3:GetObject", "s3:ListBucket"]
+    effect    = "Allow"
+    resources = ["${aws_s3_bucket.content.arn}/*"]
+  }
+}
+
+resource "aws_iam_policy" "spark_read" {
+  name        = "spark-read-role"
+  description = "IAM policy to let spark read from content uploaded to S3"
+
+  policy = data.aws_iam_policy_document.spark_read.json
+}
+
+resource "aws_iam_policy_attachment" "spark_read" {
+  name       = "spark-read-role-attach"
+  users      = [aws_iam_user.spark.name]
+  policy_arn = aws_iam_policy.spark_read.arn
+}
+
+
 # resource "helm_release" "zeppelin" {
 #   name       = "zeppelin"
 #   repository = "https://kubernetes-charts.storage.googleapis.com"
