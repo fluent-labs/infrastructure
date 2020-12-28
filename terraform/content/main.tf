@@ -18,6 +18,7 @@ resource "helm_release" "spark" {
   chart      = "spark-operator"
   version    = "1.0.5"
   namespace  = "content"
+  values     = [file("${path.module}/spark.yml")]
 
   depends_on = [
     kubernetes_namespace.content
