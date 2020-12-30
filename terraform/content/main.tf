@@ -79,5 +79,16 @@ resource "aws_iam_policy_attachment" "spark_read" {
   policy_arn = aws_iam_policy.spark_read.arn
 }
 
+# Configuration variables for all spark jobs
+
+resource "random_password" "truststore_password" {
+  length  = 32
+  special = false
+}
+
+resource "random_password" "elasticsearch_password" {
+  length  = 64
+  special = false
+}
 
 
