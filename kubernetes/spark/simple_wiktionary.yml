@@ -22,19 +22,15 @@ spec:
     labels:
       version: 3.0.0
     serviceAccount: spark-spark
-    configMaps:
-      - name: spark-config
-        path: /mnt/config
-    envSecretKeyRefs:
-      AWS_ACCESS_KEY_ID:
-        name: spark-s3-creds
-        key: access_key
-      AWS_SECRET_ACCESS_KEY:
-        name: spark-s3-creds
-        key: secret_key
+    env:
+      - name: SPARK_CONF_DIR
+        value: /opt/spark/conf
     secrets:
       - name: elasticsearch-truststore
         path: /etc/flrcredentials/
+        secretType: Generic
+      - name: spark-config
+        path: /opt/spark/conf
         secretType: Generic
   executor:
     javaOptions: "-Dlog4j.configurationFile=log4j2.xml"
@@ -43,14 +39,13 @@ spec:
     memory: "512m"
     labels:
       version: 3.0.0
-    envSecretKeyRefs:
-      AWS_ACCESS_KEY_ID:
-        name: spark-s3-creds
-        key: access_key
-      AWS_SECRET_ACCESS_KEY:
-        name: spark-s3-creds
-        key: secret_key
+    env:
+      - name: SPARK_CONF_DIR
+        value: /opt/spark/conf
     secrets:
       - name: elasticsearch-truststore
         path: /etc/flrcredentials/
+        secretType: Generic
+      - name: spark-config
+        path: /opt/spark/conf
         secretType: Generic
