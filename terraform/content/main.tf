@@ -80,14 +80,4 @@ resource "aws_iam_policy_attachment" "spark_read" {
 }
 
 
-# resource "helm_release" "zeppelin" {
-#   name       = "zeppelin"
-#   repository = "https://kubernetes-charts.storage.googleapis.com"
-#   chart      = "zeppelin"
-#   version    = "1.1.1"
-#   namespace  = "content"
 
-#   depends_on = [
-#     kubernetes_namespace.content
-#   ]
-# }
