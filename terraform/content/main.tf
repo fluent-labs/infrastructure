@@ -82,16 +82,10 @@ resource "kubernetes_secret" "spark_config" {
   }
 
   data = {
-    "spark-defaults.conf" = <<EOF
-fs.s3a.access.key ${aws_iam_access_key.spark.id}
-fs.s3a.secret.key ${aws_iam_access_key.spark.secret}
-es.nodes content-es-http.content.svc.cluster.local
-es.net.ssl true
-es.net.ssl.keystore.location file:///etc/flrcredentials/api_keystore.jks
-es.net.ssl.cert.allow.self.signed true
-es.net.ssl.truststore.pass ${random_password.truststore_password.result}
-es.net.http.auth.user spark
-es.net.http.auth.pass ${random_password.elasticsearch_password.result}
-EOF
+    "AWS_ACCESS_KEY_ID"     = aws_iam_access_key.spark.id
+    "AWS_SECRET_ACCESS_KEY" = aws_iam_access_key.spark.secret
+    "es_truststore"         = random_password.truststore_password.result
+    "es_user"               = "spark"
+    "es_password"           = random_password.elasticsearch_password.result
   }
 }
