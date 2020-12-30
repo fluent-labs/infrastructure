@@ -32,6 +32,10 @@ spec:
       AWS_SECRET_ACCESS_KEY:
         name: spark-s3-creds
         key: secret_key
+    secrets:
+      - name: elasticsearch-truststore
+        path: /etc/flrcredentials/
+        secretType: Generic
   executor:
     javaOptions: "-Dlog4j.configurationFile=log4j2.xml"
     cores: 1
@@ -46,3 +50,7 @@ spec:
       AWS_SECRET_ACCESS_KEY:
         name: spark-s3-creds
         key: secret_key
+    secrets:
+      - name: elasticsearch-truststore
+        path: /etc/flrcredentials/
+        secretType: Generic
