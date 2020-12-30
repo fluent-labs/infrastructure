@@ -63,6 +63,37 @@ resource "aws_iam_policy_attachment" "spark_read" {
   policy_arn = aws_iam_policy.spark_read.arn
 }
 
+# S3 Deploy credentials
+
+resource "aws_iam_access_key" "github" {
+  user = aws_iam_user.github.name
+}
+
+resource "aws_iam_user" "github" {
+  name = "github-spark-deploy"
+}
+
+data "aws_iam_policy_document" "spark_deploy" {
+  statement {
+    actions   = ["s3:DeleteObject", "s3:GetBucketLocation", "s3:GetObject", "s3:ListBucket", "s3:PutObject"]
+    effect    = "Allow"
+    resources = ["${aws_s3_bucket.content.arn}/*"]
+  }
+}
+
+resource "aws_iam_policy" "deploy" {
+  name        = "spark-deploy-role"
+  description = "IAM policy for deploying to spark"
+
+  policy = data.aws_iam_policy_document.spark_deploy.json
+}
+
+resource "aws_iam_policy_attachment" "deploy" {
+  name       = "spark-deploy-role-attach"
+  users      = [aws_iam_user.github.name]
+  policy_arn = aws_iam_policy.deploy.arn
+}
+
 # Configuration variables for all spark jobs
 
 resource "random_password" "truststore_password" {
