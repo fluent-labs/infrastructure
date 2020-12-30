@@ -75,7 +75,7 @@ resource "aws_iam_user" "github" {
 
 data "aws_iam_policy_document" "spark_deploy" {
   statement {
-    actions   = ["s3:DeleteObject", "s3:GetBucketLocation", "s3:GetObject", "s3:ListBucket", "s3:PutObject"]
+    actions   = ["s3:PutObject", "s3:GetObjectAcl", "s3:GetObject", "s3:ListBucketMultipartUploads", "s3:AbortMultipartUpload", "s3:ListBucket", "s3:DeleteObject", "s3:GetBucketLocation", "s3:PutObjectAcl", "s3:ListMultipartUploadParts"]
     effect    = "Allow"
     resources = ["${aws_s3_bucket.content.arn}/*"]
   }
