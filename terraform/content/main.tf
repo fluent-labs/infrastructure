@@ -42,22 +42,6 @@ resource "aws_iam_user" "spark" {
   name = "spark"
 }
 
-resource "kubernetes_secret" "spark_s3_creds" {
-  metadata {
-    name      = "spark-s3-creds"
-    namespace = "content"
-  }
-
-  data = {
-    access_key = aws_iam_access_key.spark.id
-    secret_key = aws_iam_access_key.spark.secret
-  }
-
-  depends_on = [
-    kubernetes_namespace.content
-  ]
-}
-
 data "aws_iam_policy_document" "spark_read" {
   statement {
     actions   = ["s3:GetBucketLocation", "s3:GetObject", "s3:ListBucket"]
@@ -91,4 +75,23 @@ resource "random_password" "elasticsearch_password" {
   special = false
 }
 
+resource "kubernetes_secret" "spark_config" {
+  metadata {
+    name      = "spark-config"
+    namespace = "content"
+  }
 
+  data = {
+    "spark-defaults.conf" = <<EOF
+fs.s3a.access.key ${aws_iam_access_key.spark.id}
+fs.s3a.secret.key ${aws_iam_access_key.spark.secret}
+es.nodes content-es-http.content.svc.cluster.local
+es.net.ssl true
+es.net.ssl.keystore.location file:///etc/flrcredentials/api_keystore.jks
+es.net.ssl.cert.allow.self.signed true
+es.net.ssl.truststore.pass ${random_password.truststore_password.result}
+es.net.http.auth.user spark
+es.net.http.auth.pass ${random_password.elasticsearch_password.result}
+EOF
+  }
+}
