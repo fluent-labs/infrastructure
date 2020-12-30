@@ -10,7 +10,6 @@ spec:
   imagePullPolicy: Always
   mainClass: com.foreignlanguagereader.jobs.definitions.SimpleWiktionary
   mainApplicationFile: "https://foreign-language-reader-content.s3-us-west-2.amazonaws.com/jobs.jar"
-  sparkConfigMap: spark-config
   sparkVersion: "3.0.0"
   restartPolicy:
     type: Never
@@ -22,12 +21,28 @@ spec:
     labels:
       version: 3.0.0
     serviceAccount: spark-spark
-    envFrom:
-      - secretRef:
-          name: spark-config
+    envSecretKeyRefs:
+      AWS_ACCESS_KEY_ID:
+        name: spark-config
+        key: AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY:
+        name: spark-config
+        key: AWS_SECRET_ACCESS_KEY
+      es_truststore:
+        name: spark-config
+        key: es_truststore
+      es_user:
+        name: spark-config
+        key: es_user
+      es_password:
+        name: spark-config
+        key: es_password
     secrets:
       - name: elasticsearch-truststore
         path: /etc/flrcredentials/
+        secretType: Generic
+      - name: spark-config
+        path: /opt/spark/conf
         secretType: Generic
   executor:
     javaOptions: "-Dlog4j.configurationFile=log4j2.xml"
@@ -36,10 +51,26 @@ spec:
     memory: "512m"
     labels:
       version: 3.0.0
-    envFrom:
-      - secretRef:
-          name: spark-config
+    envSecretKeyRefs:
+      AWS_ACCESS_KEY_ID:
+        name: spark-config
+        key: AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY:
+        name: spark-config
+        key: AWS_SECRET_ACCESS_KEY
+      es_truststore:
+        name: spark-config
+        key: es_truststore
+      es_user:
+        name: spark-config
+        key: es_user
+      es_password:
+        name: spark-config
+        key: es_password
     secrets:
       - name: elasticsearch-truststore
         path: /etc/flrcredentials/
+        secretType: Generic
+      - name: spark-config
+        path: /opt/spark/conf
         secretType: Generic
