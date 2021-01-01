@@ -3,6 +3,6 @@ elasticsearch:
     enabled: true
     user: fluentd
   hosts: 
-    - logs-es-http.logging.svc.cluster.local
+    - elastic-es-http.default.svc.cluster.local
   scheme: https
   sslVerify: false
