@@ -7,3 +7,14 @@ resource "helm_release" "elasticsearch" {
   version    = "1.0.5"
   namespace  = "content"
 }
+
+resource "kubernetes_secret" "elasticsearch_roles" {
+  metadata {
+    name      = "elasticsearch-roles"
+    namespace = "content"
+  }
+
+  data = {
+    "roles.yml" = file("${path.module}/elastic_roles.yml")
+  }
+}

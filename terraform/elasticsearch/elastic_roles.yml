@@ -1,0 +1,52 @@
+api_qa:
+  run_as: []
+  cluster: []
+  indices:
+  - names: [ 'definitions-qa' ]
+    privileges:
+    - "index"
+    - "delete"
+    - "read"
+    - "write"
+    - "view_index_metadata"
+
+api_prod:
+  run_as: []
+  cluster: []
+  indices:
+  - names: [ 'definitions-prod' ]
+    privileges:
+    - "index"
+    - "delete"
+    - "read"
+    - "write"
+    - "view_index_metadata"
+
+fluentd:
+  run_as: []
+  cluster: [ 'monitor' ]
+  indices:
+  - names: [ 'logstash-*' ]
+    privileges:
+    - "create"
+    - "create_index"
+    - "delete"
+    - "index"
+    - "manage"
+    - "manage_ilm"
+    - "read"
+    - "write"
+    - "view_index_metadata"
+
+spark:
+  run_as: []
+  cluster: [ 'monitor' ]
+  indices:
+  - names: [ 'definitions-*' ]
+    privileges:
+    - "index"
+    - "indices:admin/refresh"
+    - "delete"
+    - "read"
+    - "write"
+    - "view_index_metadata"
