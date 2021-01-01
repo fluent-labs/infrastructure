@@ -12,6 +12,8 @@ resource "kubernetes_namespace" "content" {
   }
 }
 
+# Spark config
+
 resource "helm_release" "spark" {
   name       = "spark"
   repository = "https://googlecloudplatform.github.io/spark-on-k8s-operator"

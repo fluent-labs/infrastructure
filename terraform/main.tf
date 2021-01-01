@@ -61,43 +61,10 @@ module "storybook" {
   deploy_users = [aws_iam_user.github.name]
 }
 
-# QA environment
-
-resource "kubernetes_namespace" "qa" {
-  metadata {
-    annotations = {
-      name = "qa"
-    }
-
-    name = "qa"
-  }
-}
-
-# module "api_qa" {
-#   source        = "./api"
-#   cluster_name  = var.cluster_name
-#   database_name = module.database.database_name
-#   env           = "qa"
-#   min_replicas  = 1
-#   max_replicas  = 1
-# }
-
-# Production environment
-
-resource "kubernetes_namespace" "prod" {
-  metadata {
-    annotations = {
-      name = "prod"
-    }
-
-    name = "prod"
-  }
-}
-
 module "api" {
   source       = "./api"
   cluster_name = var.cluster_name
-  env          = "prod"
+  env          = "default"
   min_replicas = 1
   max_replicas = 10
 }
@@ -109,6 +76,13 @@ module "api" {
 
 module "content" {
   source = "./content"
+}
+
+module "elasticsearch" {
+  source           = "./elasticsearch"
+  api_password     = module.api.elasticsearch_password
+  fluentd_password = module.monitoring.fluentd_password
+  spark_password   = module.content.elasticsearch_password
 }
 
 # Contains logging and monitoring configuration
