@@ -17,6 +17,9 @@ resource "kubernetes_secret" "elasticsearch_roles" {
   }
 }
 
+// Cannot install through terraform until ECK 1.4
+// Manually configure until then
+
 # resource "kubernetes_manifest" "elasticsearch" {
 #   provider = kubernetes-alpha
 #   manifest = yamldecode(file("${path.module}/elasticsearch.yml"))
