@@ -10,16 +10,6 @@
 # Logging configuration
 # Every node has a log collection agent that posts logs to elasticsearch
 
-resource "kubernetes_namespace" "logging" {
-  metadata {
-    annotations = {
-      name = "logging"
-    }
-
-    name = "logging"
-  }
-}
-
 resource "random_password" "fluent_elasticsearch_password" {
   length      = 32
   special     = false
@@ -31,7 +21,6 @@ resource "helm_release" "fluentd_elasticsearch" {
   repository = "https://kokuwaio.github.io/helm-charts"
   chart      = "fluentd-elasticsearch"
   version    = "11.6.2"
-  namespace  = "logging"
 
   values = [file("${path.module}/fluentd.yml")]
 
@@ -39,8 +28,4 @@ resource "helm_release" "fluentd_elasticsearch" {
     name  = "elasticsearch.auth.password"
     value = random_password.fluent_elasticsearch_password.result
   }
-
-  depends_on = [
-    kubernetes_namespace.logging
-  ]
 }
