@@ -90,3 +90,40 @@ resource "kubernetes_ingress" "ingress" {
     }
   }
 }
+
+resource "kubernetes_ingress" "ingress_passthrough" {
+  metadata {
+    name = "foreign-language-reader-ingress"
+    annotations = {
+      "kubernetes.io/ingress.class"                 = "nginx"
+      "nginx.ingress.kubernetes.io/enable-cors"     = "true"
+      "nginx.ingress.kubernetes.io/ssl-passthrough" = "true"
+    }
+  }
+
+  spec {
+    rule {
+      host = "elastic.foreignlanguagereader.com"
+      http {
+        path {
+          backend {
+            service_name = "elastic-es-http"
+            service_port = 9200
+          }
+        }
+      }
+    }
+
+    rule {
+      host = "elastic.foreignlanguagereader.com"
+      http {
+        path {
+          backend {
+            service_name = "kibana-kb-http"
+            service_port = 5601
+          }
+        }
+      }
+    }
+  }
+}

@@ -109,7 +109,7 @@ module "monitoring" {
 module "nginx_ingress" {
   source          = "./nginx_ingress"
   domain          = digitalocean_domain.main.name
-  subdomains      = ["api"]
+  subdomains      = ["api", "elastic", "kibana"]
   private_key_pem = acme_certificate.certificate.private_key_pem
   certificate_pem = acme_certificate.certificate.certificate_pem
   issuer_pem      = acme_certificate.certificate.issuer_pem
