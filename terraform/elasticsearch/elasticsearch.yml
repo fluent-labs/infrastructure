@@ -2,6 +2,7 @@ apiVersion: elasticsearch.k8s.elastic.co/v1
 kind: Elasticsearch
 metadata:
   name: elastic
+  namespace: default
 spec:
   version: 7.10.1
   auth:
