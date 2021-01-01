@@ -8,6 +8,10 @@ terraform {
       source  = "vancluever/acme"
       version = "1.6.3"
     }
+    kubernetes-alpha = {
+      source = "hashicorp/kubernetes-alpha"
+      version = "0.2.1"
+    }
   }
 }
 
@@ -20,6 +24,14 @@ data "digitalocean_kubernetes_cluster" "foreign_language_reader" {
 
 provider "kubernetes" {
   load_config_file = false
+  host             = data.digitalocean_kubernetes_cluster.foreign_language_reader.endpoint
+  token            = data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].token
+  cluster_ca_certificate = base64decode(
+    data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].cluster_ca_certificate
+  )
+}
+
+provider "kubernetes-alpha" {
   host             = data.digitalocean_kubernetes_cluster.foreign_language_reader.endpoint
   token            = data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].token
   cluster_ca_certificate = base64decode(
