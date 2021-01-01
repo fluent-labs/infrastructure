@@ -56,3 +56,32 @@ resource "digitalocean_record" "kubernetes_subdomain_dns" {
     ]
   }
 }
+
+resource "kubernetes_ingress" "ingress" {
+  metadata {
+    name = "foreign-language-reader-ingress"
+    annotations = {
+      "kubernetes.io/ingress.class"             = "nginx"
+      "nginx.ingress.kubernetes.io/enable-cors" = "true"
+    }
+  }
+
+  spec {
+    tls {
+      hosts       = ["api.foreignlanguagereader.com"]
+      secret_name = "nginx-certificate"
+    }
+
+    rule {
+      host = "api.foreignlanguagereader.com"
+      http {
+        path {
+          backend {
+            service_name = "api"
+            service_port = 9000
+          }
+        }
+      }
+    }
+  }
+}

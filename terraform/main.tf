@@ -94,44 +94,14 @@ module "monitoring" {
 # Handles traffic going in to the cluster
 # Proxies everything through a load balancer and nginx
 
-module "nginx_ingress_prod" {
+module "nginx_ingress" {
   source          = "./nginx_ingress"
   domain          = digitalocean_domain.main.name
   subdomains      = ["api"]
   private_key_pem = acme_certificate.certificate.private_key_pem
   certificate_pem = acme_certificate.certificate.certificate_pem
   issuer_pem      = acme_certificate.certificate.issuer_pem
-  namespace       = "prod"
-}
-
-resource "kubernetes_ingress" "prod_ingress" {
-  metadata {
-    name = "foreign-language-reader-ingress"
-    annotations = {
-      "kubernetes.io/ingress.class"             = "nginx"
-      "nginx.ingress.kubernetes.io/enable-cors" = "true"
-    }
-    namespace = "prod"
-  }
-
-  spec {
-    tls {
-      hosts       = ["api.foreignlanguagereader.com"]
-      secret_name = "nginx-certificate"
-    }
-
-    rule {
-      host = "api.foreignlanguagereader.com"
-      http {
-        path {
-          backend {
-            service_name = "api"
-            service_port = 9000
-          }
-        }
-      }
-    }
-  }
+  namespace       = "default"
 }
 
 
