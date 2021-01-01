@@ -9,3 +9,7 @@ variable "fluentd_password" {
 variable "spark_password" {
   description = "The password for the spark user."
 }
+
+variable "domain" {
+  description = "The domain to attach subdomains to"
+}

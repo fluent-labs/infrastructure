@@ -10,7 +10,6 @@ resource "helm_release" "spark" {
   chart      = "spark-operator"
   version    = "1.0.5"
   values     = [file("${path.module}/spark.yml")]
-
 }
 
 # Content buckets for spark to read
