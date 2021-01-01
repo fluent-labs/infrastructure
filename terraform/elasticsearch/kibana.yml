@@ -12,3 +12,6 @@ spec:
     tls:
       certificate:
         secretName: nginx-certificate
+    service:
+      spec:
+        type: LoadBalancer 

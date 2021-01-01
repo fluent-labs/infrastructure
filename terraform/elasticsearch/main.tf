@@ -33,3 +33,44 @@ resource "kubernetes_secret" "elasticsearch_roles" {
 
 #   depends_on = [helm_release.elasticsearch]
 # }
+
+# Use this to get the load balancer external IP for DNS configuration
+data "kubernetes_service" "elastic" {
+  metadata {
+    name      = "elastic-es-http"
+    namespace = "default"
+  }
+}
+
+resource "digitalocean_record" "elastic_subdomain_dns" {
+  domain   = var.domain
+  type     = "A"
+  name     = "elastic"
+  value    = data.kubernetes_service.elastic.load_balancer_ingress.0.ip
+
+  lifecycle {
+    ignore_changes = [
+      value,
+    ]
+  }
+}
+
+data "kubernetes_service" "kibana" {
+  metadata {
+    name      = "kibana-kb-http"
+    namespace = "default"
+  }
+}
+
+resource "digitalocean_record" "kibana_subdomain_dns" {
+  domain   = var.domain
+  type     = "A"
+  name     = "kibana"
+  value    = data.kubernetes_service.kibana.load_balancer_ingress.0.ip
+
+  lifecycle {
+    ignore_changes = [
+      value,
+    ]
+  }
+}

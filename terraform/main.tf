@@ -92,6 +92,7 @@ module "content" {
 
 module "elasticsearch" {
   source           = "./elasticsearch"
+  domain           = digitalocean_domain.main.name
   api_password     = module.api.elasticsearch_password
   fluentd_password = module.monitoring.fluentd_password
   spark_password   = module.content.elasticsearch_password
@@ -109,7 +110,7 @@ module "monitoring" {
 module "nginx_ingress" {
   source          = "./nginx_ingress"
   domain          = digitalocean_domain.main.name
-  subdomains      = ["api", "elastic", "kibana"]
+  subdomains      = ["api"]
   private_key_pem = acme_certificate.certificate.private_key_pem
   certificate_pem = acme_certificate.certificate.certificate_pem
   issuer_pem      = acme_certificate.certificate.issuer_pem
