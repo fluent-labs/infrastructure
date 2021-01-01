@@ -7,6 +7,12 @@ spec:
   auth:
     roles:
     - secretName: elasticsearch-roles
+  http:
+    tls:
+      selfSignedCertificate:
+        subjectAltNames:
+        - dns: elastic-es-http.default.svc.cluster.local
+        - dns: localhost
   nodeSets:
   - name: elastic
     count: 1
