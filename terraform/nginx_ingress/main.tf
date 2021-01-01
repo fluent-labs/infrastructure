@@ -115,7 +115,7 @@ resource "kubernetes_ingress" "ingress_passthrough" {
     }
 
     rule {
-      host = "elastic.foreignlanguagereader.com"
+      host = "kibana.foreignlanguagereader.com"
       http {
         path {
           backend {
