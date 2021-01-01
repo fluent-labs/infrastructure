@@ -16,3 +16,13 @@ resource "kubernetes_secret" "elasticsearch_roles" {
     "roles.yml" = file("${path.module}/elastic_roles.yml")
   }
 }
+
+resource "kubernetes_manifest" "elasticsearch" {
+  provider = kubernetes-alpha
+  manifest = yamldecode(file("${path.module}/elasticsearch.yml"))
+}
+
+resource "kubernetes_manifest" "kibana" {
+  provider = kubernetes-alpha
+  manifest = yamldecode(file("${path.module}/kibana.yml"))
+}

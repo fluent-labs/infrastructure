@@ -1,24 +1,29 @@
 apiVersion: elasticsearch.k8s.elastic.co/v1
 kind: Elasticsearch
 metadata:
-  name: content
-  namespace: content
+  name: elastic
 spec:
   version: 7.10.1
-  http:
-    tls:
-      selfSignedCertificate:
-        subjectAltNames:
-        - dns: content-es-http.content.svc.cluster.local
-        - dns: localhost
+  auth:
+    roles:
+    - secretName: elasticsearch-roles
   nodeSets:
-  - name: content
+  - name: elastic
     count: 1
     config:
       node.master: true
       node.data: true
       node.ingest: true
       node.store.allow_mmap: false
+    podTemplate:
+      spec:
+        initContainers:
+        - name: install-plugins
+          command:
+          - sh
+          - -c
+          - |
+            bin/elasticsearch-plugin install --batch repository-s3
     volumeClaimTemplates:
     - metadata:
         name: elasticsearch-data
@@ -27,5 +32,5 @@ spec:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 30Gi
+            storage: 100Gi
         storageClassName: do-block-storage
