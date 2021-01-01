@@ -13,6 +13,11 @@ resource "helm_release" "nginx_ingress" {
   chart      = "nginx-ingress"
   version    = "0.7.1"
   namespace  = var.namespace
+
+  set {
+    name  = "extraArgs"
+    value = "--enable-ssl-passthrough"
+  }
 }
 
 # Use this to get the load balancer external IP for DNS configuration
@@ -54,5 +59,71 @@ resource "digitalocean_record" "kubernetes_subdomain_dns" {
     ignore_changes = [
       value,
     ]
+  }
+}
+
+resource "kubernetes_ingress" "ingress" {
+  metadata {
+    name = "foreign-language-reader-ingress"
+    annotations = {
+      "kubernetes.io/ingress.class"             = "nginx"
+      "nginx.ingress.kubernetes.io/enable-cors" = "true"
+    }
+  }
+
+  spec {
+    tls {
+      hosts       = ["api.foreignlanguagereader.com"]
+      secret_name = "nginx-certificate"
+    }
+
+    rule {
+      host = "api.foreignlanguagereader.com"
+      http {
+        path {
+          backend {
+            service_name = "api"
+            service_port = 9000
+          }
+        }
+      }
+    }
+  }
+}
+
+resource "kubernetes_ingress" "ingress_passthrough" {
+  metadata {
+    name = "foreign-language-reader-ingress"
+    annotations = {
+      "kubernetes.io/ingress.class"                 = "nginx"
+      "nginx.ingress.kubernetes.io/enable-cors"     = "true"
+      "nginx.ingress.kubernetes.io/ssl-passthrough" = "true"
+    }
+  }
+
+  spec {
+    rule {
+      host = "elastic.foreignlanguagereader.com"
+      http {
+        path {
+          backend {
+            service_name = "elastic-es-http"
+            service_port = 9200
+          }
+        }
+      }
+    }
+
+    rule {
+      host = "elastic.foreignlanguagereader.com"
+      http {
+        path {
+          backend {
+            service_name = "kibana-kb-http"
+            service_port = 5601
+          }
+        }
+      }
+    }
   }
 }

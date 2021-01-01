@@ -2,27 +2,15 @@
 # Content requires long running jobs that could be split into parallel
 # This is a good use case for spark.
 
-resource "kubernetes_namespace" "content" {
-  metadata {
-    annotations = {
-      name = "content"
-    }
-
-    name = "content"
-  }
-}
+# Spark config
 
 resource "helm_release" "spark" {
   name       = "spark"
   repository = "https://googlecloudplatform.github.io/spark-on-k8s-operator"
   chart      = "spark-operator"
   version    = "1.0.5"
-  namespace  = "content"
   values     = [file("${path.module}/spark.yml")]
 
-  depends_on = [
-    kubernetes_namespace.content
-  ]
 }
 
 # Content buckets for spark to read
@@ -108,8 +96,7 @@ resource "random_password" "elasticsearch_password" {
 
 resource "kubernetes_secret" "spark_config" {
   metadata {
-    name      = "spark-config"
-    namespace = "content"
+    name = "spark-config"
   }
 
   data = {

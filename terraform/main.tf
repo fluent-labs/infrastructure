@@ -8,6 +8,10 @@ terraform {
       source  = "vancluever/acme"
       version = "1.6.3"
     }
+    kubernetes-alpha = {
+      source  = "hashicorp/kubernetes-alpha"
+      version = "0.2.1"
+    }
   }
 }
 
@@ -22,6 +26,14 @@ provider "kubernetes" {
   load_config_file = false
   host             = data.digitalocean_kubernetes_cluster.foreign_language_reader.endpoint
   token            = data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].token
+  cluster_ca_certificate = base64decode(
+    data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].cluster_ca_certificate
+  )
+}
+
+provider "kubernetes-alpha" {
+  host  = data.digitalocean_kubernetes_cluster.foreign_language_reader.endpoint
+  token = data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].token
   cluster_ca_certificate = base64decode(
     data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].cluster_ca_certificate
   )
@@ -61,43 +73,10 @@ module "storybook" {
   deploy_users = [aws_iam_user.github.name]
 }
 
-# QA environment
-
-resource "kubernetes_namespace" "qa" {
-  metadata {
-    annotations = {
-      name = "qa"
-    }
-
-    name = "qa"
-  }
-}
-
-# module "api_qa" {
-#   source        = "./api"
-#   cluster_name  = var.cluster_name
-#   database_name = module.database.database_name
-#   env           = "qa"
-#   min_replicas  = 1
-#   max_replicas  = 1
-# }
-
-# Production environment
-
-resource "kubernetes_namespace" "prod" {
-  metadata {
-    annotations = {
-      name = "prod"
-    }
-
-    name = "prod"
-  }
-}
-
 module "api" {
   source       = "./api"
   cluster_name = var.cluster_name
-  env          = "prod"
+  env          = "default"
   min_replicas = 1
   max_replicas = 10
 }
@@ -111,6 +90,13 @@ module "content" {
   source = "./content"
 }
 
+module "elasticsearch" {
+  source           = "./elasticsearch"
+  api_password     = module.api.elasticsearch_password
+  fluentd_password = module.monitoring.fluentd_password
+  spark_password   = module.content.elasticsearch_password
+}
+
 # Contains logging and monitoring configuration
 module "monitoring" {
   source = "./monitoring"
@@ -120,44 +106,14 @@ module "monitoring" {
 # Handles traffic going in to the cluster
 # Proxies everything through a load balancer and nginx
 
-module "nginx_ingress_prod" {
+module "nginx_ingress" {
   source          = "./nginx_ingress"
   domain          = digitalocean_domain.main.name
-  subdomains      = ["api"]
+  subdomains      = ["api", "elastic", "kibana"]
   private_key_pem = acme_certificate.certificate.private_key_pem
   certificate_pem = acme_certificate.certificate.certificate_pem
   issuer_pem      = acme_certificate.certificate.issuer_pem
-  namespace       = "prod"
-}
-
-resource "kubernetes_ingress" "prod_ingress" {
-  metadata {
-    name = "foreign-language-reader-ingress"
-    annotations = {
-      "kubernetes.io/ingress.class"             = "nginx"
-      "nginx.ingress.kubernetes.io/enable-cors" = "true"
-    }
-    namespace = "prod"
-  }
-
-  spec {
-    tls {
-      hosts       = ["api.foreignlanguagereader.com"]
-      secret_name = "nginx-certificate"
-    }
-
-    rule {
-      host = "api.foreignlanguagereader.com"
-      http {
-        path {
-          backend {
-            service_name = "api"
-            service_port = 9000
-          }
-        }
-      }
-    }
-  }
+  namespace       = "default"
 }
 
 

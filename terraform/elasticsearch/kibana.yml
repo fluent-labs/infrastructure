@@ -1,17 +1,13 @@
 apiVersion: kibana.k8s.elastic.co/v1
 kind: Kibana
 metadata:
-  name: logs
-  namespace: logging
+  name: kibana
 spec:
   version: 7.10.1
   count: 1
   elasticsearchRef:
-    name: logs
+    name: elastic
   http:
     tls:
       certificate:
-        secretName: logging-tls-cert
-    service:
-      spec:
-        type: LoadBalancer
+        secretName: nginx-certificate
