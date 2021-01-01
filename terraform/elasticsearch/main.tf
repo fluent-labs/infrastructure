@@ -17,16 +17,19 @@ resource "kubernetes_secret" "elasticsearch_roles" {
   }
 }
 
-resource "kubernetes_manifest" "elasticsearch" {
-  provider = kubernetes-alpha
-  manifest = yamldecode(file("${path.module}/elasticsearch.yml"))
+// Cannot install through terraform until ECK 1.4
+// Manually configure until then
 
-  depends_on = [helm_release.elasticsearch]
-}
+# resource "kubernetes_manifest" "elasticsearch" {
+#   provider = kubernetes-alpha
+#   manifest = yamldecode(file("${path.module}/elasticsearch.yml"))
 
-resource "kubernetes_manifest" "kibana" {
-  provider = kubernetes-alpha
-  manifest = yamldecode(file("${path.module}/kibana.yml"))
+#   depends_on = [helm_release.elasticsearch]
+# }
 
-  depends_on = [helm_release.elasticsearch]
-}
+# resource "kubernetes_manifest" "kibana" {
+#   provider = kubernetes-alpha
+#   manifest = yamldecode(file("${path.module}/kibana.yml"))
+
+#   depends_on = [helm_release.elasticsearch]
+# }
