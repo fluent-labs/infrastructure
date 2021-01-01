@@ -96,7 +96,7 @@ resource "random_password" "elasticsearch_password" {
 
 resource "kubernetes_secret" "spark_config" {
   metadata {
-    name      = "spark-config"
+    name = "spark-config"
   }
 
   data = {

@@ -9,7 +9,7 @@ resource "helm_release" "elasticsearch" {
 
 resource "kubernetes_secret" "elasticsearch_roles" {
   metadata {
-    name      = "elasticsearch-roles"
+    name = "elasticsearch-roles"
   }
 
   data = {
