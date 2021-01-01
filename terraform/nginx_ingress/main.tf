@@ -13,11 +13,7 @@ resource "helm_release" "nginx_ingress" {
   chart      = "nginx-ingress"
   version    = "0.7.1"
   namespace  = var.namespace
-
-  set {
-    name  = "extraArgs"
-    value = "--enable-ssl-passthrough"
-  }
+  values     = [file("${path.module}/nginx_ingress.yml")]
 }
 
 # Use this to get the load balancer external IP for DNS configuration
