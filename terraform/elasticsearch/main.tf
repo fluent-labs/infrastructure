@@ -17,16 +17,16 @@ resource "kubernetes_secret" "elasticsearch_roles" {
   }
 }
 
-# resource "kubernetes_manifest" "elasticsearch" {
-#   provider = kubernetes-alpha
-#   manifest = yamldecode(file("${path.module}/elasticsearch.yml"))
+resource "kubernetes_manifest" "elasticsearch" {
+  provider = kubernetes-alpha
+  manifest = yamldecode(file("${path.module}/elasticsearch.yml"))
 
-#   depends_on = [helm_release.elasticsearch]
-# }
+  depends_on = [helm_release.elasticsearch]
+}
 
-# resource "kubernetes_manifest" "kibana" {
-#   provider = kubernetes-alpha
-#   manifest = yamldecode(file("${path.module}/kibana.yml"))
+resource "kubernetes_manifest" "kibana" {
+  provider = kubernetes-alpha
+  manifest = yamldecode(file("${path.module}/kibana.yml"))
 
-#   depends_on = [helm_release.elasticsearch]
-# }
+  depends_on = [helm_release.elasticsearch]
+}

@@ -93,7 +93,7 @@ resource "kubernetes_ingress" "ingress" {
 
 resource "kubernetes_ingress" "ingress_passthrough" {
   metadata {
-    name = "foreign-language-reader-ingress"
+    name = "foreign-language-reader-ingress-passthrough"
     annotations = {
       "kubernetes.io/ingress.class"                 = "nginx"
       "nginx.ingress.kubernetes.io/enable-cors"     = "true"
