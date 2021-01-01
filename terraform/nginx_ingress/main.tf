@@ -102,28 +102,28 @@ resource "kubernetes_ingress" "ingress_passthrough" {
   }
 
   spec {
-    rule {
-      host = "elastic.foreignlanguagereader.com"
-      http {
-        path {
-          backend {
-            service_name = "elastic-es-http"
-            service_port = 9200
-          }
-        }
-      }
-    }
+    # rule {
+    #   host = "elastic.foreignlanguagereader.com"
+    #   http {
+    #     path {
+    #       backend {
+    #         service_name = "elastic-es-http"
+    #         service_port = 9200
+    #       }
+    #     }
+    #   }
+    # }
 
-    rule {
-      host = "elastic.foreignlanguagereader.com"
-      http {
-        path {
-          backend {
-            service_name = "kibana-kb-http"
-            service_port = 5601
-          }
-        }
-      }
-    }
+    # rule {
+    #   host = "elastic.foreignlanguagereader.com"
+    #   http {
+    #     path {
+    #       backend {
+    #         service_name = "kibana-kb-http"
+    #         service_port = 5601
+    #       }
+    #     }
+    #   }
+    # }
   }
 }
