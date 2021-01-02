@@ -42,3 +42,5 @@ spec:
           requests:
             storage: 100Gi
         storageClassName: do-block-storage
+  secureSettings:
+  - secretName: elasticsearch-s3-creds

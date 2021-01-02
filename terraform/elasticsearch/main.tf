@@ -121,4 +121,14 @@ resource "aws_iam_policy_attachment" "elasticsearch_backup" {
   users      = [aws_iam_user.elasticsearch.name]
   policy_arn = aws_iam_policy.elasticsearch_backup.arn
 }
+
+resource "kubernetes_secret" "elasticsearch_aws_credentials" {
+  metadata {
+    name = "elasticsearch-s3-creds"
+  }
+
+  data = {
+    "s3.client.default.access_key" = aws_iam_access_key.elasticsearch.id
+    "s3.client.default.secret_key" = aws_iam_access_key.elasticsearch.secret
+  }
 }
