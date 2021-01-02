@@ -10,10 +10,8 @@ spec:
     - secretName: elasticsearch-roles
   http:
     tls:
-      selfSignedCertificate:
-        subjectAltNames:
-        - dns: elastic-es-http.default.svc.cluster.local
-        - dns: localhost
+      certificate:
+        secretName: nginx-certificate
     service:
       spec:
         type: LoadBalancer 
