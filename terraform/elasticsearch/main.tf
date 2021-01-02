@@ -193,3 +193,69 @@ resource "elasticsearch_snapshot_repository" "backups" {
     "bucket" = aws_s3_bucket.backup.id
   }
 }
+
+resource "elasticsearch_snapshot_lifecycle_policy" "daily_backup" {
+  name          = "daily-snapshots"
+  snapshot_name = "backup"
+  schedule      = "0 30 1 * * ?"
+  repository    = elasticsearch_snapshot_repository.backups.name
+  configs       = <<EOF
+{
+    "partial": true,
+}
+EOF
+  retention     = <<EOF
+{
+    "expire_after": "120d"
+}
+EOF
+}
+
+# Automated log rollover
+resource "elasticsearch_index_lifecycle_policy" "rollover" {
+  name   = "logging-rollover"
+  policy = <<EOF
+{
+  "policy": {
+    "phases": {
+      "hot": {
+        "min_age": "0ms",
+        "actions": {
+          "rollover": {
+            "max_size": "50gb",
+            "max_age": "30d"
+          }
+        }
+      },
+      "delete": {
+        "min_age": "60d",
+        "actions": {
+          "wait_for_snapshot": {
+            "policy": "daily-snapshots"
+          }
+        }
+      }
+    }
+  }
+}
+EOF
+
+  depends_on = [elasticsearch_snapshot_lifecycle_policy.daily_backup]
+}
+
+resource "elasticsearch_index_template" "fluentd" {
+  name     = "fluentd"
+  template = <<EOF
+{
+  "index_patterns": [
+    "logstash-*"
+  ],
+  "settings": {
+    "index.lifecycle.name": "logging-rollover",
+    "index.lifecycle.rollover_alias": "logstash-backup-alias"
+  }
+}
+EOF
+
+  depends_on = [elasticsearch_index_lifecycle_policy.rollover]
+}
