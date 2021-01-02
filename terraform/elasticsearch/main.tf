@@ -46,9 +46,9 @@ data "kubernetes_secret" "elastic_user" {
 }
 
 provider "elasticsearch" {
-    urls     = "https://elastic.foreignlanguagereader.com:9200"
-    username = "elastic"
-    password = data.kubernetes_secret.elastic_user.data.elastic
+  urls     = "https://elastic.foreignlanguagereader.com:9200"
+  username = "elastic"
+  password = data.kubernetes_secret.elastic_user.data.elastic
 }
 
 resource "kubernetes_secret" "elasticsearch_roles" {
