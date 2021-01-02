@@ -118,16 +118,6 @@ resource "kubernetes_deployment" "api" {
           }
 
           env {
-            name = "TRUSTSTORE_PASSWORD"
-            value_from {
-              secret_key_ref {
-                name = "elasticsearch-credentials"
-                key  = "truststore"
-              }
-            }
-          }
-
-          env {
             name  = "GOOGLE_APPLICATION_CREDENTIALS"
             value = "/etc/flrcredentials/gcloud-creds.json"
           }
