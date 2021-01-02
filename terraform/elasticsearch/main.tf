@@ -210,3 +210,52 @@ EOF
 }
 EOF
 }
+
+# Automated log rollover
+resource elasticsearch_index_lifecycle_policy "rollover" {
+  name = "logging-rollover"
+  policy = <<EOF
+{
+  "policy": {
+    "phases": {
+      "hot": {
+        "min_age": "0ms",
+        "actions": {
+          "rollover": {
+            "max_size": "50gb",
+            "max_age": "30d"
+          }
+        }
+      },
+      "delete": {
+        "min_age": "60d",
+        "actions": {
+          "wait_for_snapshot": {
+            "policy": "daily-snapshots"
+          }
+        }
+      }
+    }
+  }
+}
+EOF
+
+  depends_on = [elasticsearch_snapshot_lifecycle_policy.daily_backup]
+}
+
+resource elasticsearch_index_template "fluentd" {
+  name         = "fluentd"
+  template     = <<EOF
+{
+  "index_patterns": [
+    "logstash-*"
+  ],
+  "settings": {
+    "index.lifecycle.name": "logging-rollover",
+    "index.lifecycle.rollover_alias": "logstash-backup-alias"
+  }
+}
+EOF
+
+  depends_on = [elasticsearch_index_lifecycle_policy.rollover]
+}
