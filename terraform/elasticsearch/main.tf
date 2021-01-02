@@ -193,3 +193,20 @@ resource "elasticsearch_snapshot_repository" "backups" {
     "bucket" = aws_s3_bucket.backup.id
   }
 }
+
+resource elasticsearch_snapshot_lifecycle_policy "daily_backup" {
+  name            = "daily-snapshots"
+  snapshot_name = "backup"
+  schedule         = "0 30 1 * * ?"
+  repository    = elasticsearch_snapshot_repository.backups.name
+  configs        = <<EOF
+{
+    "partial": true,
+}
+EOF
+  retention       = <<EOF
+{
+    "expire_after": "120d"
+}
+EOF
+}
