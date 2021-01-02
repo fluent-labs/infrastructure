@@ -194,17 +194,17 @@ resource "elasticsearch_snapshot_repository" "backups" {
   }
 }
 
-resource elasticsearch_snapshot_lifecycle_policy "daily_backup" {
-  name            = "daily-snapshots"
+resource "elasticsearch_snapshot_lifecycle_policy" "daily_backup" {
+  name          = "daily-snapshots"
   snapshot_name = "backup"
-  schedule         = "0 30 1 * * ?"
+  schedule      = "0 30 1 * * ?"
   repository    = elasticsearch_snapshot_repository.backups.name
-  configs        = <<EOF
+  configs       = <<EOF
 {
     "partial": true,
 }
 EOF
-  retention       = <<EOF
+  retention     = <<EOF
 {
     "expire_after": "120d"
 }
@@ -212,8 +212,8 @@ EOF
 }
 
 # Automated log rollover
-resource elasticsearch_index_lifecycle_policy "rollover" {
-  name = "logging-rollover"
+resource "elasticsearch_index_lifecycle_policy" "rollover" {
+  name   = "logging-rollover"
   policy = <<EOF
 {
   "policy": {
@@ -243,9 +243,9 @@ EOF
   depends_on = [elasticsearch_snapshot_lifecycle_policy.daily_backup]
 }
 
-resource elasticsearch_index_template "fluentd" {
-  name         = "fluentd"
-  template     = <<EOF
+resource "elasticsearch_index_template" "fluentd" {
+  name     = "fluentd"
+  template = <<EOF
 {
   "index_patterns": [
     "logstash-*"
