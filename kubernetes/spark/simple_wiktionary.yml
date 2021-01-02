@@ -2,7 +2,7 @@ apiVersion: "sparkoperator.k8s.io/v1beta2"
 kind: SparkApplication
 metadata:
   name: simple-wiktionary-definitions
-  namespace: content
+  namespace: default
 spec:
   type: Scala
   mode: cluster
@@ -28,9 +28,6 @@ spec:
       AWS_SECRET_ACCESS_KEY:
         name: spark-config
         key: AWS_SECRET_ACCESS_KEY
-      es_truststore:
-        name: spark-config
-        key: es_truststore
       es_user:
         name: spark-config
         key: es_user
@@ -55,9 +52,6 @@ spec:
       AWS_SECRET_ACCESS_KEY:
         name: spark-config
         key: AWS_SECRET_ACCESS_KEY
-      es_truststore:
-        name: spark-config
-        key: es_truststore
       es_user:
         name: spark-config
         key: es_user

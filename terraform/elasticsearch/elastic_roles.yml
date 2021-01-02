@@ -2,7 +2,7 @@ api_qa:
   run_as: []
   cluster: []
   indices:
-  - names: [ 'definitions-qa' ]
+  - names: [ 'attempts', 'definitions-qa' ]
     privileges:
     - "index"
     - "delete"
@@ -14,7 +14,7 @@ api_prod:
   run_as: []
   cluster: []
   indices:
-  - names: [ 'definitions-prod' ]
+  - names: [ 'attempts', 'definitions-default', 'definitions-prod' ]
     privileges:
     - "index"
     - "delete"

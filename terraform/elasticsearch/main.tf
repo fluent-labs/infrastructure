@@ -199,11 +199,6 @@ resource "elasticsearch_snapshot_lifecycle_policy" "daily_backup" {
   snapshot_name = "backup"
   schedule      = "0 30 1 * * ?"
   repository    = elasticsearch_snapshot_repository.backups.name
-#   configs       = <<EOF
-# {
-#     "partial": true,
-# }
-# EOF
   retention     = <<EOF
 {
     "expire_after": "120d"
