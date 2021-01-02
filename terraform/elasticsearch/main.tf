@@ -83,3 +83,42 @@ resource "digitalocean_record" "kibana_subdomain_dns" {
     ]
   }
 }
+
+# Backups in S3
+
+resource "aws_s3_bucket" "backup" {
+  bucket = "foreign-language-reader-elasticsearch-backups"
+  acl    = "private"
+}
+
+# S3 Credentials for Elasticsearch
+
+resource "aws_iam_access_key" "elasticsearch" {
+  user = aws_iam_user.elasticsearch.name
+}
+
+resource "aws_iam_user" "elasticsearch" {
+  name = "elasticsearch"
+}
+
+data "aws_iam_policy_document" "elasticsearch_backup" {
+  statement {
+    actions   = ["s3:PutObject", "s3:GetObjectAcl", "s3:GetObject", "s3:ListBucketMultipartUploads", "s3:AbortMultipartUpload", "s3:ListBucket", "s3:DeleteObject", "s3:GetBucketLocation", "s3:PutObjectAcl", "s3:ListMultipartUploadParts"]
+    effect    = "Allow"
+    resources = ["${aws_s3_bucket.backup.arn}/*"]
+  }
+}
+
+resource "aws_iam_policy" "elasticsearch_backup" {
+  name        = "elasticsearch-backup-role"
+  description = "IAM policy to let elasticsearch backup documents to S3"
+
+  policy = data.aws_iam_policy_document.elasticsearch_backup.json
+}
+
+resource "aws_iam_policy_attachment" "elasticsearch_backup" {
+  name       = "elasticsearch-backup-role-attach"
+  users      = [aws_iam_user.elasticsearch.name]
+  policy_arn = aws_iam_policy.elasticsearch_backup.arn
+}
+}
