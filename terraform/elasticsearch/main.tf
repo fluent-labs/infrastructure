@@ -11,7 +11,7 @@ terraform {
   }
 }
 
-# Elasticsearch config
+# Elasticsearch installation
 
 resource "helm_release" "elasticsearch" {
   name       = "elastic-operator"
@@ -20,7 +20,24 @@ resource "helm_release" "elasticsearch" {
   version    = "1.3.1"
 }
 
-# Roles
+// Cannot install through terraform until ECK 1.4
+// Manually configure until then
+
+# resource "kubernetes_manifest" "elasticsearch" {
+#   provider = kubernetes-alpha
+#   manifest = yamldecode(file("${path.module}/elasticsearch.yml"))
+
+#   depends_on = [helm_release.elasticsearch]
+# }
+
+# resource "kubernetes_manifest" "kibana" {
+#   provider = kubernetes-alpha
+#   manifest = yamldecode(file("${path.module}/kibana.yml"))
+
+#   depends_on = [helm_release.elasticsearch]
+# }
+
+# Users and roles
 
 data "kubernetes_secret" "elastic_user" {
   metadata {
@@ -70,23 +87,6 @@ resource "elasticsearch_user" "spark" {
   password  = var.spark_password
   roles     = ["spark"]
 }
-
-// Cannot install through terraform until ECK 1.4
-// Manually configure until then
-
-# resource "kubernetes_manifest" "elasticsearch" {
-#   provider = kubernetes-alpha
-#   manifest = yamldecode(file("${path.module}/elasticsearch.yml"))
-
-#   depends_on = [helm_release.elasticsearch]
-# }
-
-# resource "kubernetes_manifest" "kibana" {
-#   provider = kubernetes-alpha
-#   manifest = yamldecode(file("${path.module}/kibana.yml"))
-
-#   depends_on = [helm_release.elasticsearch]
-# }
 
 # Domains for services
 
