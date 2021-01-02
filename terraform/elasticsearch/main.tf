@@ -4,6 +4,10 @@ terraform {
       source  = "digitalocean/digitalocean"
       version = "2.3.0"
     }
+    elasticsearch = {
+      source  = "disaster37/elasticsearch"
+      version = "7.0.4"
+    }
   }
 }
 
@@ -26,6 +30,15 @@ resource "kubernetes_secret" "elasticsearch_roles" {
   }
 }
 
+resource "elasticsearch_user" "fluentd" {
+  username  = "fluentd"
+  enabled   = "true"
+  email     = "fluentd@foreignlanguagereader.com"
+  full_name = "fluentd"
+  password  = var.fluentd_password
+  roles     = ["fluentd"]
+}
+
 // Cannot install through terraform until ECK 1.4
 // Manually configure until then
 
@@ -43,7 +56,8 @@ resource "kubernetes_secret" "elasticsearch_roles" {
 #   depends_on = [helm_release.elasticsearch]
 # }
 
-# Use this to get the load balancer external IP for DNS configuration
+# Domains for services
+
 data "kubernetes_service" "elastic" {
   metadata {
     name      = "elastic-es-http"
