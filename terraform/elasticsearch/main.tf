@@ -30,6 +30,15 @@ resource "kubernetes_secret" "elasticsearch_roles" {
   }
 }
 
+resource "elasticsearch_user" "api" {
+  username  = "apiprod"
+  enabled   = "true"
+  email     = "apiprod@foreignlanguagereader.com"
+  full_name = "api prod"
+  password  = var.api_password
+  roles     = ["api_prod"]
+}
+
 resource "elasticsearch_user" "fluentd" {
   username  = "fluentd"
   enabled   = "true"
@@ -37,6 +46,15 @@ resource "elasticsearch_user" "fluentd" {
   full_name = "fluentd"
   password  = var.fluentd_password
   roles     = ["fluentd"]
+}
+
+resource "elasticsearch_user" "spark" {
+  username  = "spark"
+  enabled   = "true"
+  email     = "spark@foreignlanguagereader.com"
+  full_name = "spark"
+  password  = var.spark_password
+  roles     = ["spark"]
 }
 
 // Cannot install through terraform until ECK 1.4
