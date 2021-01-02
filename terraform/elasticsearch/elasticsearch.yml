@@ -8,6 +8,8 @@ spec:
   auth:
     roles:
     - secretName: elasticsearch-roles
+  secureSettings:
+  - secretName: elasticsearch-s3-creds
   http:
     tls:
       certificate:
@@ -42,5 +44,3 @@ spec:
           requests:
             storage: 100Gi
         storageClassName: do-block-storage
-  secureSettings:
-  - secretName: elasticsearch-s3-creds
