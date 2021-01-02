@@ -103,7 +103,12 @@ resource "aws_iam_user" "elasticsearch" {
 
 data "aws_iam_policy_document" "elasticsearch_backup" {
   statement {
-    actions   = ["s3:PutObject", "s3:GetObjectAcl", "s3:GetObject", "s3:ListBucketMultipartUploads", "s3:AbortMultipartUpload", "s3:ListBucket", "s3:DeleteObject", "s3:GetBucketLocation", "s3:PutObjectAcl", "s3:ListMultipartUploadParts"]
+    actions   = ["s3:ListBucket", "s3:GetBucketLocation", "s3:ListBucketMultipartUploads", "s3:ListBucketVersions"]
+    effect    = "Allow"
+    resources = [aws_s3_bucket.backup.arn]
+  }
+  statement {
+    actions   = ["s3:GetObject", "s3:PutObject", "s3:DeleteObject", "s3:AbortMultipartUpload", "s3:ListMultipartUploadParts"]
     effect    = "Allow"
     resources = ["${aws_s3_bucket.backup.arn}/*"]
   }
