@@ -4,26 +4,20 @@ terraform {
       source  = "digitalocean/digitalocean"
       version = "2.3.0"
     }
+    elasticsearch = {
+      source  = "disaster37/elasticsearch"
+      version = "7.0.4"
+    }
   }
 }
 
-# Elasticsearch config
+# Elasticsearch installation
 
 resource "helm_release" "elasticsearch" {
   name       = "elastic-operator"
   repository = "https://helm.elastic.co"
   chart      = "eck-operator"
   version    = "1.3.1"
-}
-
-resource "kubernetes_secret" "elasticsearch_roles" {
-  metadata {
-    name = "elasticsearch-roles"
-  }
-
-  data = {
-    "roles.yml" = file("${path.module}/elastic_roles.yml")
-  }
 }
 
 // Cannot install through terraform until ECK 1.4
@@ -43,7 +37,59 @@ resource "kubernetes_secret" "elasticsearch_roles" {
 #   depends_on = [helm_release.elasticsearch]
 # }
 
-# Use this to get the load balancer external IP for DNS configuration
+# Users and roles
+
+data "kubernetes_secret" "elastic_user" {
+  metadata {
+    name = "elastic-es-elastic-user"
+  }
+}
+
+provider "elasticsearch" {
+  urls     = "https://elastic.foreignlanguagereader.com:9200"
+  username = "elastic"
+  password = data.kubernetes_secret.elastic_user.data.elastic
+}
+
+resource "kubernetes_secret" "elasticsearch_roles" {
+  metadata {
+    name = "elasticsearch-roles"
+  }
+
+  data = {
+    "roles.yml" = file("${path.module}/elastic_roles.yml")
+  }
+}
+
+resource "elasticsearch_user" "api" {
+  username  = "apiprod"
+  enabled   = "true"
+  email     = "apiprod@foreignlanguagereader.com"
+  full_name = "api prod"
+  password  = var.api_password
+  roles     = ["api_prod"]
+}
+
+resource "elasticsearch_user" "fluentd" {
+  username  = "fluentd"
+  enabled   = "true"
+  email     = "fluentd@foreignlanguagereader.com"
+  full_name = "fluentd"
+  password  = var.fluentd_password
+  roles     = ["fluentd"]
+}
+
+resource "elasticsearch_user" "spark" {
+  username  = "spark"
+  enabled   = "true"
+  email     = "spark@foreignlanguagereader.com"
+  full_name = "spark"
+  password  = var.spark_password
+  roles     = ["spark"]
+}
+
+# Domains for services
+
 data "kubernetes_service" "elastic" {
   metadata {
     name      = "elastic-es-http"
