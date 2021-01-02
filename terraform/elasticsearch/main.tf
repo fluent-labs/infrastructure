@@ -186,9 +186,9 @@ resource "kubernetes_secret" "elasticsearch_aws_credentials" {
 
 # Backup configuration
 
-resource elasticsearch_snapshot_repository "backups" {
-  name     = "S3-backup"
-  type     = "s3"
+resource "elasticsearch_snapshot_repository" "backups" {
+  name = "S3-backup"
+  type = "s3"
   settings = {
     "bucket" = aws_s3_bucket.backup.id
   }
