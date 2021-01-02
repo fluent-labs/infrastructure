@@ -20,6 +20,20 @@ resource "helm_release" "elasticsearch" {
   version    = "1.3.1"
 }
 
+# Roles
+
+data "kubernetes_secret" "elastic_user" {
+  metadata {
+    name = "elastic-es-elastic-user"
+  }
+}
+
+provider "elasticsearch" {
+    urls     = "https://elastic.foreignlanguagereader.com:9200"
+    username = "elastic"
+    password = data.kubernetes_secret.elastic_user.data.elastic
+}
+
 resource "kubernetes_secret" "elasticsearch_roles" {
   metadata {
     name = "elasticsearch-roles"
