@@ -1,0 +1,12 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: foreign-language-reader-api
+  labels:
+    service: api
+spec:
+  selector:
+    matchLabels:
+      app: api
+  endpoints:
+  - port: api

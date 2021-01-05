@@ -15,12 +15,16 @@ resource "kubernetes_service" "api" {
   metadata {
     name      = "api"
     namespace = var.env
+    labels = {
+      "app" = "api"
+    }
   }
   spec {
     selector = {
       app = "api"
     }
     port {
+      name = "api"
       port = 9000
     }
     type = "ClusterIP"
