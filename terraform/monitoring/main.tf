@@ -29,3 +29,10 @@ resource "helm_release" "fluentd_elasticsearch" {
     value = random_password.fluent_elasticsearch_password.result
   }
 }
+
+resource "helm_release" "prometheus_operator" {
+  name       = "prometheus"
+  repository = "https://charts.bitnami.com/bitnami"
+  chart      = "kube-prometheus"
+  version    = "3.3.2"
+}
