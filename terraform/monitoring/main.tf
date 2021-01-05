@@ -37,9 +37,9 @@ resource "helm_release" "prometheus_operator" {
   version    = "3.3.2"
 }
 
-resource "kubernetes_manifest" "api_prometheus" {
-  provider = kubernetes-alpha
-  manifest = yamldecode(file("${path.module}/api_prometheus.yml"))
+# resource "kubernetes_manifest" "api_prometheus" {
+#   provider = kubernetes-alpha
+#   manifest = yamldecode(file("${path.module}/api_prometheus.yml"))
 
-  depends_on = [helm_release.prometheus_operator]
-}
+#   depends_on = [helm_release.prometheus_operator]
+# }

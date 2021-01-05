@@ -15,7 +15,7 @@ resource "kubernetes_service" "api" {
   metadata {
     name      = "api"
     namespace = var.env
-    labels    = {
+    labels = {
       "app" = "api"
     }
   }
