@@ -126,6 +126,36 @@ resource "kubernetes_deployment" "api" {
           }
 
           env {
+            name = "DATABASE_URL"
+            value_from {
+              secret_key_ref {
+                name = "api-database-credentials"
+                key  = "connection_string"
+              }
+            }
+          }
+
+          env {
+            name = "DATABASE_USERNAME"
+            value_from {
+              secret_key_ref {
+                name = "api-database-credentials"
+                key  = "username"
+              }
+            }
+          }
+
+          env {
+            name = "DATABASE_PASSWORD"
+            value_from {
+              secret_key_ref {
+                name = "api-database-credentials"
+                key  = "password"
+              }
+            }
+          }
+
+          env {
             name  = "GOOGLE_APPLICATION_CREDENTIALS"
             value = "/etc/flrcredentials/gcloud-creds.json"
           }
