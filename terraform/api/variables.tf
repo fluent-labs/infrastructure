@@ -2,6 +2,10 @@ variable "cluster_name" {
   description = "The cluster this will run on"
 }
 
+variable "database_name" {
+  description = "The database to connect to"
+}
+
 variable "env" {
   description = "The K8s namespace to run this in"
 }
