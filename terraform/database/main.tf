@@ -13,17 +13,17 @@ data "digitalocean_kubernetes_cluster" "foreign_language_reader" {
 
 # Configure database
 
-resource "digitalocean_database_cluster" "api_mysql" {
+resource "digitalocean_database_cluster" "api_db" {
   name       = "foreign-language-reader"
-  engine     = "mysql"
-  version    = "8"
+  engine     = "pg"
+  version    = "12"
   size       = var.size
   region     = "sfo2"
   node_count = var.node_count
 }
 
 resource "digitalocean_database_firewall" "allow_kubernetes" {
-  cluster_id = digitalocean_database_cluster.api_mysql.id
+  cluster_id = digitalocean_database_cluster.api_db.id
 
   rule {
     type  = "k8s"
