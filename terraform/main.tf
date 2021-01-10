@@ -50,12 +50,12 @@ provider "helm" {
 }
 
 # Mysql database to store user context.
-# module "database" {
-#   source       = "./database"
-#   cluster_name = var.cluster_name
-#   node_count   = 1
-#   size         = "db-s-1vcpu-1gb"
-# }
+module "database" {
+  source       = "./database"
+  cluster_name = var.cluster_name
+  node_count   = 1
+  size         = "db-s-1vcpu-1gb"
+}
 
 # Static content served to users
 
@@ -74,11 +74,12 @@ module "storybook" {
 }
 
 module "api" {
-  source       = "./api"
-  cluster_name = var.cluster_name
-  env          = "default"
-  min_replicas = 1
-  max_replicas = 10
+  source        = "./api"
+  cluster_name  = var.cluster_name
+  database_name = module.database.database_name
+  env           = "default"
+  min_replicas  = 1
+  max_replicas  = 10
 }
 
 # Content infrastructure
