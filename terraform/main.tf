@@ -83,11 +83,11 @@ module "api" {
 }
 
 module "language_service" {
-  source        = "./language_service"
-  cluster_name  = var.cluster_name
-  env           = "default"
-  min_replicas  = 1
-  max_replicas  = 10
+  source       = "./language_service"
+  cluster_name = var.cluster_name
+  env          = "default"
+  min_replicas = 1
+  max_replicas = 10
 }
 
 # Content infrastructure
