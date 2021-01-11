@@ -11,29 +11,29 @@ data "digitalocean_kubernetes_cluster" "foreign_language_reader" {
   name = var.cluster_name
 }
 
-resource "kubernetes_service" "api" {
+resource "kubernetes_service" "language_service" {
   metadata {
-    name      = "api"
+    name      = "language-service"
     namespace = var.env
     labels = {
-      "app" = "api"
+      "app" = "language-service"
     }
   }
   spec {
     selector = {
-      app = "api"
+      app = "language-service"
     }
     port {
-      name = "api"
-      port = 9000
+      name = "language-service"
+      port = 8000
     }
     type = "ClusterIP"
   }
 }
 
-resource "kubernetes_horizontal_pod_autoscaler" "api_autoscale" {
+resource "kubernetes_horizontal_pod_autoscaler" "language_service_autoscale" {
   metadata {
-    name      = "api"
+    name      = "language-service"
     namespace = var.env
   }
   spec {
@@ -42,29 +42,29 @@ resource "kubernetes_horizontal_pod_autoscaler" "api_autoscale" {
     scale_target_ref {
       api_version = "apps/v1"
       kind        = "Deployment"
-      name        = "api"
+      name        = "language-service"
     }
     target_cpu_utilization_percentage = 75
   }
 }
 
-resource "kubernetes_deployment" "api" {
+resource "kubernetes_deployment" "language_service" {
   metadata {
-    name      = "api"
+    name      = "language-service"
     namespace = var.env
   }
 
   spec {
     selector {
       match_labels = {
-        app = "api"
+        app = "language-service"
       }
     }
 
     template {
       metadata {
         labels = {
-          app = "api"
+          app = "language-service"
         }
       }
 
@@ -74,92 +74,11 @@ resource "kubernetes_deployment" "api" {
         }
 
         container {
-          image = "lkjaero/foreign-language-reader-api:latest"
-          name  = "api"
+          image = "lkjaero/language-service:latest"
+          name  = "language-service"
 
           port {
-            container_port = 9000
-          }
-
-          env {
-            name = "APPLICATION_SECRET"
-            value_from {
-              secret_key_ref {
-                name = "application-secret"
-                key  = "application_secret"
-              }
-            }
-          }
-
-          env {
-            name = "WEBSTER_LEARNERS_KEY"
-            value_from {
-              secret_key_ref {
-                name = "webster"
-                key  = "learners"
-              }
-            }
-          }
-
-          env {
-            name = "WEBSTER_SPANISH_KEY"
-            value_from {
-              secret_key_ref {
-                name = "webster"
-                key  = "spanish"
-              }
-            }
-          }
-
-          env {
-            name = "ELASTICSEARCH_PASSWORD"
-            value_from {
-              secret_key_ref {
-                name = "elasticsearch-credentials"
-                key  = "password"
-              }
-            }
-          }
-
-          env {
-            name = "DATABASE_URL"
-            value_from {
-              secret_key_ref {
-                name = "api-database-credentials"
-                key  = "connection_string"
-              }
-            }
-          }
-
-          env {
-            name = "DATABASE_USERNAME"
-            value_from {
-              secret_key_ref {
-                name = "api-database-credentials"
-                key  = "username"
-              }
-            }
-          }
-
-          env {
-            name = "DATABASE_PASSWORD"
-            value_from {
-              secret_key_ref {
-                name = "api-database-credentials"
-                key  = "password"
-              }
-            }
-          }
-
-          env {
-            name  = "GOOGLE_APPLICATION_CREDENTIALS"
-            value = "/etc/flrcredentials/gcloud-creds.json"
-          }
-
-          volume_mount {
-            mount_path = "/etc/flrcredentials"
-            name       = "flrcredentials"
-            read_only  = true
+            container_port = 8000
           }
 
           env {
@@ -179,7 +98,7 @@ resource "kubernetes_deployment" "api" {
           liveness_probe {
             http_get {
               path = "/health"
-              port = 9000
+              port = 8000
             }
 
             initial_delay_seconds = 30
@@ -190,21 +109,14 @@ resource "kubernetes_deployment" "api" {
 
           readiness_probe {
             http_get {
-              path = "/readiness"
-              port = 9000
+              path = "/health"
+              port = 8000
             }
 
             initial_delay_seconds = 30
             period_seconds        = 10
             timeout_seconds       = 5
             failure_threshold     = 5
-          }
-        }
-
-        volume {
-          name = "flrcredentials"
-          secret {
-            secret_name = "credentials"
           }
         }
       }
