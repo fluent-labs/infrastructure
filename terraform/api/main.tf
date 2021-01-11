@@ -225,11 +225,11 @@ resource "kubernetes_deployment" "api" {
   }
 
   # The deployment will not come up without the database connection
-  # depends_on = [
-  #   digitalocean_database_user.api_user,
-  #   digitalocean_database_db.api_database,
-  #   kubernetes_secret.api_database_credentials
-  # ]
+  depends_on = [
+    digitalocean_database_user.api_user,
+    digitalocean_database_db.api_database,
+    kubernetes_secret.api_database_credentials
+  ]
 }
 
 # Configure database
