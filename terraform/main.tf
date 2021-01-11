@@ -82,6 +82,14 @@ module "api" {
   max_replicas  = 10
 }
 
+module "language_service" {
+  source        = "./language_service"
+  cluster_name  = var.cluster_name
+  env           = "default"
+  min_replicas  = 1
+  max_replicas  = 10
+}
+
 # Content infrastructure
 # Spark jobs that scrape wiktionary for definitions
 # Should also have job triggers
