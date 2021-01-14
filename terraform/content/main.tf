@@ -122,7 +122,7 @@ resource "kubernetes_deployment" "example" {
 
     selector {
       match_labels = {
-        test = "prefect-agent"
+        app = "prefect-agent"
       }
     }
 
@@ -217,8 +217,8 @@ resource "kubernetes_deployment" "example" {
               memory = "128Mi"
             }
             requests {
-              cpu    = "250m"
-              memory = "50Mi"
+              cpu    = "100m"
+              memory = "128Mi"
             }
           }
 
@@ -268,6 +268,6 @@ resource "kubernetes_role_binding" "prefect_agent" {
   subject {
     kind      = "ServiceAccount"
     name      = "default"
-    api_group = "rbac.authorization.k8s.io"
+    api_group = ""
   }
 }
