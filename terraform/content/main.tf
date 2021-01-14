@@ -106,3 +106,168 @@ resource "kubernetes_secret" "spark_config" {
     "es_password"           = random_password.elasticsearch_password.result
   }
 }
+
+# Data pipeline orchestration
+
+resource "kubernetes_deployment" "example" {
+  metadata {
+    name = "prefect-agent"
+    labels = {
+      app = "prefect-agent"
+    }
+  }
+
+  spec {
+    replicas = 1
+
+    selector {
+      match_labels = {
+        test = "prefect-agent"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          app = "prefect-agent"
+        }
+      }
+
+      spec {
+        container {
+          name              = "agent"
+          image             = "prefecthq/prefect:0.14.2-python3.6"
+          image_pull_policy = "Always"
+          args              = ["prefect agent kubernetes start"]
+          command           = ["/bin/bash", "-c"]
+
+          env {
+            name = "PREFECT__CLOUD__AGENT__AUTH_TOKEN"
+            value_from {
+              secret_key_ref {
+                name = "prefect-auth"
+                key  = "token"
+              }
+            }
+          }
+
+          env {
+            name  = "PREFECT__CLOUD__API"
+            value = "https://api.prefect.io"
+          }
+
+          env {
+            name  = "NAMESPACE"
+            value = "default"
+          }
+
+          env {
+            name  = "IMAGE_PULL_SECRETS"
+            value = "regcred"
+          }
+
+          env {
+            name  = "PREFECT__CLOUD__AGENT__LABELS"
+            value = "[]"
+          }
+
+          env {
+            name  = "JOB_MEM_REQUEST"
+            value = "100Mi"
+          }
+
+          env {
+            name  = "JOB_MEM_LIMIT"
+            value = "500Mi"
+          }
+
+          env {
+            name  = "JOB_CPU_REQUEST"
+            value = "250m"
+          }
+
+          env {
+            name  = "JOB_CPU_LIMIT"
+            value = "500m"
+          }
+
+          env {
+            name  = "IMAGE_PULL_POLICY"
+            value = "Always"
+          }
+
+          env {
+            name  = "SERVICE_ACCOUNT_NAME"
+            value = "default"
+          }
+
+          env {
+            name  = "PREFECT__BACKEND"
+            value = "cloud"
+          }
+
+          env {
+            name  = "PREFECT__CLOUD__AGENT__AGENT_ADDRESS"
+            value = "http://:8080"
+          }
+
+          resources {
+            limits {
+              cpu    = "100m"
+              memory = "128Mi"
+            }
+            requests {
+              cpu    = "250m"
+              memory = "50Mi"
+            }
+          }
+
+          liveness_probe {
+            http_get {
+              path = "/api/health"
+              port = 8080
+            }
+
+            failure_threshold     = 2
+            initial_delay_seconds = 40
+            period_seconds        = 40
+          }
+        }
+      }
+    }
+  }
+}
+
+resource "kubernetes_role" "prefect_agent" {
+  metadata {
+    name = "prefect-agent-rbac"
+  }
+
+  rule {
+    api_groups = ["batch", "extensions"]
+    resources  = ["jobs"]
+    verbs      = ["*"]
+  }
+  rule {
+    api_groups = [""]
+    resources  = ["events", "pods"]
+    verbs      = ["*"]
+  }
+}
+
+resource "kubernetes_role_binding" "prefect_agent" {
+  metadata {
+    name      = "prefect-agent-rbac"
+    namespace = "default"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "Role"
+    name      = "prefect-agent-rbac"
+  }
+  subject {
+    kind      = "ServiceAccount"
+    name      = "default"
+    api_group = "rbac.authorization.k8s.io"
+  }
+}
