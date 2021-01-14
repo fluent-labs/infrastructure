@@ -106,3 +106,37 @@ resource "kubernetes_secret" "spark_config" {
     "es_password"           = random_password.elasticsearch_password.result
   }
 }
+
+resource "kubernetes_role" "prefect_agent" {
+  metadata {
+    name = "prefect-agent-rbac"
+  }
+
+  rule {
+    api_groups     = ["batch", "extensions"]
+    resources      = ["jobs"]
+    verbs          = ["*"]
+  }
+  rule {
+    api_groups = [""]
+    resources  = ["events", "pods"]
+    verbs      = ["*"]
+  }
+}
+
+resource "kubernetes_role_binding" "prefect_agent" {
+  metadata {
+    name      = "prefect-agent-rbac"
+    namespace = "default"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "Role"
+    name      = "prefect-agent-rbac"
+  }
+  subject {
+    kind      = "ServiceAccount"
+    name      = "default"
+    api_group = "rbac.authorization.k8s.io"
+  }
+}
