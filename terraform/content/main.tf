@@ -156,6 +156,61 @@ resource "kubernetes_deployment" "example" {
             value = "https://api.prefect.io"
           }
 
+          env {
+            name  = "NAMESPACE"
+            value = "default"
+          }
+
+          env {
+            name  = "IMAGE_PULL_SECRETS"
+            value = "regcred"
+          }
+
+          env {
+            name  = "PREFECT__CLOUD__AGENT__LABELS"
+            value = "[]"
+          }
+
+          env {
+            name  = "JOB_MEM_REQUEST"
+            value = "100Mi"
+          }
+
+          env {
+            name  = "JOB_MEM_LIMIT"
+            value = "500Mi"
+          }
+
+          env {
+            name  = "JOB_CPU_REQUEST"
+            value = "250m"
+          }
+
+          env {
+            name  = "JOB_CPU_LIMIT"
+            value = "500m"
+          }
+
+          env {
+            name  = "IMAGE_PULL_POLICY"
+            value = "Always"
+          }
+
+          env {
+            name  = "SERVICE_ACCOUNT_NAME"
+            value = "default"
+          }
+
+          env {
+            name  = "PREFECT__BACKEND"
+            value = "cloud"
+          }
+
+          env {
+            name  = "PREFECT__CLOUD__AGENT__AGENT_ADDRESS"
+            value = "http://:8080"
+          }
+
           resources {
             limits {
               cpu    = "100m"
