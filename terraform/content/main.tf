@@ -107,15 +107,91 @@ resource "kubernetes_secret" "spark_config" {
   }
 }
 
+# Data pipeline orchestration
+
+resource "kubernetes_deployment" "example" {
+  metadata {
+    name = "prefect-agent"
+    labels = {
+      app = "prefect-agent"
+    }
+  }
+
+  spec {
+    replicas = 1
+
+    selector {
+      match_labels = {
+        test = "prefect-agent"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          app = "prefect-agent"
+        }
+      }
+
+      spec {
+        container {
+          name              = "agent"
+          image             = "prefecthq/prefect:0.14.2-python3.6"
+          image_pull_policy = "Always"
+          args              = ["prefect agent kubernetes start"]
+          command           = ["/bin/bash", "-c"]
+
+          env {
+            name = "PREFECT__CLOUD__AGENT__AUTH_TOKEN"
+            value_from {
+              secret_key_ref {
+                name = "prefect-auth"
+                key  = "token"
+              }
+            }
+          }
+
+          env {
+            name  = "PREFECT__CLOUD__API"
+            value = "https://api.prefect.io"
+          }
+
+          resources {
+            limits {
+              cpu    = "100m"
+              memory = "128Mi"
+            }
+            requests {
+              cpu    = "250m"
+              memory = "50Mi"
+            }
+          }
+
+          liveness_probe {
+            http_get {
+              path = "/api/health"
+              port = 8080
+            }
+
+            failure_threshold     = 2
+            initial_delay_seconds = 40
+            period_seconds        = 40
+          }
+        }
+      }
+    }
+  }
+}
+
 resource "kubernetes_role" "prefect_agent" {
   metadata {
     name = "prefect-agent-rbac"
   }
 
   rule {
-    api_groups     = ["batch", "extensions"]
-    resources      = ["jobs"]
-    verbs          = ["*"]
+    api_groups = ["batch", "extensions"]
+    resources  = ["jobs"]
+    verbs      = ["*"]
   }
   rule {
     api_groups = [""]
