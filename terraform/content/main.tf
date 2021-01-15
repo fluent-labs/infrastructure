@@ -136,7 +136,7 @@ resource "kubernetes_deployment" "example" {
       spec {
         container {
           name              = "agent"
-          image             = "prefecthq/prefect:0.14.2-python3.6"
+          image             = "prefecthq/prefect:0.14.3-python3.8"
           image_pull_policy = "Always"
           args              = ["prefect agent kubernetes start"]
           command           = ["/bin/bash", "-c"]
