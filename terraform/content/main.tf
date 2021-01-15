@@ -109,7 +109,7 @@ resource "kubernetes_secret" "spark_config" {
 
 # Data pipeline orchestration
 
-resource "kubernetes_deployment" "example" {
+resource "kubernetes_deployment" "prefect" {
   metadata {
     name = "prefect-agent"
     labels = {
