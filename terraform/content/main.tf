@@ -235,7 +235,7 @@ resource "kubernetes_deployment" "prefect" {
         }
 
         automount_service_account_token = true
-        service_account_name = "prefect-agent"
+        service_account_name            = "prefect-agent"
       }
     }
   }
