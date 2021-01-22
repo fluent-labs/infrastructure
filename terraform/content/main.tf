@@ -168,7 +168,7 @@ resource "kubernetes_deployment" "prefect" {
 
           env {
             name  = "PREFECT__CLOUD__AGENT__LABELS"
-            value = "[]"
+            value = "['default']"
           }
 
           env {
@@ -198,7 +198,7 @@ resource "kubernetes_deployment" "prefect" {
 
           env {
             name  = "SERVICE_ACCOUNT_NAME"
-            value = "default"
+            value = "prefect-agent"
           }
 
           env {
@@ -267,7 +267,16 @@ resource "kubernetes_role_binding" "prefect_agent" {
   }
   subject {
     kind      = "ServiceAccount"
-    name      = "default"
+    name      = "prefect-agent"
     api_group = ""
+  }
+}
+
+resource "kubernetes_service_account" "prefect_agent" {
+  metadata {
+    name = "prefect-agent"
+  }
+  secret {
+    name = "prefect-auth"
   }
 }
