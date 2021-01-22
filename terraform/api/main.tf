@@ -156,11 +156,21 @@ resource "kubernetes_deployment" "api" {
           }
 
           env {
-            name = "AUTH0_CLIENT_ID"
+            name = "AUTH0_AUDIENCE"
             value_from {
               secret_key_ref {
                 name = "auth0"
-                key  = "clientId"
+                key  = "audience"
+              }
+            }
+          }
+
+          env {
+            name = "AUTH0_DOMAIN"
+            value_from {
+              secret_key_ref {
+                name = "auth0"
+                key  = "domain"
               }
             }
           }
