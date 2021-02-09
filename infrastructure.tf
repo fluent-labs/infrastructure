@@ -39,7 +39,7 @@ provider "aws" {
 resource "digitalocean_kubernetes_cluster" "foreign_language_reader" {
   name    = "foreign-language-reader"
   region  = "sfo2"
-  version = "1.19.3-do.3"
+  version = "1.19.6-do.0"
   tags    = ["prod"]
 
   node_pool {
