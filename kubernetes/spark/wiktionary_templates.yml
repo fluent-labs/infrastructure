@@ -1,0 +1,44 @@
+apiVersion: "sparkoperator.k8s.io/v1beta2"
+kind: SparkApplication
+metadata:
+  name: wiktionary-templates
+  namespace: default
+spec:
+  type: Scala
+  mode: cluster
+  image: "gcr.io/spark-operator/spark:v3.0.0"
+  imagePullPolicy: Always
+  mainClass: com.foreignlanguagereader.jobs.definitions.TemplateExtractor
+  mainApplicationFile: "https://foreign-language-reader-content.s3-us-west-2.amazonaws.com/jobs.jar"
+  sparkVersion: "3.0.0"
+  restartPolicy:
+    type: Never
+  driver:
+    javaOptions: "-Dlog4j.configurationFile=/mnt/config/log4j2.xml"
+    cores: 1
+    coreLimit: "1200m"
+    memory: "512m"
+    labels:
+      version: 3.0.0
+    serviceAccount: spark-spark
+    envSecretKeyRefs:
+      AWS_ACCESS_KEY_ID:
+        name: spark-config
+        key: AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY:
+        name: spark-config
+        key: AWS_SECRET_ACCESS_KEY
+  executor:
+    javaOptions: "-Dlog4j.configurationFile=log4j2.xml"
+    cores: 1
+    instances: 1
+    memory: "512m"
+    labels:
+      version: 3.0.0
+    envSecretKeyRefs:
+      AWS_ACCESS_KEY_ID:
+        name: spark-config
+        key: AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY:
+        name: spark-config
+        key: AWS_SECRET_ACCESS_KEY
