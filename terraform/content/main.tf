@@ -50,6 +50,27 @@ resource "aws_iam_policy_attachment" "spark_read" {
   policy_arn = aws_iam_policy.spark_read.arn
 }
 
+data "aws_iam_policy_document" "spark_write" {
+  statement {
+    actions   = ["s3:PutObject"]
+    effect    = "Allow"
+    resources = ["${aws_s3_bucket.content.arn}/definitions/wiktionary/*"]
+  }
+}
+
+resource "aws_iam_policy" "spark_write" {
+  name        = "spark-write-role"
+  description = "IAM policy to let spark write results from content uploaded to S3"
+
+  policy = data.aws_iam_policy_document.spark_write.json
+}
+
+resource "aws_iam_policy_attachment" "spark_write" {
+  name       = "spark-write-role-attach"
+  users      = [aws_iam_user.spark.name]
+  policy_arn = aws_iam_policy.spark_write.arn
+}
+
 # S3 Deploy credentials
 
 resource "aws_iam_access_key" "github" {
