@@ -52,7 +52,7 @@ resource "aws_iam_policy_attachment" "spark_read" {
 
 data "aws_iam_policy_document" "spark_write" {
   statement {
-    actions   = ["s3:PutObject"]
+    actions   = ["*"]
     effect    = "Allow"
     resources = ["${aws_s3_bucket.content.arn}/*"]
   }
