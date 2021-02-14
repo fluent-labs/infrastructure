@@ -54,7 +54,7 @@ data "aws_iam_policy_document" "spark_write" {
   statement {
     actions   = ["s3:PutObject"]
     effect    = "Allow"
-    resources = ["${aws_s3_bucket.content.arn}/definitions/wiktionary/*"]
+    resources = ["${aws_s3_bucket.content.arn}/*"]
   }
 }
 
