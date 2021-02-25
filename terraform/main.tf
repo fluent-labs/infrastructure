@@ -79,19 +79,19 @@ module "frontend_preprod" {
   deploy_users = [aws_iam_user.github.name]
 }
 
-module "frontend_fluent_labs" {
-  source       = "./static_bucket"
-  domain       = digitalocean_domain.fluentlabs.name
-  subdomain    = "www"
-  deploy_users = [aws_iam_user.github.name]
-}
+# module "frontend_fluent_labs" {
+#   source       = "./static_bucket"
+#   domain       = digitalocean_domain.fluentlabs.name
+#   subdomain    = "www"
+#   deploy_users = [aws_iam_user.github.name]
+# }
 
-module "frontend_preprod_fluent_labs" {
-  source       = "./static_bucket"
-  domain       = digitalocean_domain.fluentlabs.name
-  subdomain    = "preprod"
-  deploy_users = [aws_iam_user.github.name]
-}
+# module "frontend_preprod_fluent_labs" {
+#   source       = "./static_bucket"
+#   domain       = digitalocean_domain.fluentlabs.name
+#   subdomain    = "preprod"
+#   deploy_users = [aws_iam_user.github.name]
+# }
 
 module "api" {
   source        = "./api"
