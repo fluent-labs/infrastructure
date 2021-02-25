@@ -18,7 +18,8 @@ data "digitalocean_domain" "main" {
 data "aws_caller_identity" "current" {}
 
 data "aws_acm_certificate" "cert" {
-  domain = "*.${var.domain}"
+  provider = aws.us_east_1
+  domain   = "*.${var.domain}"
 }
 
 resource "aws_s3_bucket" "main" {
