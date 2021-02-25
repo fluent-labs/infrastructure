@@ -22,7 +22,7 @@ data "aws_acm_certificate" "cert" {
 }
 
 resource "aws_s3_bucket" "main" {
-  bucket = local.full_domain
+  bucket = "*.${var.domain}"
   acl    = "public-read"
 
   website {
