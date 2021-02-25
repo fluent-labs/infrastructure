@@ -200,3 +200,9 @@ resource "acme_certificate" "certificate_fluent_labs" {
     }
   }
 }
+
+resource "aws_acm_certificate" "cert" {
+  private_key       = acme_certificate.certificate_fluent_labs.private_key_pem
+  certificate_body  = acme_certificate.certificate_fluent_labs.certificate_pem
+  certificate_chain = acme_certificate.certificate_fluent_labs.issuer_pem
+}
