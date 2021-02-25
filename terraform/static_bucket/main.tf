@@ -17,6 +17,10 @@ data "digitalocean_domain" "main" {
 
 data "aws_caller_identity" "current" {}
 
+data "aws_acm_certificate" "cert" {
+  domain = "*.${var.domain}"
+}
+
 resource "aws_s3_bucket" "main" {
   bucket = local.full_domain
   acl    = "public-read"
@@ -87,7 +91,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = "arn:aws:acm:us-east-1:${data.aws_caller_identity.current.account_id}:certificate/23bf2e3d-1934-4470-a27d-05f3847a5ef2"
+    acm_certificate_arn = data.aws_acm_certificate.cert.arn
     ssl_support_method  = "sni-only"
   }
 }

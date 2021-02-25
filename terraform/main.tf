@@ -73,19 +73,19 @@ module "frontend_preprod" {
   deploy_users = [aws_iam_user.github.name]
 }
 
-module "frontend_fluent_labs" {
-  source       = "./static_bucket"
-  domain       = digitalocean_domain.fluentlabs.name
-  subdomain    = "www"
-  deploy_users = [aws_iam_user.github.name]
-}
+# module "frontend_fluent_labs" {
+#   source       = "./static_bucket"
+#   domain       = digitalocean_domain.fluentlabs.name
+#   subdomain    = "www"
+#   deploy_users = [aws_iam_user.github.name]
+# }
 
-module "frontend_preprod_fluent_labs" {
-  source       = "./static_bucket"
-  domain       = digitalocean_domain.fluentlabs.name
-  subdomain    = "preprod"
-  deploy_users = [aws_iam_user.github.name]
-}
+# module "frontend_preprod_fluent_labs" {
+#   source       = "./static_bucket"
+#   domain       = digitalocean_domain.fluentlabs.name
+#   subdomain    = "preprod"
+#   deploy_users = [aws_iam_user.github.name]
+# }
 
 module "api" {
   source        = "./api"
@@ -199,4 +199,10 @@ resource "acme_certificate" "certificate_fluent_labs" {
       DO_PROPAGATION_TIMEOUT = 600
     }
   }
+}
+
+resource "aws_acm_certificate" "cert" {
+  private_key       = acme_certificate.certificate_fluent_labs.private_key_pem
+  certificate_body  = acme_certificate.certificate_fluent_labs.certificate_pem
+  certificate_chain = acme_certificate.certificate_fluent_labs.issuer_pem
 }

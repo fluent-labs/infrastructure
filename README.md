@@ -1,2 +1,2 @@
 # Infrastructure
-Infrastructure for foreign-language-reader: Terraform scripts and Kubernetes configurations.
+Infrastructure for Fluent Labs: Terraform scripts and Kubernetes configurations.
