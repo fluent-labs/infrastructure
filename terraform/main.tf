@@ -73,19 +73,19 @@ module "frontend_preprod" {
   deploy_users = [aws_iam_user.github.name]
 }
 
-# module "frontend_fluent_labs" {
-#   source       = "./static_bucket"
-#   domain       = digitalocean_domain.fluentlabs.name
-#   subdomain    = "www"
-#   deploy_users = [aws_iam_user.github.name]
-# }
+module "frontend_fluent_labs" {
+  source       = "./static_bucket"
+  domain       = digitalocean_domain.fluentlabs.name
+  subdomain    = "www"
+  deploy_users = [aws_iam_user.github.name]
+}
 
-# module "frontend_preprod_fluent_labs" {
-#   source       = "./static_bucket"
-#   domain       = digitalocean_domain.fluentlabs.name
-#   subdomain    = "preprod"
-#   deploy_users = [aws_iam_user.github.name]
-# }
+module "frontend_preprod_fluent_labs" {
+  source       = "./static_bucket"
+  domain       = digitalocean_domain.fluentlabs.name
+  subdomain    = "preprod"
+  deploy_users = [aws_iam_user.github.name]
+}
 
 module "api" {
   source        = "./api"
@@ -186,17 +186,17 @@ resource "acme_certificate" "certificate" {
   }
 }
 
-# resource "acme_certificate" "certificate_fluent_labs" {
-#   account_key_pem = acme_registration.reg.account_key_pem
-#   common_name     = "*.fluentlabs.io"
+resource "acme_certificate" "certificate_fluent_labs" {
+  account_key_pem = acme_registration.reg.account_key_pem
+  common_name     = "*.fluentlabs.io"
 
-#   dns_challenge {
-#     provider = "digitalocean"
-#     config = {
-#       DO_AUTH_TOKEN          = var.digitalocean_token
-#       DO_HTTP_TIMEOUT        = 60
-#       DO_POLLING_INTERVAL    = 30
-#       DO_PROPAGATION_TIMEOUT = 600
-#     }
-#   }
-# }
+  dns_challenge {
+    provider = "digitalocean"
+    config = {
+      DO_AUTH_TOKEN          = var.digitalocean_token
+      DO_HTTP_TIMEOUT        = 60
+      DO_POLLING_INTERVAL    = 30
+      DO_PROPAGATION_TIMEOUT = 600
+    }
+  }
+}
