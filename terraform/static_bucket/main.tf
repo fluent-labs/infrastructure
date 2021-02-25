@@ -7,6 +7,12 @@ terraform {
   }
 }
 
+# Certificate manager certificates need to be in us-east-1
+provider "aws" {
+  alias  = "us_east_1"
+  region = "us-east-1"
+}
+
 locals {
   full_domain = "${var.subdomain}.${var.domain}"
 }
@@ -18,7 +24,8 @@ data "digitalocean_domain" "main" {
 data "aws_caller_identity" "current" {}
 
 data "aws_acm_certificate" "cert" {
-  domain = "*.${var.domain}"
+  provider = aws.us_east_1
+  domain   = "*.${var.domain}"
 }
 
 resource "aws_s3_bucket" "main" {

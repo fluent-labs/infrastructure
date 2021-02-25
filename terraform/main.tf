@@ -15,6 +15,12 @@ terraform {
   }
 }
 
+# Certificate manager certificates need to be in us-east-1
+provider "aws" {
+  alias  = "us_east_1"
+  region = "us-east-1"
+}
+
 # Hold K8s configuration in an intermediate level
 # Terraform currently cannot create a cluster and use it to set up a provider on the same leve.
 
@@ -73,19 +79,19 @@ module "frontend_preprod" {
   deploy_users = [aws_iam_user.github.name]
 }
 
-module "frontend_fluent_labs" {
-  source       = "./static_bucket"
-  domain       = digitalocean_domain.fluentlabs.name
-  subdomain    = "www"
-  deploy_users = [aws_iam_user.github.name]
-}
+# module "frontend_fluent_labs" {
+#   source       = "./static_bucket"
+#   domain       = digitalocean_domain.fluentlabs.name
+#   subdomain    = "www"
+#   deploy_users = [aws_iam_user.github.name]
+# }
 
-module "frontend_preprod_fluent_labs" {
-  source       = "./static_bucket"
-  domain       = digitalocean_domain.fluentlabs.name
-  subdomain    = "preprod"
-  deploy_users = [aws_iam_user.github.name]
-}
+# module "frontend_preprod_fluent_labs" {
+#   source       = "./static_bucket"
+#   domain       = digitalocean_domain.fluentlabs.name
+#   subdomain    = "preprod"
+#   deploy_users = [aws_iam_user.github.name]
+# }
 
 module "api" {
   source        = "./api"
@@ -202,6 +208,7 @@ resource "acme_certificate" "certificate_fluent_labs" {
 }
 
 resource "aws_acm_certificate" "cert" {
+  provider          = aws.us_east_1
   private_key       = acme_certificate.certificate_fluent_labs.private_key_pem
   certificate_body  = acme_certificate.certificate_fluent_labs.certificate_pem
   certificate_chain = acme_certificate.certificate_fluent_labs.issuer_pem
