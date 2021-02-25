@@ -15,6 +15,12 @@ terraform {
   }
 }
 
+# Certificate manager certificates need to be in us-east-1
+provider "aws" {
+  alias           = "us_east_1"
+  region          = "us-east-1"
+}
+
 # Hold K8s configuration in an intermediate level
 # Terraform currently cannot create a cluster and use it to set up a provider on the same leve.
 

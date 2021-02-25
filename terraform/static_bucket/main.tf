@@ -7,6 +7,12 @@ terraform {
   }
 }
 
+# Certificate manager certificates need to be in us-east-1
+provider "aws" {
+  alias           = "us_east_1"
+  region          = "us-east-1"
+}
+
 locals {
   full_domain = "${var.subdomain}.${var.domain}"
 }

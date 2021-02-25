@@ -34,10 +34,6 @@ provider "aws" {
   profile = "default"
   region  = "us-west-2"
 }
-provider "aws" {
-  alias           = "us_east_1"
-  region          = "us-east-1"
-}
 
 # Held here so that Helm and K8s providers can be initialized to work on this cluster
 resource "digitalocean_kubernetes_cluster" "foreign_language_reader" {
