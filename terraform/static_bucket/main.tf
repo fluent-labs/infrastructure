@@ -18,11 +18,11 @@ data "digitalocean_domain" "main" {
 data "aws_caller_identity" "current" {}
 
 data "aws_acm_certificate" "cert" {
-  domain = local.full_domain
+  domain = "*.${var.domain}"
 }
 
 resource "aws_s3_bucket" "main" {
-  bucket = "*.${var.domain}"
+  bucket = local.full_domain
   acl    = "public-read"
 
   website {
