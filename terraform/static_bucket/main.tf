@@ -134,7 +134,7 @@ data "aws_iam_policy_document" "deploy" {
   statement {
     actions   = ["s3:DeleteObject", "s3:GetBucketLocation", "s3:GetObject", "s3:ListBucket", "s3:PutObject", "s3:HeadBucket", "s3:PutBucketWebsite"]
     effect    = "Allow"
-    resources = ["${aws_s3_bucket.main.arn}/*"]
+    resources = [aws_s3_bucket.main.arn, "${aws_s3_bucket.main.arn}/*"]
   }
   statement {
     actions   = ["cloudfront:CreateInvalidation"]
