@@ -60,7 +60,7 @@ resource "digitalocean_record" "kubernetes_subdomain_dns" {
 
 resource "kubernetes_ingress" "ingress" {
   metadata {
-    name = "foreign-language-reader-ingress"
+    name = "fluentlabs-ingress"
     annotations = {
       "kubernetes.io/ingress.class"             = "nginx"
       "nginx.ingress.kubernetes.io/enable-cors" = "true"
@@ -69,12 +69,12 @@ resource "kubernetes_ingress" "ingress" {
 
   spec {
     tls {
-      hosts       = ["api.foreignlanguagereader.com"]
+      hosts       = ["api.fluentlabs.io"]
       secret_name = "nginx-certificate"
     }
 
     rule {
-      host = "api.foreignlanguagereader.com"
+      host = "api.fluentlabs.io"
       http {
         path {
           backend {
