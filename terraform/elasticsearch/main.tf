@@ -46,7 +46,7 @@ data "kubernetes_secret" "elastic_user" {
 }
 
 provider "elasticsearch" {
-  urls     = "https://elastic.foreignlanguagereader.com:9200"
+  urls     = "https://elastic.fluentlabs.io:9200"
   username = "elastic"
   password = data.kubernetes_secret.elastic_user.data.elastic
 }
