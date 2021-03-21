@@ -25,8 +25,8 @@ resource "helm_release" "fluentd_elasticsearch" {
   values = [file("${path.module}/fluentd.yml")]
 
   set_sensitive {
-    name  = "elasticsearch.auth.password"
-    value = random_password.fluent_elasticsearch_password.result
+    name  = "elasticsearch.indexName"
+    value = var.sematext_index_name
   }
 }
 

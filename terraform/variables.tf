@@ -5,3 +5,7 @@ variable "cluster_name" {
 variable "digitalocean_token" {
   description = "The digitalocean auth token. Used to generate cert challenges"
 }
+
+variable "sematext_index_name" {
+  description = "The elasticsearch index to send logs to. This is kept secret."
+}

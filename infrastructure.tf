@@ -51,8 +51,12 @@ resource "digitalocean_kubernetes_cluster" "foreign_language_reader" {
   }
 }
 
+
+variable "sematext_index_name" {}
+
 module "infrastructure" {
-  source             = "./terraform"
-  cluster_name       = digitalocean_kubernetes_cluster.foreign_language_reader.name
-  digitalocean_token = var.digitalocean_token
+  source              = "./terraform"
+  cluster_name        = digitalocean_kubernetes_cluster.foreign_language_reader.name
+  digitalocean_token  = var.digitalocean_token
+  sematext_index_name = var.sematext_index_name
 }
