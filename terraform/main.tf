@@ -129,7 +129,8 @@ module "elasticsearch" {
 
 # Contains logging and monitoring configuration
 module "monitoring" {
-  source = "./monitoring"
+  source              = "./monitoring"
+  sematext_index_name = var.sematext_index_name
 }
 
 # Ingress

@@ -16,8 +16,6 @@ resource "random_password" "fluent_elasticsearch_password" {
   min_numeric = 10
 }
 
-variable "sematext_index_name" {}
-
 resource "helm_release" "fluentd_elasticsearch" {
   name       = "fluentd"
   repository = "https://kokuwaio.github.io/helm-charts"
