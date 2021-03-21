@@ -40,7 +40,7 @@ resource "helm_release" "prometheus_operator" {
 resource "helm_release" "sematext_logagent" {
   name       = "sematext"
   repository = "https://cdn.sematext.com/helm-charts"
-  chart      = "st-logagent"
+  chart      = "sematext/sematext-agent"
   version    = "1.0.35"
 
   set {
