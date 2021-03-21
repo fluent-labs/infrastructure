@@ -16,6 +16,8 @@ resource "random_password" "fluent_elasticsearch_password" {
   min_numeric = 10
 }
 
+variable "sematext_index_name" {}
+
 resource "helm_release" "fluentd_elasticsearch" {
   name       = "fluentd"
   repository = "https://kokuwaio.github.io/helm-charts"
@@ -25,8 +27,8 @@ resource "helm_release" "fluentd_elasticsearch" {
   values = [file("${path.module}/fluentd.yml")]
 
   set_sensitive {
-    name  = "elasticsearch.auth.password"
-    value = random_password.fluent_elasticsearch_password.result
+    name  = "elasticsearch.indexName"
+    value = var.sematext_index_name
   }
 }
 
