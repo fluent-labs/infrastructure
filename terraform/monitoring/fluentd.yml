@@ -1,7 +1,8 @@
 elasticsearch:
+  auth:
+    enabled: true
+    user: fluentd
   hosts: 
-    - logsene-receiver.sematext.com
-  logstash:
-    enabled: false
+    - elastic-es-http.default.svc.cluster.local
   scheme: https
-  sslVerify: true
+  sslVerify: false
