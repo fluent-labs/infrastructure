@@ -50,7 +50,7 @@ resource "helm_release" "sematext_logagent" {
 
   set_sensitive {
     name  = "logsToken"
-    value = var.sematext_index_name.result
+    value = var.sematext_index_name
   }
 }
 
