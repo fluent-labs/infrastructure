@@ -37,6 +37,23 @@ resource "helm_release" "prometheus_operator" {
   version    = "3.3.2"
 }
 
+resource "helm_release" "sematext_logagent" {
+  name       = "sematext"
+  repository = "https://cdn.sematext.com/helm-charts"
+  chart      = "st-logagent"
+  version    = "1.0.35"
+
+  set {
+    name  = "region"
+    value = "US"
+  }
+
+  set_sensitive {
+    name  = "logsToken"
+    value = var.sematext_index_name.result
+  }
+}
+
 # resource "kubernetes_manifest" "api_prometheus" {
 #   provider = kubernetes-alpha
 #   manifest = yamldecode(file("${path.module}/api_prometheus.yml"))
