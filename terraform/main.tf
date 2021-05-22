@@ -2,7 +2,7 @@ terraform {
   required_providers {
     digitalocean = {
       source  = "digitalocean/digitalocean"
-      version = "2.3.0"
+      version = "2.8.0"
     }
     acme = {
       source  = "vancluever/acme"
@@ -10,7 +10,7 @@ terraform {
     }
     kubernetes-alpha = {
       source  = "hashicorp/kubernetes-alpha"
-      version = "0.2.1"
+      version = "0.4.1"
     }
   }
 }
