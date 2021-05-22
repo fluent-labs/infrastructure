@@ -123,12 +123,12 @@ POLICY
 #   }
 # }
 
-resource "digitalocean_record" "subdomain" {
-  domain = data.digitalocean_domain.main.name
-  type   = "CNAME"
-  name   = var.subdomain
-  value  = "${aws_cloudfront_distribution.s3_distribution.domain_name}."
-}
+# resource "digitalocean_record" "subdomain" {
+#   domain = data.digitalocean_domain.main.name
+#   type   = "CNAME"
+#   name   = var.subdomain
+#   value  = "${aws_cloudfront_distribution.s3_distribution.domain_name}."
+# }
 
 # data "aws_iam_policy_document" "deploy" {
 #   statement {
