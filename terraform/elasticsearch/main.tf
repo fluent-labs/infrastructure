@@ -133,7 +133,7 @@ resource "digitalocean_record" "kibana_subdomain_dns" {
 # Backups in S3
 
 resource "aws_s3_bucket" "backup" {
-  bucket = "foreign-language-reader-elasticsearch-backups"
+  bucket = "fluentlabs-elasticsearch-backups"
   acl    = "private"
 }
 
