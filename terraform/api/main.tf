@@ -2,7 +2,7 @@ terraform {
   required_providers {
     digitalocean = {
       source  = "digitalocean/digitalocean"
-      version = "2.3.0"
+      version = "2.8.0"
     }
   }
 }
@@ -192,10 +192,10 @@ resource "kubernetes_deployment" "api" {
           }
 
           resources {
-            limits {
+            limits = {
               memory = "500Mi"
             }
-            requests {
+            requests = {
               memory = "100Mi"
             }
           }

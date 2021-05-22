@@ -2,7 +2,7 @@ terraform {
   required_providers {
     digitalocean = {
       source  = "digitalocean/digitalocean"
-      version = "2.3.0"
+      version = "2.8.0"
     }
     elasticsearch = {
       source  = "disaster37/elasticsearch"
@@ -97,18 +97,18 @@ data "kubernetes_service" "elastic" {
   }
 }
 
-resource "digitalocean_record" "elastic_subdomain_dns" {
-  domain = var.domain
-  type   = "A"
-  name   = "elastic"
-  value  = data.kubernetes_service.elastic.load_balancer_ingress.0.ip
+# resource "digitalocean_record" "elastic_subdomain_dns" {
+#   domain = var.domain
+#   type   = "A"
+#   name   = "elastic"
+#   value  = data.kubernetes_service.elastic.ingress.ip
 
-  lifecycle {
-    ignore_changes = [
-      value,
-    ]
-  }
-}
+#   lifecycle {
+#     ignore_changes = [
+#       value,
+#     ]
+#   }
+# }
 
 data "kubernetes_service" "kibana" {
   metadata {
@@ -117,18 +117,18 @@ data "kubernetes_service" "kibana" {
   }
 }
 
-resource "digitalocean_record" "kibana_subdomain_dns" {
-  domain = var.domain
-  type   = "A"
-  name   = "kibana"
-  value  = data.kubernetes_service.kibana.load_balancer_ingress.0.ip
+# resource "digitalocean_record" "kibana_subdomain_dns" {
+#   domain = var.domain
+#   type   = "A"
+#   name   = "kibana"
+#   value  = data.kubernetes_service.kibana.ingress.ip
 
-  lifecycle {
-    ignore_changes = [
-      value,
-    ]
-  }
-}
+#   lifecycle {
+#     ignore_changes = [
+#       value,
+#     ]
+#   }
+# }
 
 # Backups in S3
 
