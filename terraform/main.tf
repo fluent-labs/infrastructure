@@ -3,7 +3,7 @@ terraform {
     digitalocean = {
       source  = "digitalocean/digitalocean"
       version = "2.3.0"
-    } 
+    }
     acme = {
       source  = "vancluever/acme"
       version = "1.6.3"
