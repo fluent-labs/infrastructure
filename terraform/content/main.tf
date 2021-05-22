@@ -233,11 +233,11 @@ resource "kubernetes_deployment" "prefect" {
           }
 
           resources {
-            limits {
+            limits = {
               cpu    = "100m"
               memory = "128Mi"
             }
-            requests {
+            requests = {
               cpu    = "100m"
               memory = "128Mi"
             }

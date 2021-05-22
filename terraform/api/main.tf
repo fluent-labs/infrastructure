@@ -192,10 +192,10 @@ resource "kubernetes_deployment" "api" {
           }
 
           resources {
-            limits {
+            limits = {
               memory = "500Mi"
             }
-            requests {
+            requests = {
               memory = "100Mi"
             }
           }
