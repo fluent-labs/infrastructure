@@ -11,7 +11,7 @@ terraform {
   required_providers {
     digitalocean = {
       source  = "digitalocean/digitalocean"
-      version = "2.3.0"
+      version = "2.8.0"
     }
     acme = {
       source  = "vancluever/acme"
