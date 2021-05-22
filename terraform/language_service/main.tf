@@ -87,10 +87,10 @@ resource "kubernetes_deployment" "language_service" {
           }
 
           resources {
-            limits {
+            limits = {
               memory = "2000Mi"
             }
-            requests {
+            requests = {
               memory = "1400Mi"
             }
           }
