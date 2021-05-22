@@ -101,7 +101,7 @@ resource "digitalocean_record" "elastic_subdomain_dns" {
   domain = var.domain
   type   = "A"
   name   = "elastic"
-  value  = data.kubernetes_service.elastic.load_balancer_ingress.0.ip
+  value  = data.kubernetes_service.elastic.ingress.ip
 
   lifecycle {
     ignore_changes = [
@@ -121,7 +121,7 @@ resource "digitalocean_record" "kibana_subdomain_dns" {
   domain = var.domain
   type   = "A"
   name   = "kibana"
-  value  = data.kubernetes_service.kibana.load_balancer_ingress.0.ip
+  value  = data.kubernetes_service.kibana.ingress.ip
 
   lifecycle {
     ignore_changes = [
