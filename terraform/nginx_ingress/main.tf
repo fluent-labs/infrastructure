@@ -44,19 +44,19 @@ EOF
 
 # DNS to route to cluster
 # TODO figure out what the output of the kubernetes service looks like
-resource "digitalocean_record" "kubernetes_subdomain_dns" {
-  for_each = toset(var.subdomains)
-  domain   = var.domain
-  type     = "A"
-  name     = each.value
-  value    = data.kubernetes_service.nginx.load_balancer_ingress.0.ip
+# resource "digitalocean_record" "kubernetes_subdomain_dns" {
+#   for_each = toset(var.subdomains)
+#   domain   = var.domain
+#   type     = "A"
+#   name     = each.value
+#   value    = data.kubernetes_service.nginx.load_balancer_ingress.0.ip
 
-  lifecycle {
-    ignore_changes = [
-      value,
-    ]
-  }
-}
+#   lifecycle {
+#     ignore_changes = [
+#       value,
+#     ]
+#   }
+# }
 
 resource "kubernetes_ingress" "ingress" {
   metadata {
