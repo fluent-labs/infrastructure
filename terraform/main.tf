@@ -3,7 +3,7 @@ terraform {
     digitalocean = {
       source  = "digitalocean/digitalocean"
       version = "2.3.0"
-    }
+    } 
     acme = {
       source  = "vancluever/acme"
       version = "1.6.3"
@@ -65,33 +65,33 @@ module "database" {
 
 # Static content served to users
 
-module "frontend" {
-  source       = "./static_bucket"
-  domain       = digitalocean_domain.main.name
-  subdomain    = "www"
-  deploy_users = [aws_iam_user.github.name]
-}
+# module "frontend" {
+#   source       = "./static_bucket"
+#   domain       = digitalocean_domain.main.name
+#   subdomain    = "www"
+#   deploy_users = [aws_iam_user.github.name]
+# }
 
-module "frontend_preprod" {
-  source       = "./static_bucket"
-  domain       = digitalocean_domain.main.name
-  subdomain    = "preprod"
-  deploy_users = [aws_iam_user.github.name]
-}
+# module "frontend_preprod" {
+#   source       = "./static_bucket"
+#   domain       = digitalocean_domain.main.name
+#   subdomain    = "preprod"
+#   deploy_users = [aws_iam_user.github.name]
+# }
 
-module "frontend_fluent_labs" {
-  source       = "./static_bucket"
-  domain       = digitalocean_domain.fluentlabs.name
-  subdomain    = "www"
-  deploy_users = [aws_iam_user.github.name]
-}
+# module "frontend_fluent_labs" {
+#   source       = "./static_bucket"
+#   domain       = digitalocean_domain.fluentlabs.name
+#   subdomain    = "www"
+#   deploy_users = [aws_iam_user.github.name]
+# }
 
-module "frontend_preprod_fluent_labs" {
-  source       = "./static_bucket"
-  domain       = digitalocean_domain.fluentlabs.name
-  subdomain    = "preprod"
-  deploy_users = [aws_iam_user.github.name]
-}
+# module "frontend_preprod_fluent_labs" {
+#   source       = "./static_bucket"
+#   domain       = digitalocean_domain.fluentlabs.name
+#   subdomain    = "preprod"
+#   deploy_users = [aws_iam_user.github.name]
+# }
 
 module "api" {
   source        = "./api"
@@ -159,13 +159,13 @@ resource "digitalocean_domain" "fluentlabs" {
 }
 
 # Frontend deploy user
-resource "aws_iam_access_key" "github" {
-  user = aws_iam_user.github.name
-}
+# resource "aws_iam_access_key" "github" {
+#   user = aws_iam_user.github.name
+# }
 
-resource "aws_iam_user" "github" {
-  name = "foreign-language-reader-github"
-}
+# resource "aws_iam_user" "github" {
+#   name = "foreign-language-reader-github"
+# }
 
 # TLS
 
@@ -208,9 +208,9 @@ resource "acme_certificate" "certificate_fluent_labs" {
   }
 }
 
-resource "aws_acm_certificate" "cert" {
-  provider          = aws.us_east_1
-  private_key       = acme_certificate.certificate_fluent_labs.private_key_pem
-  certificate_body  = acme_certificate.certificate_fluent_labs.certificate_pem
-  certificate_chain = acme_certificate.certificate_fluent_labs.issuer_pem
-}
+# resource "aws_acm_certificate" "cert" {
+#   provider          = aws.us_east_1
+#   private_key       = acme_certificate.certificate_fluent_labs.private_key_pem
+#   certificate_body  = acme_certificate.certificate_fluent_labs.certificate_pem
+#   certificate_chain = acme_certificate.certificate_fluent_labs.issuer_pem
+# }
