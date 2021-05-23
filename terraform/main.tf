@@ -95,7 +95,7 @@ module "frontend_preprod_fluent_labs" {
 module "api" {
   source        = "./api"
   cluster_name  = var.cluster_name
-  database_name = module.database.database_name
+  database_name = "test"
   env           = "default"
   min_replicas  = 1
   max_replicas  = 10
