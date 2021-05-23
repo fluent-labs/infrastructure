@@ -1,32 +1,20 @@
-terraform {
-  required_providers {
-    digitalocean = {
-      source  = "digitalocean/digitalocean"
-      version = "2.8.0"
-    }
-  }
+resource "random_password" "database_admin_password" {
+  length  = 64
+  special = true
 }
 
-data "digitalocean_kubernetes_cluster" "foreign_language_reader" {
-  name = var.cluster_name
-}
+resource "aws_db_instance" "fluentlabs" {
+  engine               = "postgres"
+  engine_version       = "PostgreSQL 12.5-R1"
+  instance_class       = "db.t3.micro"
+  name                 = "fluentlabs"
+  username             = "admin"
+  password             = random_password.database_admin_password.result
+  parameter_group_name = "default.postgres12"
+  skip_final_snapshot  = true
+  deletion_protection  = true
 
-# Configure database
-
-resource "digitalocean_database_cluster" "api_db" {
-  name       = "foreign-language-reader"
-  engine     = "pg"
-  version    = "12"
-  size       = var.size
-  region     = "sfo2"
-  node_count = var.node_count
-}
-
-resource "digitalocean_database_firewall" "allow_kubernetes" {
-  cluster_id = digitalocean_database_cluster.api_db.id
-
-  rule {
-    type  = "k8s"
-    value = data.digitalocean_kubernetes_cluster.foreign_language_reader.id
-  }
+  # Storage autoscaling goes here
+  allocated_storage     = 20
+  max_allocated_storage = 100
 }
