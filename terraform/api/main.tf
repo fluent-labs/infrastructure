@@ -12,7 +12,7 @@ data "digitalocean_kubernetes_cluster" "foreign_language_reader" {
 }
 
 data "aws_db_instance" "api_db" {
-  name = var.database_name
+  db_instance_identifier = var.database_name
 }
 
 resource "kubernetes_service" "api" {
