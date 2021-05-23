@@ -97,18 +97,18 @@ data "kubernetes_service" "elastic" {
   }
 }
 
-# resource "digitalocean_record" "elastic_subdomain_dns" {
-#   domain = var.domain
-#   type   = "A"
-#   name   = "elastic"
-#   value  = data.kubernetes_service.elastic.ingress.ip
+resource "digitalocean_record" "elastic_subdomain_dns" {
+  domain = var.domain
+  type   = "A"
+  name   = "elastic"
+  value  = data.kubernetes_service.elastic.status.0.load_balancer.0.ingress.0.ip
 
-#   lifecycle {
-#     ignore_changes = [
-#       value,
-#     ]
-#   }
-# }
+  lifecycle {
+    ignore_changes = [
+      value,
+    ]
+  }
+}
 
 data "kubernetes_service" "kibana" {
   metadata {
@@ -117,18 +117,18 @@ data "kubernetes_service" "kibana" {
   }
 }
 
-# resource "digitalocean_record" "kibana_subdomain_dns" {
-#   domain = var.domain
-#   type   = "A"
-#   name   = "kibana"
-#   value  = data.kubernetes_service.kibana.ingress.ip
+resource "digitalocean_record" "kibana_subdomain_dns" {
+  domain = var.domain
+  type   = "A"
+  name   = "kibana"
+  value  = data.kubernetes_service.kibana.status.0.load_balancer.0.ingress.0.ip
 
-#   lifecycle {
-#     ignore_changes = [
-#       value,
-#     ]
-#   }
-# }
+  lifecycle {
+    ignore_changes = [
+      value,
+    ]
+  }
+}
 
 # Backups in S3
 
