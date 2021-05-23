@@ -1,3 +1,3 @@
-# output "database_name" {
-#   value = digitalocean_database_cluster.api_db.name
-# }
+output "database_name" {
+  value = aws_db_instance.fluentlabs.name
+}
