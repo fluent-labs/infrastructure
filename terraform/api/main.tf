@@ -7,6 +7,10 @@ terraform {
   }
 }
 
+locals {
+  database_name = "fluentlabs-${var.env}"
+}
+
 data "digitalocean_kubernetes_cluster" "foreign_language_reader" {
   name = var.cluster_name
 }
@@ -265,8 +269,8 @@ resource "kubernetes_secret" "api_database_credentials" {
     password          = "password"
     host              = data.aws_db_instance.api_db.address
     port              = data.aws_db_instance.api_db.port
-    database          = "database"
-    connection_string = "jdbc:postgresql://${data.digitalocean_database_cluster.api_db.private_host}:${data.digitalocean_database_cluster.api_db.port}/${digitalocean_database_db.api_database.name}"
+    database          = locals.database_name
+    connection_string = "jdbc:postgresql://${data.aws_db_instance.api_db.address}:${data.aws_db_instance.api_db.port}/${locals.database_name}"
   }
 }
 
