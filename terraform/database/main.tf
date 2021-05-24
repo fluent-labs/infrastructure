@@ -7,6 +7,7 @@ resource "aws_db_instance" "fluentlabs" {
   engine                     = "postgres"
   engine_version             = "12.5"
   instance_class             = "db.t3.micro"
+  identifier                 = "fluentlabs"
   name                       = "fluentlabs"
   username                   = "fluentlabs_admin"
   password                   = random_password.database_admin_password.result
