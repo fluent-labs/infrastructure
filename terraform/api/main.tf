@@ -7,13 +7,17 @@ terraform {
   }
 }
 
+locals {
+  database_name = "fluentlabs-${var.env}"
+}
+
 data "digitalocean_kubernetes_cluster" "foreign_language_reader" {
   name = var.cluster_name
 }
 
-data "digitalocean_database_cluster" "api_db" {
-  name = var.database_name
-}
+# data "aws_db_instance" "api_db" {
+#   db_instance_identifier = var.database_name
+# }
 
 resource "kubernetes_service" "api" {
   metadata {
@@ -245,24 +249,13 @@ resource "kubernetes_deployment" "api" {
   }
 
   # The deployment will not come up without the database connection
+  ## TODO create the database table and user credentials
   depends_on = [
-    digitalocean_database_user.api_user,
-    digitalocean_database_db.api_database,
     kubernetes_secret.api_database_credentials
   ]
 }
 
 # Configure database
-
-resource "digitalocean_database_user" "api_user" {
-  cluster_id = data.digitalocean_database_cluster.api_db.id
-  name       = "api-${var.env}"
-}
-
-resource "digitalocean_database_db" "api_database" {
-  cluster_id = data.digitalocean_database_cluster.api_db.id
-  name       = "foreign-language-reader-${var.env}"
-}
 
 resource "kubernetes_secret" "api_database_credentials" {
   metadata {
@@ -271,12 +264,12 @@ resource "kubernetes_secret" "api_database_credentials" {
   }
 
   data = {
-    username          = digitalocean_database_user.api_user.name
-    password          = digitalocean_database_user.api_user.password
-    host              = data.digitalocean_database_cluster.api_db.private_host
-    port              = data.digitalocean_database_cluster.api_db.port
-    database          = digitalocean_database_db.api_database.name
-    connection_string = "jdbc:postgresql://${data.digitalocean_database_cluster.api_db.private_host}:${data.digitalocean_database_cluster.api_db.port}/${digitalocean_database_db.api_database.name}"
+    username = "username"
+    password = "password"
+    # host              = data.aws_db_instance.api_db.address
+    # port              = data.aws_db_instance.api_db.port
+    # database          = local.database_name
+    # connection_string = "jdbc:postgresql://${data.aws_db_instance.api_db.address}:${data.aws_db_instance.api_db.port}/${local.database_name}"
   }
 }
 
