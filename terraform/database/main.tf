@@ -8,7 +8,7 @@ resource "aws_db_instance" "fluentlabs" {
   engine_version             = "12.5"
   instance_class             = "db.t3.micro"
   name                       = "fluentlabs"
-  username                   = "admin"
+  username                   = "fluentlabs_admin"
   password                   = random_password.database_admin_password.result
   parameter_group_name       = "default.postgres12"
   skip_final_snapshot        = true
