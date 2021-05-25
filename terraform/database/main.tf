@@ -15,6 +15,7 @@ resource "aws_db_instance" "fluentlabs" {
   skip_final_snapshot        = true
   deletion_protection        = true
   auto_minor_version_upgrade = true
+  backup_retention_period    = 30
 
   # Storage autoscaling goes here
   allocated_storage     = 20
