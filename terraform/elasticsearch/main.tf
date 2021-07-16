@@ -6,7 +6,7 @@ terraform {
     }
     elasticsearch = {
       source  = "disaster37/elasticsearch"
-      version = "7.0.4"
+      version = "7.12.2"
     }
   }
 }
