@@ -61,7 +61,7 @@ resource "aws_eks_cluster" "fluentlabs" {
   }
 
   depends_on = [
-    aws_iam_role_policy_attachment.eks_role_attach,
+    aws_iam_role_policy_attachment.eks_cluster_policy,
     aws_iam_role_policy_attachment.eks_vpc_controller,
   ]
 }
