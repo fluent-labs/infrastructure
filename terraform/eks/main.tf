@@ -14,6 +14,8 @@ resource "aws_subnet" "public" {
   availability_zone       = data.aws_availability_zones.available.names[count.index]
   cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, count.index)
   vpc_id                  = aws_vpc.main.id
+
+  # Required so that the nodes can join the kubernetes cluster
   map_public_ip_on_launch = true
 
   tags = {
