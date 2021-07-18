@@ -62,16 +62,16 @@ resource "aws_iam_role_policy_attachment" "eks_vpc_controller" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
 }
 
-# resource "aws_eks_cluster" "fluentlabs" {
-#   name     = "fluentlabs-prod"
-#   role_arn = aws_iam_role.eks_cluster_role.arn
+resource "aws_eks_cluster" "fluentlabs" {
+  name     = "fluentlabs-prod"
+  role_arn = aws_iam_role.eks_cluster_role.arn
 
-#   vpc_config {
-#     subnet_ids = [aws_subnet.example1.id, aws_subnet.example2.id]
-#   }
+  vpc_config {
+    subnet_ids = [aws_subnet.public_one.id, aws_subnet.public_two.id, aws_subnet.public_three.id]
+  }
 
-#   depends_on = [
-#     aws_iam_role_policy_attachment.eks_role_attach,
-#     aws_iam_role_policy_attachment.eks_vpc_controller,
-#   ]
-# }
+  depends_on = [
+    aws_iam_role_policy_attachment.eks_role_attach,
+    aws_iam_role_policy_attachment.eks_vpc_controller,
+  ]
+}
