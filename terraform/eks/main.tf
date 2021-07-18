@@ -17,6 +17,7 @@ resource "aws_subnet" "public" {
 
   tags = {
     Name = "fluentlabs-public-${count.index}"
+    "kubernetes.io/cluster/fluentlabs-prod" = "shared"
   }
 }
 
