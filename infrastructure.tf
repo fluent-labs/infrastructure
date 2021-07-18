@@ -61,28 +61,6 @@ module "infrastructure" {
   sematext_index_name = var.sematext_index_name
 }
 
-# Permissions for K8s cluster go below here.
-resource "aws_iam_role" "eks_cluster_role" {
-  name = "eks-cluster-role"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "eks.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_role_policy_attachment" "eks-role-attach" {
-  role       = aws_iam_role.eks_cluster_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+module "kubernetes" {
+  source = "./terraform/eks"
 }
