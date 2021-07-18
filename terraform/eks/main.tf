@@ -64,3 +64,46 @@ resource "aws_eks_cluster" "fluentlabs" {
     aws_iam_role_policy_attachment.eks_vpc_controller,
   ]
 }
+
+resource "aws_iam_role" "service_workers" {
+  name = "eks-node-group-service"
+
+  assume_role_policy = jsonencode({
+    Statement = [{
+      Action = "sts:AssumeRole"
+      Effect = "Allow"
+      Principal = {
+        Service = "ec2.amazonaws.com"
+      }
+    }]
+    Version = "2012-10-17"
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "eks_worker_node_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+  role       = aws_iam_role.service_workers.name
+}
+
+resource "aws_iam_role_policy_attachment" "eks_cni_policy_worker" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+  role       = aws_iam_role.service_workers.name
+}
+
+resource "aws_eks_node_group" "services" {
+  cluster_name    = aws_eks_cluster.fluentlabs.name
+  node_group_name = "services"
+  node_role_arn   = aws_iam_role.service_workers.arn
+  subnet_ids      = aws_subnet.public[*].id
+
+  scaling_config {
+    desired_size = 1
+    max_size     = 5
+    min_size     = 1
+  }
+
+  depends_on = [
+    aws_iam_role_policy_attachment.eks_worker_node_policy,
+    aws_iam_role_policy_attachment.eks_cni_policy_worker,
+  ]
+}
