@@ -4,30 +4,19 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames = true
 }
 
-resource "aws_subnet" "public_one" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = "10.0.1.0/24"
-
-  tags = {
-    Name = "fluentlabs-public-1"
-  }
+data "aws_availability_zones" "available" {
+  state = "available"
 }
 
-resource "aws_subnet" "public_two" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = "10.0.2.0/24"
+resource "aws_subnet" "public" {
+  count = 3
+
+  availability_zone = data.aws_availability_zones.available.names[count.index]
+  cidr_block        = cidrsubnet(aws_vpc.main.cidr_block, 8, count.index)
+  vpc_id            = aws_vpc.main.id
 
   tags = {
-    Name = "fluentlabs-public-2"
-  }
-}
-
-resource "aws_subnet" "public_three" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = "10.0.3.0/24"
-
-  tags = {
-    Name = "fluentlabs-public-3"
+    Name = "fluentlabs-public-${count.index}"
   }
 }
 
@@ -67,7 +56,7 @@ resource "aws_eks_cluster" "fluentlabs" {
   role_arn = aws_iam_role.eks_cluster_role.arn
 
   vpc_config {
-    subnet_ids = [aws_subnet.public_one.id, aws_subnet.public_two.id, aws_subnet.public_three.id]
+    subnet_ids = aws_subnet.public[*].id
   }
 
   depends_on = [
