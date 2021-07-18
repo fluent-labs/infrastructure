@@ -16,7 +16,7 @@ resource "aws_subnet" "public" {
   vpc_id            = aws_vpc.main.id
 
   tags = {
-    Name = "fluentlabs-public-${count.index}"
+    Name                                    = "fluentlabs-public-${count.index}"
     "kubernetes.io/cluster/fluentlabs-prod" = "shared"
   }
 }
