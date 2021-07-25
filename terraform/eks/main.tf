@@ -60,7 +60,7 @@ resource "aws_iam_role_policy_attachment" "eks_vpc_controller" {
 }
 
 resource "aws_eks_cluster" "fluentlabs" {
-  name     = "fluentlabs-prod"
+  name     = "fluentlabsprod"
   role_arn = aws_iam_role.eks_cluster_role.arn
 
   vpc_config {
