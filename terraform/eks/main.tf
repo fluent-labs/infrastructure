@@ -23,7 +23,7 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name                                                    = "fluentlabs-public-${count.index}"
+    Name                                                       = "fluentlabs-public-${count.index}"
     "kubernetes.io/cluster/${aws_eks_cluster.fluentlabs.name}" = "shared"
   }
 }
