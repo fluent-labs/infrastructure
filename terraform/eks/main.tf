@@ -117,4 +117,8 @@ resource "aws_eks_node_group" "services" {
     aws_iam_role_policy_attachment.eks_cni_policy_worker,
     aws_iam_role_policy_attachment.eks_container_read_policy,
   ]
+
+  lifecycle {
+    ignore_changes = [scaling_config[0].desired_size]
+  }
 }
