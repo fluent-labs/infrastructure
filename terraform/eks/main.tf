@@ -2,6 +2,10 @@ resource "aws_vpc" "main" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_support   = true
   enable_dns_hostnames = true
+
+  tags = {
+    Name = "fluentlabs-prod"
+  }
 }
 
 data "aws_availability_zones" "available" {
@@ -19,8 +23,8 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name                                    = "fluentlabs-public-${count.index}"
-    "kubernetes.io/cluster/fluentlabs-prod" = "shared"
+    Name                                   = "fluentlabs-public-${count.index}"
+    "kubernetes.io/cluster/fluentlabsprod" = "shared"
   }
 }
 
@@ -56,8 +60,9 @@ resource "aws_iam_role_policy_attachment" "eks_vpc_controller" {
 }
 
 resource "aws_eks_cluster" "fluentlabs" {
-  name     = "fluentlabs-prod"
+  name     = "fluentlabsprod"
   role_arn = aws_iam_role.eks_cluster_role.arn
+  version  = "1.21.2"
 
   vpc_config {
     subnet_ids = aws_subnet.public[*].id
@@ -117,4 +122,8 @@ resource "aws_eks_node_group" "services" {
     aws_iam_role_policy_attachment.eks_cni_policy_worker,
     aws_iam_role_policy_attachment.eks_container_read_policy,
   ]
+
+  lifecycle {
+    ignore_changes = [scaling_config[0].desired_size]
+  }
 }
