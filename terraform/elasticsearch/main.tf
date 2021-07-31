@@ -117,18 +117,18 @@ resource "kubernetes_secret" "elasticsearch_roles" {
 #   }
 # }
 
-resource "digitalocean_record" "kibana_subdomain_dns" {
-  domain = var.domain
-  type   = "A"
-  name   = "kibana"
-  value  = data.kubernetes_service.kibana.status.0.load_balancer.0.ingress.0.ip
+# resource "digitalocean_record" "kibana_subdomain_dns" {
+#   domain = var.domain
+#   type   = "A"
+#   name   = "kibana"
+#   value  = data.kubernetes_service.kibana.status.0.load_balancer.0.ingress.0.ip
 
-  lifecycle {
-    ignore_changes = [
-      value,
-    ]
-  }
-}
+#   lifecycle {
+#     ignore_changes = [
+#       value,
+#     ]
+#   }
+# }
 
 # Backups in S3
 
