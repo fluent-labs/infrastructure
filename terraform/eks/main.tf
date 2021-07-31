@@ -98,8 +98,8 @@ resource "aws_eks_cluster" "fluentlabs" {
 }
 
 resource "aws_eks_addon" "vpc_cni" {
-  cluster_name  = aws_eks_cluster.fluentlabs.name
-  addon_name    = "vpc-cni"
+  cluster_name = aws_eks_cluster.fluentlabs.name
+  addon_name   = "vpc-cni"
 }
 
 resource "aws_eks_addon" "kube_proxy" {
