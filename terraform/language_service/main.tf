@@ -7,10 +7,6 @@ terraform {
   }
 }
 
-data "digitalocean_kubernetes_cluster" "foreign_language_reader" {
-  name = var.cluster_name
-}
-
 resource "kubernetes_service" "language_service" {
   metadata {
     name      = "language-service"
