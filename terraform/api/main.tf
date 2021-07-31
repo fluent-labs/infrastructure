@@ -73,9 +73,9 @@ resource "kubernetes_deployment" "api" {
       }
 
       spec {
-        image_pull_secrets {
-          name = "regcred"
-        }
+        # image_pull_secrets {
+        #   name = "regcred"
+        # }
 
         container {
           image = "lkjaero/foreign-language-reader-api:latest"
