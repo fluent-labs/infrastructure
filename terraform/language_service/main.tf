@@ -65,9 +65,9 @@ resource "kubernetes_deployment" "language_service" {
       }
 
       spec {
-        image_pull_secrets {
-          name = "regcred"
-        }
+        # image_pull_secrets {
+        #   name = "regcred"
+        # }
 
         container {
           image = "lkjaero/language-service:latest"
