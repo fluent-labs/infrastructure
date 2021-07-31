@@ -102,13 +102,13 @@ module "content" {
   source = "./content"
 }
 
-module "elasticsearch" {
-  source           = "./elasticsearch"
-  domain           = digitalocean_domain.fluentlabs.name
-  api_password     = module.api.elasticsearch_password
-  fluentd_password = module.monitoring.fluentd_password
-  spark_password   = module.content.elasticsearch_password
-}
+# module "elasticsearch" {
+#   source           = "./elasticsearch"
+#   domain           = digitalocean_domain.fluentlabs.name
+#   api_password     = module.api.elasticsearch_password
+#   fluentd_password = module.monitoring.fluentd_password
+#   spark_password   = module.content.elasticsearch_password
+# }
 
 # Contains logging and monitoring configuration
 module "monitoring" {
