@@ -22,35 +22,33 @@ provider "aws" {
 }
 
 # Hold K8s configuration in an intermediate level
-# Terraform currently cannot create a cluster and use it to set up a provider on the same leve.
+# Terraform currently cannot create a cluster and use it to set up a provider on the same level.
 
-data "digitalocean_kubernetes_cluster" "foreign_language_reader" {
+data "aws_eks_cluster" "main" {
+  name = var.cluster_name
+}
+
+data "aws_eks_cluster_auth" "main" {
   name = var.cluster_name
 }
 
 provider "kubernetes" {
-  host  = data.digitalocean_kubernetes_cluster.foreign_language_reader.endpoint
-  token = data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].token
-  cluster_ca_certificate = base64decode(
-    data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].cluster_ca_certificate
-  )
+  host                   = data.aws_eks_cluster.main.endpoint
+  token                  = data.aws_eks_cluster_auth.main.token
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.main.certificate_authority[0].data)
 }
 
 provider "kubernetes-alpha" {
-  host  = data.digitalocean_kubernetes_cluster.foreign_language_reader.endpoint
-  token = data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].token
-  cluster_ca_certificate = base64decode(
-    data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].cluster_ca_certificate
-  )
+  host                   = data.aws_eks_cluster.main.endpoint
+  token                  = data.aws_eks_cluster_auth.main.token
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.main.certificate_authority[0].data)
 }
 
 provider "helm" {
   kubernetes {
-    host  = data.digitalocean_kubernetes_cluster.foreign_language_reader.endpoint
-    token = data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].token
-    cluster_ca_certificate = base64decode(
-      data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].cluster_ca_certificate
-    )
+    host                   = data.aws_eks_cluster.main.endpoint
+    token                  = data.aws_eks_cluster_auth.main.token
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.main.certificate_authority[0].data)
   }
 }
 
@@ -104,13 +102,13 @@ module "content" {
   source = "./content"
 }
 
-module "elasticsearch" {
-  source           = "./elasticsearch"
-  domain           = digitalocean_domain.fluentlabs.name
-  api_password     = module.api.elasticsearch_password
-  fluentd_password = module.monitoring.fluentd_password
-  spark_password   = module.content.elasticsearch_password
-}
+# module "elasticsearch" {
+#   source           = "./elasticsearch"
+#   domain           = digitalocean_domain.fluentlabs.name
+#   api_password     = module.api.elasticsearch_password
+#   fluentd_password = module.monitoring.fluentd_password
+#   spark_password   = module.content.elasticsearch_password
+# }
 
 # Contains logging and monitoring configuration
 module "monitoring" {

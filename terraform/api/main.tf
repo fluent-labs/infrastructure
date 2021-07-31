@@ -11,10 +11,6 @@ locals {
   database_name = "fluentlabs-${var.env}"
 }
 
-data "digitalocean_kubernetes_cluster" "foreign_language_reader" {
-  name = var.cluster_name
-}
-
 # data "aws_db_instance" "api_db" {
 #   db_instance_identifier = var.database_name
 # }
