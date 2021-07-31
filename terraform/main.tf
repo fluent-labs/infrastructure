@@ -22,35 +22,39 @@ provider "aws" {
 }
 
 # Hold K8s configuration in an intermediate level
-# Terraform currently cannot create a cluster and use it to set up a provider on the same leve.
+# Terraform currently cannot create a cluster and use it to set up a provider on the same level.
 
 data "digitalocean_kubernetes_cluster" "foreign_language_reader" {
   name = var.cluster_name
 }
 
+data "aws_eks_cluster" "main" {
+  name = var.cluster_name
+}
+
+data "aws_eks_cluster_auth" "main" {
+  name = var.cluster_name
+}
+
 provider "kubernetes" {
-  host  = data.digitalocean_kubernetes_cluster.foreign_language_reader.endpoint
-  token = data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].token
-  cluster_ca_certificate = base64decode(
-    data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].cluster_ca_certificate
-  )
+  host                   = data.aws_eks_cluster.main.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.main.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.main.token
+  load_config_file       = false
 }
 
 provider "kubernetes-alpha" {
-  host  = data.digitalocean_kubernetes_cluster.foreign_language_reader.endpoint
-  token = data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].token
-  cluster_ca_certificate = base64decode(
-    data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].cluster_ca_certificate
-  )
+  host                   = data.aws_eks_cluster.main.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.main.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.main.token
+  load_config_file       = false
 }
 
 provider "helm" {
   kubernetes {
-    host  = data.digitalocean_kubernetes_cluster.foreign_language_reader.endpoint
-    token = data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].token
-    cluster_ca_certificate = base64decode(
-      data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].cluster_ca_certificate
-    )
+    host                   = data.aws_eks_cluster.main.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.main.certificate_authority[0].data)
+    token                  = data.aws_eks_cluster_auth.main.token
   }
 }
 
