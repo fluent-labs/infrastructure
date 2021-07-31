@@ -64,7 +64,9 @@ resource "aws_eks_cluster" "fluentlabs" {
   role_arn = aws_iam_role.eks_cluster_role.arn
 
   vpc_config {
-    subnet_ids = aws_subnet.public[*].id
+    subnet_ids              = aws_subnet.public[*].id
+    endpoint_private_access = true
+    endpoint_public_access  = true
   }
 
   depends_on = [
