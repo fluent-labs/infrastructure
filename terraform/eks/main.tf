@@ -64,13 +64,30 @@ resource "aws_eks_cluster" "fluentlabs" {
   role_arn = aws_iam_role.eks_cluster_role.arn
 
   vpc_config {
-    subnet_ids = aws_subnet.public[*].id
+    subnet_ids              = aws_subnet.public[*].id
+    endpoint_private_access = true
+    endpoint_public_access  = true
   }
 
   depends_on = [
     aws_iam_role_policy_attachment.eks_cluster_policy,
     aws_iam_role_policy_attachment.eks_vpc_controller,
   ]
+}
+
+resource "aws_eks_addon" "vpc_cni" {
+  cluster_name = aws_eks_cluster.fluentlabs.name
+  addon_name   = "vpc-cni"
+}
+
+resource "aws_eks_addon" "kube_proxy" {
+  cluster_name = aws_eks_cluster.fluentlabs.name
+  addon_name   = "kube-proxy"
+}
+
+resource "aws_eks_addon" "coredns" {
+  cluster_name = aws_eks_cluster.fluentlabs.name
+  addon_name   = "coredns"
 }
 
 resource "aws_iam_role" "service_workers" {
