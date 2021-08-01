@@ -11,9 +11,9 @@ locals {
   database_name = "fluentlabs-${var.env}"
 }
 
-# data "aws_db_instance" "api_db" {
-#   db_instance_identifier = var.database_name
-# }
+data "aws_db_instance" "api_db" {
+  db_instance_identifier = var.database_name
+}
 
 resource "kubernetes_service" "api" {
   metadata {
