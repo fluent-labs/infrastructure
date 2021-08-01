@@ -49,11 +49,11 @@ resource "aws_route53_zone" "main" {
 
 resource "aws_route53_record" "subdomain" {
   for_each = toset(var.subdomains)
-  zone_id = aws_route53_zone.main.zone_id
-  name    = "${each.value}.fluentlabs.io"
-  type    = "A"
-  ttl     = "3600"
-  records = [data.kubernetes_service.nginx.status.0.load_balancer.0.ingress.0.ip]
+  zone_id  = aws_route53_zone.main.zone_id
+  name     = "${each.value}.fluentlabs.io"
+  type     = "A"
+  ttl      = "3600"
+  records  = [data.kubernetes_service.nginx.status.0.load_balancer.0.ingress.0.ip]
 }
 
 resource "kubernetes_ingress" "ingress" {
