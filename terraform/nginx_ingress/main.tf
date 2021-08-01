@@ -43,13 +43,13 @@ EOF
 }
 
 # DNS to route to cluster
-resource "aws_route53_zone" "main" {
+data "aws_route53_zone" "main" {
   name = "fluentlabs.io"
 }
 
 resource "aws_route53_record" "subdomain" {
   for_each = toset(var.subdomains)
-  zone_id  = aws_route53_zone.main.zone_id
+  zone_id  = data.aws_route53_zone.main.zone_id
   name     = "${each.value}.fluentlabs.io"
   type     = "CNAME"
   ttl      = "3600"

@@ -133,11 +133,7 @@ module "nginx_ingress" {
 
 # Shared resources for the cluster go down here.
 
-resource "digitalocean_domain" "main" {
-  name = "foreignlanguagereader.com"
-}
-
-resource "digitalocean_domain" "fluentlabs" {
+resource "aws_route53_zone" "main" {
   name = "fluentlabs.io"
 }
 
