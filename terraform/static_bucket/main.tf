@@ -124,11 +124,11 @@ data "aws_route53_zone" "main" {
 }
 
 resource "aws_route53_record" "subdomain" {
-  zone_id  = data.aws_route53_zone.main.zone_id
-  name     = "${var.subdomain}.fluentlabs.io"
-  type     = "CNAME"
-  ttl      = "3600"
-  records  = [aws_cloudfront_distribution.s3_distribution.domain_name]
+  zone_id = data.aws_route53_zone.main.zone_id
+  name    = "${var.subdomain}.fluentlabs.io"
+  type    = "CNAME"
+  ttl     = "3600"
+  records = [aws_cloudfront_distribution.s3_distribution.domain_name]
 }
 
 data "aws_iam_policy_document" "deploy" {
