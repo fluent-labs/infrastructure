@@ -148,29 +148,6 @@ resource "aws_eks_node_group" "services" {
   node_group_name = "services"
   node_role_arn   = aws_iam_role.service_workers.arn
   subnet_ids      = aws_subnet.public[*].id
-
-  scaling_config {
-    desired_size = 1
-    max_size     = 5
-    min_size     = 1
-  }
-
-  depends_on = [
-    aws_iam_role_policy_attachment.eks_worker_node_policy,
-    aws_iam_role_policy_attachment.eks_cni_policy_worker,
-    aws_iam_role_policy_attachment.eks_container_read_policy,
-  ]
-
-  lifecycle {
-    ignore_changes = [scaling_config[0].desired_size]
-  }
-}
-
-resource "aws_eks_node_group" "jobs" {
-  cluster_name    = aws_eks_cluster.fluentlabs.name
-  node_group_name = "jobs"
-  node_role_arn   = aws_iam_role.service_workers.arn
-  subnet_ids      = aws_subnet.public[*].id
   capacity_type   = "SPOT"
 
   scaling_config {
