@@ -44,7 +44,7 @@ EOF
 
 # DNS to route to cluster
 data "aws_route53_zone" "main" {
-  name = "fluentlabs.io"
+  name = var.domain
 }
 
 resource "aws_route53_record" "subdomain" {

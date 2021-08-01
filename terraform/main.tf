@@ -64,14 +64,14 @@ module "database" {
 
 module "frontend_fluent_labs" {
   source       = "./static_bucket"
-  domain       = digitalocean_domain.fluentlabs.name
+  domain       = aws_route53_zone.main.name
   subdomain    = "www"
   deploy_users = [aws_iam_user.github.name]
 }
 
 module "frontend_preprod_fluent_labs" {
   source       = "./static_bucket"
-  domain       = digitalocean_domain.fluentlabs.name
+  domain       = aws_route53_zone.main.name
   subdomain    = "preprod"
   deploy_users = [aws_iam_user.github.name]
 }
@@ -122,7 +122,7 @@ module "monitoring" {
 
 module "nginx_ingress" {
   source          = "./nginx_ingress"
-  domain          = "fluentlabs.io"
+  domain          = aws_route53_zone.main.name
   subdomains      = ["api"]
   private_key_pem = acme_certificate.certificate_fluent_labs.private_key_pem
   certificate_pem = acme_certificate.certificate_fluent_labs.certificate_pem

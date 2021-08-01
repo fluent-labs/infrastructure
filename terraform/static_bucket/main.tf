@@ -120,7 +120,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 }
 
 data "aws_route53_zone" "main" {
-  name = "fluentlabs.io"
+  name = var.domain
 }
 
 resource "aws_route53_record" "subdomain" {
