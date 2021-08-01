@@ -43,19 +43,17 @@ EOF
 }
 
 # DNS to route to cluster
-# TODO figure out what the output of the kubernetes service looks like
-resource "digitalocean_record" "kubernetes_subdomain_dns" {
-  for_each = toset(var.subdomains)
-  domain   = var.domain
-  type     = "A"
-  name     = each.value
-  value    = data.kubernetes_service.nginx.status.0.load_balancer.0.ingress.0.ip
+resource "aws_route53_zone" "main" {
+  name = "fluentlabs.io"
+}
 
-  lifecycle {
-    ignore_changes = [
-      value,
-    ]
-  }
+resource "aws_route53_record" "subdomain" {
+  for_each = toset(var.subdomains)
+  zone_id = aws_route53_zone.main.zone_id
+  name    = "${each.value}.fluentlabs.io"
+  type    = "A"
+  ttl     = "3600"
+  records = [data.kubernetes_service.nginx.status.0.load_balancer.0.ingress.0.ip]
 }
 
 resource "kubernetes_ingress" "ingress" {
