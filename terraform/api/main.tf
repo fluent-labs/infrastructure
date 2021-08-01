@@ -11,9 +11,9 @@ locals {
   database_name = "fluentlabs-${var.env}"
 }
 
-# data "aws_db_instance" "api_db" {
-#   db_instance_identifier = var.database_name
-# }
+data "aws_db_instance" "api_db" {
+  db_instance_identifier = var.database_name
+}
 
 resource "kubernetes_service" "api" {
   metadata {
@@ -260,8 +260,8 @@ resource "kubernetes_secret" "api_database_credentials" {
   }
 
   data = {
-    username = "username"
-    password = "password"
+    username          = "username"
+    password          = "password"
     host              = data.aws_db_instance.api_db.address
     port              = data.aws_db_instance.api_db.port
     database          = local.database_name
