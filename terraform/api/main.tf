@@ -78,7 +78,7 @@ resource "kubernetes_deployment" "api" {
         # }
 
         container {
-          image = "lkjaero/foreign-language-reader-api:latest"
+          image = "lkjaero/foreign-language-reader-api:LATEST"
           name  = "api"
 
           port {
