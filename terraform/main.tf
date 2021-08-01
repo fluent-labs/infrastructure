@@ -122,7 +122,7 @@ module "monitoring" {
 
 module "nginx_ingress" {
   source          = "./nginx_ingress"
-  domain          = digitalocean_domain.fluentlabs.name
+  domain          = "fluentlabs.io"
   subdomains      = ["api"]
   private_key_pem = acme_certificate.certificate_fluent_labs.private_key_pem
   certificate_pem = acme_certificate.certificate_fluent_labs.certificate_pem
@@ -157,33 +157,12 @@ resource "acme_registration" "reg" {
   email_address   = "letsencrypt@lucaskjaerozhang.com"
 }
 
-resource "acme_certificate" "certificate" {
-  account_key_pem = acme_registration.reg.account_key_pem
-  common_name     = "*.foreignlanguagereader.com"
-
-  dns_challenge {
-    provider = "digitalocean"
-    config = {
-      DO_AUTH_TOKEN          = var.digitalocean_token
-      DO_HTTP_TIMEOUT        = 60
-      DO_POLLING_INTERVAL    = 30
-      DO_PROPAGATION_TIMEOUT = 600
-    }
-  }
-}
-
 resource "acme_certificate" "certificate_fluent_labs" {
   account_key_pem = acme_registration.reg.account_key_pem
   common_name     = "*.fluentlabs.io"
 
   dns_challenge {
-    provider = "digitalocean"
-    config = {
-      DO_AUTH_TOKEN          = var.digitalocean_token
-      DO_HTTP_TIMEOUT        = 60
-      DO_POLLING_INTERVAL    = 30
-      DO_PROPAGATION_TIMEOUT = 600
-    }
+    provider = "route53"
   }
 }
 
