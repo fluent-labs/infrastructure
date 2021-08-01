@@ -35,23 +35,6 @@ provider "aws" {
   region  = "us-west-2"
 }
 
-# Held here so that Helm and K8s providers can be initialized to work on this cluster
-resource "digitalocean_kubernetes_cluster" "foreign_language_reader" {
-  name    = "foreign-language-reader"
-  region  = "sfo2"
-  version = "1.19.6-do.0"
-  tags    = ["prod"]
-
-  node_pool {
-    name       = "worker-pool"
-    size       = "s-2vcpu-4gb"
-    auto_scale = true
-    min_nodes  = 1
-    max_nodes  = 5
-  }
-}
-
-
 variable "sematext_index_name" {}
 
 module "infrastructure" {
@@ -61,6 +44,7 @@ module "infrastructure" {
   sematext_index_name = var.sematext_index_name
 }
 
+# Held here so that Helm and K8s providers can be initialized to work on this cluster
 module "kubernetes" {
   source = "./terraform/eks"
 }
