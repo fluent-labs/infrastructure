@@ -51,9 +51,9 @@ resource "aws_route53_record" "subdomain" {
   for_each = toset(var.subdomains)
   zone_id  = aws_route53_zone.main.zone_id
   name     = "${each.value}.fluentlabs.io"
-  type     = "A"
+  type     = "CNAME"
   ttl      = "3600"
-  records  = [data.kubernetes_service.nginx.status.0.load_balancer.0.ingress.0.ip]
+  records  = [data.kubernetes_service.nginx.status.0.load_balancer.0.ingress.0.hostname]
 }
 
 resource "kubernetes_ingress" "ingress" {
