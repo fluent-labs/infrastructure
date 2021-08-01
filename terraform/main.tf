@@ -64,14 +64,14 @@ module "database" {
 
 module "frontend_fluent_labs" {
   source       = "./static_bucket"
-  domain       = digitalocean_domain.fluentlabs.name
+  domain       = aws_route53_zone.main.name
   subdomain    = "www"
   deploy_users = [aws_iam_user.github.name]
 }
 
 module "frontend_preprod_fluent_labs" {
   source       = "./static_bucket"
-  domain       = digitalocean_domain.fluentlabs.name
+  domain       = aws_route53_zone.main.name
   subdomain    = "preprod"
   deploy_users = [aws_iam_user.github.name]
 }
@@ -122,7 +122,7 @@ module "monitoring" {
 
 module "nginx_ingress" {
   source          = "./nginx_ingress"
-  domain          = digitalocean_domain.fluentlabs.name
+  domain          = aws_route53_zone.main.name
   subdomains      = ["api"]
   private_key_pem = acme_certificate.certificate_fluent_labs.private_key_pem
   certificate_pem = acme_certificate.certificate_fluent_labs.certificate_pem
@@ -133,11 +133,7 @@ module "nginx_ingress" {
 
 # Shared resources for the cluster go down here.
 
-resource "digitalocean_domain" "main" {
-  name = "foreignlanguagereader.com"
-}
-
-resource "digitalocean_domain" "fluentlabs" {
+resource "aws_route53_zone" "main" {
   name = "fluentlabs.io"
 }
 
@@ -161,33 +157,12 @@ resource "acme_registration" "reg" {
   email_address   = "letsencrypt@lucaskjaerozhang.com"
 }
 
-resource "acme_certificate" "certificate" {
-  account_key_pem = acme_registration.reg.account_key_pem
-  common_name     = "*.foreignlanguagereader.com"
-
-  dns_challenge {
-    provider = "digitalocean"
-    config = {
-      DO_AUTH_TOKEN          = var.digitalocean_token
-      DO_HTTP_TIMEOUT        = 60
-      DO_POLLING_INTERVAL    = 30
-      DO_PROPAGATION_TIMEOUT = 600
-    }
-  }
-}
-
 resource "acme_certificate" "certificate_fluent_labs" {
   account_key_pem = acme_registration.reg.account_key_pem
   common_name     = "*.fluentlabs.io"
 
   dns_challenge {
-    provider = "digitalocean"
-    config = {
-      DO_AUTH_TOKEN          = var.digitalocean_token
-      DO_HTTP_TIMEOUT        = 60
-      DO_POLLING_INTERVAL    = 30
-      DO_PROPAGATION_TIMEOUT = 600
-    }
+    provider = "route53"
   }
 }
 

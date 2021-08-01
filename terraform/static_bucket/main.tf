@@ -17,10 +17,6 @@ locals {
   full_domain = "${var.subdomain}.${var.domain}"
 }
 
-data "digitalocean_domain" "main" {
-  name = var.domain
-}
-
 data "aws_caller_identity" "current" {}
 
 data "aws_acm_certificate" "cert" {
@@ -123,12 +119,17 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 }
 
-# resource "digitalocean_record" "subdomain" {
-#   domain = data.digitalocean_domain.main.name
-#   type   = "CNAME"
-#   name   = var.subdomain
-#   value  = "${aws_cloudfront_distribution.s3_distribution.domain_name}."
-# }
+data "aws_route53_zone" "main" {
+  name = var.domain
+}
+
+resource "aws_route53_record" "subdomain" {
+  zone_id = data.aws_route53_zone.main.zone_id
+  name    = "${var.subdomain}.fluentlabs.io"
+  type    = "CNAME"
+  ttl     = "3600"
+  records = [aws_cloudfront_distribution.s3_distribution.domain_name]
+}
 
 data "aws_iam_policy_document" "deploy" {
   statement {
