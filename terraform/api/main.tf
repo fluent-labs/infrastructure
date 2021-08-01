@@ -262,10 +262,10 @@ resource "kubernetes_secret" "api_database_credentials" {
   data = {
     username = "username"
     password = "password"
-    # host              = data.aws_db_instance.api_db.address
-    # port              = data.aws_db_instance.api_db.port
-    # database          = local.database_name
-    # connection_string = "jdbc:postgresql://${data.aws_db_instance.api_db.address}:${data.aws_db_instance.api_db.port}/${local.database_name}"
+    host              = data.aws_db_instance.api_db.address
+    port              = data.aws_db_instance.api_db.port
+    database          = local.database_name
+    connection_string = "jdbc:postgresql://${data.aws_db_instance.api_db.address}:${data.aws_db_instance.api_db.port}/${local.database_name}"
   }
 }
 
