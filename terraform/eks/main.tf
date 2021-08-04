@@ -166,3 +166,35 @@ resource "aws_eks_node_group" "services" {
     ignore_changes = [scaling_config[0].desired_size]
   }
 }
+
+data "aws_iam_policy_document" "deploy_kubernetes" {
+  statement {
+    actions   = ["eks:AccessKubernetesApi"]
+    effect    = "Allow"
+    resources = [aws_eks_cluster.fluentlabs.arn]
+  }
+
+  statement {
+    actions   = ["iam:PassRole"]
+    effect    = "Allow"
+    resources = ["*"]
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["eks.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_policy" "deploy_kubernetes" {
+  name        = "github-eks-deploy-role"
+  description = "IAM policy for deploying to eks services from github"
+
+  policy = data.aws_iam_policy_document.deploy_kubernetes.json
+}
+
+resource "aws_iam_policy_attachment" "deploy" {
+  name       = "github-eks-deploy-role-attach"
+  users      = ["foreign-language-reader-github"]
+  policy_arn = aws_iam_policy.deploy_kubernetes.arn
+}
