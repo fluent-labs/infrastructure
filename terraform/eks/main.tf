@@ -173,15 +173,15 @@ data "aws_iam_policy_document" "deploy_kubernetes" {
     effect    = "Allow"
     resources = [aws_eks_cluster.fluentlabs.arn]
   }
-  
+
   statement {
     actions   = ["iam:PassRole"]
     effect    = "Allow"
     resources = ["*"]
     condition {
-      test = "StringEquals"
+      test     = "StringEquals"
       variable = "iam:PassedToService"
-      values = ["eks.amazonaws.com"]
+      values   = ["eks.amazonaws.com"]
     }
   }
 }
