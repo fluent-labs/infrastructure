@@ -10,7 +10,7 @@ terraform {
     }
     kubernetes-alpha = {
       source  = "hashicorp/kubernetes-alpha"
-      version = "0.5.0"
+      version = "0.6.0"
     }
   }
 }
