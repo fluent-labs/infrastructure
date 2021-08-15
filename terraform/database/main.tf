@@ -61,7 +61,6 @@ resource "aws_security_group" "database" {
     to_port          = 5432
     protocol         = "tcp"
     cidr_blocks      = [data.aws_vpc.main.cidr_block]
-    ipv6_cidr_blocks = [data.aws_vpc.main.ipv6_cidr_block]
   }
 
   tags = {
