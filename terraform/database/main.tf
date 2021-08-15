@@ -63,6 +63,11 @@ resource "aws_security_group" "database" {
       protocol         = "tcp"
       cidr_blocks      = [data.aws_vpc.main.cidr_block]
       ipv6_cidr_blocks = [data.aws_vpc.main.ipv6_cidr_block]
+
+      // https://github.com/hashicorp/terraform-provider-aws/issues/8786
+      prefix_list_ids = null
+      security_groups = null
+      self            = null
     }
   ]
 
