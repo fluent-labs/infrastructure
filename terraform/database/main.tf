@@ -56,11 +56,11 @@ resource "aws_security_group" "database" {
   vpc_id      = data.aws_vpc.main.id
 
   ingress {
-    description      = "database from VPC"
-    from_port        = 5432
-    to_port          = 5432
-    protocol         = "tcp"
-    cidr_blocks      = [data.aws_vpc.main.cidr_block]
+    description = "database from VPC"
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = [data.aws_vpc.main.cidr_block]
   }
 
   tags = {
