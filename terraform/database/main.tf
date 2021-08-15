@@ -34,7 +34,7 @@ resource "aws_db_instance" "fluentlabs" {
   publicly_accessible = true
 
   // Networking
-  aws_db_subnet_group = aws_db_subnet_group.main.name
+  db_subnet_group_name = aws_db_subnet_group.main.name
 
   # Storage autoscaling
   allocated_storage     = 20
