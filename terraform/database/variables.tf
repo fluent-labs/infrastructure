@@ -9,3 +9,7 @@ variable "node_count" {
 variable "size" {
   description = "The size machine to run the database on."
 }
+
+variable "subnet_ids" {
+  description = "The subnet IDs for the kubernetes cluster"
+}

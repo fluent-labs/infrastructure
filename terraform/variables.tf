@@ -9,3 +9,7 @@ variable "digitalocean_token" {
 variable "sematext_index_name" {
   description = "The elasticsearch index to send logs to. This is kept secret."
 }
+
+variable "subnet_ids" {
+  description = "The subnet IDs for the kubernetes cluster"
+}

@@ -58,6 +58,7 @@ module "database" {
   cluster_name = var.cluster_name
   node_count   = 1
   size         = "db-s-1vcpu-1gb"
+  subnet_ids   = var.subnet_ids
 }
 
 # Static content served to users
