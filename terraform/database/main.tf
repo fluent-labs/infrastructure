@@ -55,21 +55,14 @@ resource "aws_security_group" "database" {
   description = "Allow database inbound traffic from the vpc"
   vpc_id      = data.aws_vpc.main.id
 
-  ingress = [
-    {
-      description      = "database from VPC"
-      from_port        = 5432
-      to_port          = 5432
-      protocol         = "tcp"
-      cidr_blocks      = [data.aws_vpc.main.cidr_block]
-      ipv6_cidr_blocks = [data.aws_vpc.main.ipv6_cidr_block]
-
-      // https://github.com/hashicorp/terraform-provider-aws/issues/8786
-      prefix_list_ids = null
-      security_groups = null
-      self            = null
-    }
-  ]
+  ingress {
+    description      = "database from VPC"
+    from_port        = 5432
+    to_port          = 5432
+    protocol         = "tcp"
+    cidr_blocks      = [data.aws_vpc.main.cidr_block]
+    ipv6_cidr_blocks = [data.aws_vpc.main.ipv6_cidr_block]
+  }
 
   tags = {
     Name = "database"
