@@ -40,3 +40,19 @@ resource "aws_db_instance" "fluentlabs" {
   allocated_storage     = 20
   max_allocated_storage = 100
 }
+
+data "aws_subnet" "first" {
+  id = var.subnet_ids[0]
+}
+
+data "aws_vpc" "main" {
+  id = data.aws_subnet.first.vpc_id
+}
+
+resource "aws_db_security_group" "default" {
+  name = "rds_sg"
+
+  ingress {
+    cidr = data.aws_vpc.main.cidr_block
+  }
+}
