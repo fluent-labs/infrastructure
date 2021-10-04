@@ -2,7 +2,7 @@ terraform {
   required_providers {
     digitalocean = {
       source  = "digitalocean/digitalocean"
-      version = "2.11.0"
+      version = "2.12.1"
     }
     elasticsearch = {
       source  = "disaster37/elasticsearch"
