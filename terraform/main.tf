@@ -64,17 +64,19 @@ module "database" {
 # Static content served to users
 
 module "frontend_fluent_labs" {
-  source       = "./static_bucket"
-  domain       = aws_route53_zone.main.name
-  subdomain    = "www"
-  deploy_users = [aws_iam_user.github.name]
+  source          = "./static_bucket"
+  domain          = aws_route53_zone.main.name
+  subdomain       = "www"
+  deploy_users    = [aws_iam_user.github.name]
+  certificate_arn = aws_acm_certificate.cert.arn
 }
 
 module "frontend_preprod_fluent_labs" {
-  source       = "./static_bucket"
-  domain       = aws_route53_zone.main.name
-  subdomain    = "preprod"
-  deploy_users = [aws_iam_user.github.name]
+  source          = "./static_bucket"
+  domain          = aws_route53_zone.main.name
+  subdomain       = "preprod"
+  deploy_users    = [aws_iam_user.github.name]
+  certificate_arn = aws_acm_certificate.cert.arn
 }
 
 module "api" {

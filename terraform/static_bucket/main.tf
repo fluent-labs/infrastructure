@@ -7,21 +7,8 @@ terraform {
   }
 }
 
-# Certificate manager certificates need to be in us-east-1
-provider "aws" {
-  alias  = "us_east_1"
-  region = "us-east-1"
-}
-
 locals {
   full_domain = "${var.subdomain}.${var.domain}"
-}
-
-data "aws_caller_identity" "current" {}
-
-data "aws_acm_certificate" "cert" {
-  provider = aws.us_east_1
-  domain   = "*.${var.domain}"
 }
 
 resource "aws_s3_bucket" "main" {
@@ -114,7 +101,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = data.aws_acm_certificate.cert.arn
+    acm_certificate_arn = var.certificate_arn
     ssl_support_method  = "sni-only"
   }
 }
