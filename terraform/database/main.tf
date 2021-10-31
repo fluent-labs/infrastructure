@@ -15,7 +15,7 @@ resource "aws_db_subnet_group" "main" {
 resource "aws_db_instance" "fluentlabs" {
   // Basic config
   engine               = "postgres"
-  engine_version       = "12.5"
+  engine_version       = "12.7"
   instance_class       = "db.t3.micro"
   identifier           = "fluentlabs"
   name                 = "fluentlabs"
@@ -40,6 +40,13 @@ resource "aws_db_instance" "fluentlabs" {
   # Storage autoscaling
   allocated_storage     = 20
   max_allocated_storage = 100
+
+  lifecycle {
+    ignore_changes = [
+      # We have automatic minor version upgrades. Let's not clobber those changes
+      engine_version,
+    ]
+  }
 }
 
 data "aws_subnet" "first" {
