@@ -9,3 +9,7 @@ variable "domain" {
 variable "subdomain" {
   description = "The subdomain the site will be hosted on."
 }
+
+variable "certificate_arn" {
+  description = "The ARN of the certificate in AWS certificate manager"
+}
