@@ -6,7 +6,7 @@ terraform {
     }
     acme = {
       source  = "vancluever/acme"
-      version = "2.6.0"
+      version = "2.7.0"
     }
     kubernetes-alpha = {
       source  = "hashicorp/kubernetes-alpha"
