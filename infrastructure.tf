@@ -57,8 +57,8 @@ resource "digitalocean_kubernetes_cluster" "prod" {
   version      = data.digitalocean_kubernetes_versions.kubernetes_1_22.latest_version
 
   maintenance_policy {
-    start_time  = "04:00"
-    day         = "sunday"
+    start_time = "04:00"
+    day        = "sunday"
   }
 
   node_pool {
@@ -69,6 +69,3 @@ resource "digitalocean_kubernetes_cluster" "prod" {
     max_nodes  = 5
   }
 }
-# module "kubernetes" {
-#   source = "./terraform/eks"
-# }
