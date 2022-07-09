@@ -45,7 +45,7 @@ module "infrastructure" {
   subnet_ids          = module.kubernetes.subnet_ids
 }
 
-# Held here so that Helm and K8s providers can be initialized to work on this cluster
-module "kubernetes" {
-  source = "./terraform/eks"
-}
+# # Held here so that Helm and K8s providers can be initialized to work on this cluster
+# module "kubernetes" {
+#   source = "./terraform/eks"
+# }
