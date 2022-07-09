@@ -45,7 +45,30 @@ module "infrastructure" {
   # subnet_ids          = module.kubernetes.subnet_ids
 }
 
-# # Held here so that Helm and K8s providers can be initialized to work on this cluster
+# Held here so that Helm and K8s providers can be initialized to work on this cluster
+data "digitalocean_kubernetes_versions" "kubernetes_1_22" {
+  version_prefix = "1.22."
+}
+
+resource "digitalocean_kubernetes_cluster" "prod" {
+  name         = "prod"
+  region       = "lon1"
+  auto_upgrade = true
+  version      = data.digitalocean_kubernetes_versions.kubernetes_1_22.latest_version
+
+  maintenance_policy {
+    start_time  = "04:00"
+    day         = "sunday"
+  }
+
+  node_pool {
+    name       = "default"
+    size       = "s-2vcpu-4gb"
+    auto_scale = true
+    min_nodes  = 1
+    max_nodes  = 5
+  }
+}
 # module "kubernetes" {
 #   source = "./terraform/eks"
 # }
