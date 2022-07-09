@@ -6,6 +6,7 @@ provider "registry.terraform.io/digitalocean/digitalocean" {
   constraints = "2.14.0"
   hashes = [
     "h1:VgOC/Y3OIYezumhYMYhETZyQWjYLzDZwHBNRSezuf90=",
+    "h1:mweBY6X5RubSqiJwqj8m1gURO4NB1Wgfaihy1TwWqpY=",
     "zh:0714ad222e337fb8554b7895172c97b88d8a1dbfa9627c3dda1e01406c7e166d",
     "zh:2392648a6cba18f80e3c2ba6549669f7efbbd7cd32fdb1995f261c511910d6c6",
     "zh:24db17ca7bada30aec0d0241fc621a26faa72e721f0ec0139bbe78c88ca65d5d",
@@ -21,26 +22,6 @@ provider "registry.terraform.io/digitalocean/digitalocean" {
     "zh:ebc8dd3807f686d647af6dde901ecf8b57abb8b06bfe44cb9e2f6efb16124cb9",
     "zh:ec8887f1095d639301121c0cb4b79e83e78d4140a250a4a426904460773fb43b",
     "zh:ecb109681f1f9599661cdef7265fbe3a215a56f38f50e331a6487c343cdc3a57",
-  ]
-}
-
-provider "registry.terraform.io/disaster37/elasticsearch" {
-  version     = "7.12.2"
-  constraints = "7.12.2"
-  hashes = [
-    "h1:c2viPnS31VwiYidaSi3w7GhcwBc2hb9OM7hB5YMmgOs=",
-    "zh:1615922a485dfc676bbe8aabc062b272656fdee0562f8333e260e92767d51fc0",
-    "zh:1a55ae782e9067a1aea4cb8093bc8383c2f66692afd201e2358dc1eccb1806a8",
-    "zh:1b43d86c301cd96ff063feb95524297b80529507c6cb94ea132461d4bca225f9",
-    "zh:25a4e4c76d2d156aea996b5fa93a768563ff9d3f2d304658e119860c88801948",
-    "zh:7b171960aa5c9e7718d4bff243ee078e4445adfa9322ab413abc8e50a667c1e7",
-    "zh:9b50290803cd23c9fa8d326ccac4204bb24366762b748747e29cdfaa001c6c54",
-    "zh:9c47e1246707d4fb3440f31d0f81859576d4e415048f6d81e2751e9fae6d7f68",
-    "zh:aec9ece43584647a52deea63de136f5aecbf535cff3f17b00966f3b0e77e66e4",
-    "zh:ccfd59e98f403a85be1c70d37443b9f274ec59bde215d6ab1d98c977d643c586",
-    "zh:d767755f7de9190054e6753a3119a1ecce17ada803de854212055032eb8e215f",
-    "zh:fa6e587a98361f4542a304b05afc84d4de2903f6b92ba9e669966e505c0af890",
-    "zh:fee42b69c829fc72a608433715d1acd0db442c1262aa613de3bbd72229555df2",
   ]
 }
 
@@ -102,6 +83,7 @@ provider "registry.terraform.io/hashicorp/kubernetes-alpha" {
   version     = "0.6.0"
   constraints = "0.6.0"
   hashes = [
+    "h1:JcOXzYE//CYP5y9zmqYfIUzttBwjsSY+8MtvXfN0z9k=",
     "h1:LUnfi4+TUmVa22T0wTaSnChdQfFMnmjoyqb+Ea2Q2o4=",
     "zh:14e47cb50c1547a3eee0f3a530ce3a2191a6536207bf6293ceac25f8ab3c5e46",
     "zh:1a87198eafa0a751276aa5f0f8e800a0316f1b14d9ef1f408c93aa0ad96ffbc9",
@@ -157,6 +139,7 @@ provider "registry.terraform.io/vancluever/acme" {
   version     = "2.6.0"
   constraints = "2.6.0"
   hashes = [
+    "h1:6QY9FHAmz+4vLMiC44g4k0FCMpDZzHKNfUjlKSeyO8c=",
     "h1:stxesNm67Zt09lFLR1DpKydu6rAlKCov0GMn9/3Gyiw=",
     "zh:03f2882f03216438fd76c1d6323697933cd8aa40fe14f3920a59983aeb949a3d",
     "zh:2932bb7998aaab8e8f95871f5f38a780d65743ba072056875299cd0bc0e1a3ad",
