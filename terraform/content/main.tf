@@ -4,13 +4,13 @@
 
 # Spark config
 
-resource "helm_release" "spark" {
-  name       = "spark"
-  repository = "https://googlecloudplatform.github.io/spark-on-k8s-operator"
-  chart      = "spark-operator"
-  version    = "1.0.5"
-  values     = [file("${path.module}/spark.yml")]
-}
+# resource "helm_release" "spark" {
+#   name       = "spark"
+#   repository = "https://googlecloudplatform.github.io/spark-on-k8s-operator"
+#   chart      = "spark-operator"
+#   version    = "1.0.5"
+#   values     = [file("${path.module}/spark.yml")]
+# }
 
 # Content buckets for spark to read
 
@@ -114,19 +114,19 @@ resource "random_password" "elasticsearch_password" {
   special = false
 }
 
-resource "kubernetes_secret" "spark_config" {
-  metadata {
-    name = "spark-config"
-  }
+# resource "kubernetes_secret" "spark_config" {
+#   metadata {
+#     name = "spark-config"
+#   }
 
-  data = {
-    "AWS_ACCESS_KEY_ID"     = aws_iam_access_key.spark.id
-    "AWS_SECRET_ACCESS_KEY" = aws_iam_access_key.spark.secret
-    "es_truststore"         = random_password.truststore_password.result
-    "es_user"               = "spark"
-    "es_password"           = random_password.elasticsearch_password.result
-  }
-}
+#   data = {
+#     "AWS_ACCESS_KEY_ID"     = aws_iam_access_key.spark.id
+#     "AWS_SECRET_ACCESS_KEY" = aws_iam_access_key.spark.secret
+#     "es_truststore"         = random_password.truststore_password.result
+#     "es_user"               = "spark"
+#     "es_password"           = random_password.elasticsearch_password.result
+#   }
+# }
 
 # Data pipeline orchestration
 

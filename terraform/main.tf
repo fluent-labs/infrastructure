@@ -24,42 +24,42 @@ provider "aws" {
 # Hold K8s configuration in an intermediate level
 # Terraform currently cannot create a cluster and use it to set up a provider on the same level.
 
-data "aws_eks_cluster" "main" {
-  name = var.cluster_name
-}
+# data "aws_eks_cluster" "main" {
+#   name = var.cluster_name
+# }
 
-data "aws_eks_cluster_auth" "main" {
-  name = var.cluster_name
-}
+# data "aws_eks_cluster_auth" "main" {
+#   name = var.cluster_name
+# }
 
-provider "kubernetes" {
-  host                   = data.aws_eks_cluster.main.endpoint
-  token                  = data.aws_eks_cluster_auth.main.token
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.main.certificate_authority[0].data)
-}
+# provider "kubernetes" {
+#   host                   = data.aws_eks_cluster.main.endpoint
+#   token                  = data.aws_eks_cluster_auth.main.token
+#   cluster_ca_certificate = base64decode(data.aws_eks_cluster.main.certificate_authority[0].data)
+# }
 
-provider "kubernetes-alpha" {
-  host                   = data.aws_eks_cluster.main.endpoint
-  token                  = data.aws_eks_cluster_auth.main.token
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.main.certificate_authority[0].data)
-}
+# provider "kubernetes-alpha" {
+#   host                   = data.aws_eks_cluster.main.endpoint
+#   token                  = data.aws_eks_cluster_auth.main.token
+#   cluster_ca_certificate = base64decode(data.aws_eks_cluster.main.certificate_authority[0].data)
+# }
 
-provider "helm" {
-  kubernetes {
-    host                   = data.aws_eks_cluster.main.endpoint
-    token                  = data.aws_eks_cluster_auth.main.token
-    cluster_ca_certificate = base64decode(data.aws_eks_cluster.main.certificate_authority[0].data)
-  }
-}
+# provider "helm" {
+#   kubernetes {
+#     host                   = data.aws_eks_cluster.main.endpoint
+#     token                  = data.aws_eks_cluster_auth.main.token
+#     cluster_ca_certificate = base64decode(data.aws_eks_cluster.main.certificate_authority[0].data)
+#   }
+# }
 
 # Mysql database to store user context.
-module "database" {
-  source       = "./database"
-  cluster_name = var.cluster_name
-  node_count   = 1
-  size         = "db-s-1vcpu-1gb"
-  subnet_ids   = var.subnet_ids
-}
+# module "database" {
+#   source       = "./database"
+#   cluster_name = var.cluster_name
+#   node_count   = 1
+#   size         = "db-s-1vcpu-1gb"
+#   subnet_ids   = var.subnet_ids
+# }
 
 # Static content served to users
 
@@ -79,22 +79,22 @@ module "frontend_preprod_fluent_labs" {
   certificate_arn = aws_acm_certificate.cert.arn
 }
 
-module "api" {
-  source        = "./api"
-  cluster_name  = var.cluster_name
-  database_name = module.database.database_name
-  env           = "default"
-  min_replicas  = 1
-  max_replicas  = 10
-}
+# module "api" {
+#   source        = "./api"
+#   cluster_name  = var.cluster_name
+#   database_name = module.database.database_name
+#   env           = "default"
+#   min_replicas  = 1
+#   max_replicas  = 10
+# }
 
-module "language_service" {
-  source       = "./language_service"
-  cluster_name = var.cluster_name
-  env          = "default"
-  min_replicas = 1
-  max_replicas = 10
-}
+# module "language_service" {
+#   source       = "./language_service"
+#   cluster_name = var.cluster_name
+#   env          = "default"
+#   min_replicas = 1
+#   max_replicas = 10
+# }
 
 # Content infrastructure
 # Spark jobs that scrape wiktionary for definitions
@@ -123,15 +123,15 @@ module "monitoring" {
 # Handles traffic going in to the cluster
 # Proxies everything through a load balancer and nginx
 
-module "nginx_ingress" {
-  source          = "./nginx_ingress"
-  domain          = aws_route53_zone.main.name
-  subdomains      = ["api"]
-  private_key_pem = acme_certificate.certificate_fluent_labs.private_key_pem
-  certificate_pem = acme_certificate.certificate_fluent_labs.certificate_pem
-  issuer_pem      = acme_certificate.certificate_fluent_labs.issuer_pem
-  namespace       = "default"
-}
+# module "nginx_ingress" {
+#   source          = "./nginx_ingress"
+#   domain          = aws_route53_zone.main.name
+#   subdomains      = ["api"]
+#   private_key_pem = acme_certificate.certificate_fluent_labs.private_key_pem
+#   certificate_pem = acme_certificate.certificate_fluent_labs.certificate_pem
+#   issuer_pem      = acme_certificate.certificate_fluent_labs.issuer_pem
+#   namespace       = "default"
+# }
 
 
 # Shared resources for the cluster go down here.
