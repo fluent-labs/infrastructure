@@ -1,8 +1,0 @@
-elasticsearch:
-  auth:
-    enabled: true
-    user: fluentd
-  hosts: 
-    - elastic-es-http.default.svc.cluster.local
-  scheme: https
-  sslVerify: false
