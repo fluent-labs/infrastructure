@@ -4,13 +4,13 @@
 
 # Spark config
 
-# resource "helm_release" "spark" {
-#   name       = "spark"
-#   repository = "https://googlecloudplatform.github.io/spark-on-k8s-operator"
-#   chart      = "spark-operator"
-#   version    = "1.0.5"
-#   values     = [file("${path.module}/spark.yml")]
-# }
+resource "helm_release" "spark" {
+  name       = "spark"
+  repository = "https://googlecloudplatform.github.io/spark-on-k8s-operator"
+  chart      = "spark-operator"
+  version    = "1.1.25"
+  values     = [file("${path.module}/spark.yml")]
+}
 
 # Content buckets for spark to read
 
