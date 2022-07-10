@@ -120,6 +120,21 @@ module "monitoring" {
   sematext_index_name = var.sematext_index_name
 }
 
+# Workflow orchestration
+resource "helm_release" "jenkins" {
+  name       = "jenkins"
+  repository = "https://raw.githubusercontent.com/jenkinsci/kubernetes-operator/master/chart"
+  chart      = "jenkins-operator"
+  version    = "0.6.2"
+}
+
+resource "kubernetes_manifest" "jenkins" {
+  provider = kubernetes-alpha
+  manifest = yamldecode(file("${path.module}/jenkins.yml"))
+
+  depends_on = [helm_release.jenkins]
+}
+
 # Ingress
 # Handles traffic going in to the cluster
 # Proxies everything through a load balancer and nginx
