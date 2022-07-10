@@ -76,8 +76,12 @@ resource "kubernetes_ingress_v1" "ingress" {
       http {
         path {
           backend {
-            service_name = "api"
-            service_port = 9000
+            service {
+              name = "api"
+              port {
+                number = 9000
+              }
+            }
           }
         }
       }
