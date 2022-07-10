@@ -36,22 +36,22 @@ resource "random_password" "fluent_elasticsearch_password" {
 #   version    = "3.3.2"
 # }
 
-# resource "helm_release" "sematext_logagent" {
-#   name       = "sematext"
-#   repository = "https://cdn.sematext.com/helm-charts"
-#   chart      = "sematext-agent"
-#   version    = "1.0.35"
+resource "helm_release" "sematext_logagent" {
+  name       = "sematext"
+  repository = "https://cdn.sematext.com/helm-charts"
+  chart      = "sematext-agent"
+  version    = "1.0.46"
 
-#   set {
-#     name  = "region"
-#     value = "US"
-#   }
+  set {
+    name  = "region"
+    value = "US"
+  }
 
-#   set_sensitive {
-#     name  = "logsToken"
-#     value = var.sematext_index_name
-#   }
-# }
+  set_sensitive {
+    name  = "infraToken"
+    value = var.sematext_index_name
+  }
+}
 
 # resource "kubernetes_manifest" "api_prometheus" {
 #   provider = kubernetes-alpha
