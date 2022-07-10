@@ -11,7 +11,7 @@ resource "helm_release" "nginx_ingress" {
   name       = "nginx-ingress"
   repository = "https://helm.nginx.com/stable"
   chart      = "nginx-ingress"
-  version    = "0.7.1"
+  version    = "0.13.1"
   namespace  = var.namespace
   values     = [file("${path.module}/nginx_ingress.yml")]
 }
