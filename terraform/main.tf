@@ -118,13 +118,11 @@ resource "helm_release" "jenkins" {
   repository = "https://raw.githubusercontent.com/jenkinsci/kubernetes-operator/master/chart"
   chart      = "jenkins-operator"
   version    = "0.6.2"
-}
 
-# Note - this will fail plans until the helm release is installed. Fun times.
-resource "kubernetes_manifest" "jenkins" {
-  manifest = yamldecode(file("${path.module}/jenkins.yml"))
-
-  depends_on = [helm_release.jenkins]
+  set {
+    name  = "name"
+    value = "fluentlabs"
+  }
 }
 
 # Ingress
