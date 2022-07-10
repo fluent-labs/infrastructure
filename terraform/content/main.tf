@@ -16,6 +16,10 @@
 
 resource "aws_s3_bucket" "content" {
   bucket = "fluentlabs-content"
+}
+
+resource "aws_s3_bucket_acl" "content_acl" {
+  bucket = aws_s3_bucket.content.bucket
   acl    = "private"
 }
 

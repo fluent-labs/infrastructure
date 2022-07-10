@@ -56,7 +56,7 @@ resource "aws_route53_record" "subdomain" {
   records  = [data.kubernetes_service.nginx.status.0.load_balancer.0.ingress.0.hostname]
 }
 
-resource "kubernetes_ingress" "ingress" {
+resource "kubernetes_ingress_v1" "ingress" {
   metadata {
     name = "fluentlabs-ingress"
     annotations = {
@@ -76,8 +76,12 @@ resource "kubernetes_ingress" "ingress" {
       http {
         path {
           backend {
-            service_name = "api"
-            service_port = 9000
+            service {
+              name = "api"
+              port {
+                number = 9000
+              }
+            }
           }
         }
       }

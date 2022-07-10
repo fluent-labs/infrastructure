@@ -13,12 +13,23 @@ locals {
 
 resource "aws_s3_bucket" "main" {
   bucket = local.full_domain
-  acl    = "public-read"
+}
 
-  website {
-    index_document = "index.html"
-    error_document = "404.html"
+resource "aws_s3_bucket_website_configuration" "main" {
+  bucket = aws_s3_bucket.main.bucket
+
+  index_document {
+    suffix = "index.html"
   }
+
+  error_document {
+    key = "404.html"
+  }
+}
+
+resource "aws_s3_bucket_acl" "main_acl" {
+  bucket = aws_s3_bucket.main.bucket
+  acl    = "public-read"
 }
 
 # TODO add push permissions to the deploy user
