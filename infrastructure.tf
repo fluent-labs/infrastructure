@@ -42,7 +42,6 @@ module "infrastructure" {
   cluster_name        = "fluentlabsprod"
   digitalocean_token  = var.digitalocean_token
   sematext_index_name = var.sematext_index_name
-  # subnet_ids          = module.kubernetes.subnet_ids
 }
 
 # Held here so that Helm and K8s providers can be initialized to work on this cluster

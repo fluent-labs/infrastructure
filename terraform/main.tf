@@ -25,27 +25,27 @@ provider "aws" {
 # Terraform currently cannot create a cluster and use it to set up a provider on the same level.
 
 provider "kubernetes" {
-  host  = data.digitalocean_kubernetes_cluster.foreign_language_reader.endpoint
-  token = data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].token
+  host  = data.digitalocean_kubernetes_cluster.prod.endpoint
+  token = data.digitalocean_kubernetes_cluster.prod.kube_config[0].token
   cluster_ca_certificate = base64decode(
-    data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].cluster_ca_certificate
+    data.digitalocean_kubernetes_cluster.prod.kube_config[0].cluster_ca_certificate
   )
 }
 
 provider "kubernetes-alpha" {
-  host  = data.digitalocean_kubernetes_cluster.foreign_language_reader.endpoint
-  token = data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].token
+  host  = data.digitalocean_kubernetes_cluster.prod.endpoint
+  token = data.digitalocean_kubernetes_cluster.prod.kube_config[0].token
   cluster_ca_certificate = base64decode(
-    data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].cluster_ca_certificate
+    data.digitalocean_kubernetes_cluster.prod.kube_config[0].cluster_ca_certificate
   )
 }
 
 provider "helm" {
   kubernetes {
-    host  = data.digitalocean_kubernetes_cluster.foreign_language_reader.endpoint
-    token = data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].token
+    host  = data.digitalocean_kubernetes_cluster.prod.endpoint
+    token = data.digitalocean_kubernetes_cluster.prod.kube_config[0].token
     cluster_ca_certificate = base64decode(
-      data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].cluster_ca_certificate
+      data.digitalocean_kubernetes_cluster.prod.kube_config[0].cluster_ca_certificate
     )
   }
 }
