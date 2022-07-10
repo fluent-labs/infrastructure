@@ -35,14 +35,6 @@ provider "kubernetes" {
   )
 }
 
-provider "kubernetes-alpha" {
-  host  = data.digitalocean_kubernetes_cluster.prod.endpoint
-  token = data.digitalocean_kubernetes_cluster.prod.kube_config[0].token
-  cluster_ca_certificate = base64decode(
-    data.digitalocean_kubernetes_cluster.prod.kube_config[0].cluster_ca_certificate
-  )
-}
-
 provider "helm" {
   kubernetes {
     host  = data.digitalocean_kubernetes_cluster.prod.endpoint
@@ -129,7 +121,6 @@ resource "helm_release" "jenkins" {
 }
 
 resource "kubernetes_manifest" "jenkins" {
-  provider = kubernetes-alpha
   manifest = yamldecode(file("${path.module}/jenkins.yml"))
 
   depends_on = [helm_release.jenkins]
