@@ -24,33 +24,31 @@ provider "aws" {
 # Hold K8s configuration in an intermediate level
 # Terraform currently cannot create a cluster and use it to set up a provider on the same level.
 
-# data "aws_eks_cluster" "main" {
-#   name = var.cluster_name
-# }
+provider "kubernetes" {
+  host  = data.digitalocean_kubernetes_cluster.foreign_language_reader.endpoint
+  token = data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].token
+  cluster_ca_certificate = base64decode(
+    data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].cluster_ca_certificate
+  )
+}
 
-# data "aws_eks_cluster_auth" "main" {
-#   name = var.cluster_name
-# }
+provider "kubernetes-alpha" {
+  host  = data.digitalocean_kubernetes_cluster.foreign_language_reader.endpoint
+  token = data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].token
+  cluster_ca_certificate = base64decode(
+    data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].cluster_ca_certificate
+  )
+}
 
-# provider "kubernetes" {
-#   host                   = data.aws_eks_cluster.main.endpoint
-#   token                  = data.aws_eks_cluster_auth.main.token
-#   cluster_ca_certificate = base64decode(data.aws_eks_cluster.main.certificate_authority[0].data)
-# }
-
-# provider "kubernetes-alpha" {
-#   host                   = data.aws_eks_cluster.main.endpoint
-#   token                  = data.aws_eks_cluster_auth.main.token
-#   cluster_ca_certificate = base64decode(data.aws_eks_cluster.main.certificate_authority[0].data)
-# }
-
-# provider "helm" {
-#   kubernetes {
-#     host                   = data.aws_eks_cluster.main.endpoint
-#     token                  = data.aws_eks_cluster_auth.main.token
-#     cluster_ca_certificate = base64decode(data.aws_eks_cluster.main.certificate_authority[0].data)
-#   }
-# }
+provider "helm" {
+  kubernetes {
+    host  = data.digitalocean_kubernetes_cluster.foreign_language_reader.endpoint
+    token = data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].token
+    cluster_ca_certificate = base64decode(
+      data.digitalocean_kubernetes_cluster.foreign_language_reader.kube_config[0].cluster_ca_certificate
+    )
+  }
+}
 
 # Mysql database to store user context.
 # module "database" {
@@ -123,15 +121,15 @@ module "monitoring" {
 # Handles traffic going in to the cluster
 # Proxies everything through a load balancer and nginx
 
-# module "nginx_ingress" {
-#   source          = "./nginx_ingress"
-#   domain          = aws_route53_zone.main.name
-#   subdomains      = ["api"]
-#   private_key_pem = acme_certificate.certificate_fluent_labs.private_key_pem
-#   certificate_pem = acme_certificate.certificate_fluent_labs.certificate_pem
-#   issuer_pem      = acme_certificate.certificate_fluent_labs.issuer_pem
-#   namespace       = "default"
-# }
+module "nginx_ingress" {
+  source          = "./nginx_ingress"
+  domain          = aws_route53_zone.main.name
+  subdomains      = ["api"]
+  private_key_pem = acme_certificate.certificate_fluent_labs.private_key_pem
+  certificate_pem = acme_certificate.certificate_fluent_labs.certificate_pem
+  issuer_pem      = acme_certificate.certificate_fluent_labs.issuer_pem
+  namespace       = "default"
+}
 
 
 # Shared resources for the cluster go down here.
