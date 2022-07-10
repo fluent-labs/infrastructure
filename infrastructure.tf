@@ -31,7 +31,7 @@ provider "acme" {
 }
 
 provider "aws" {
-  region  = "us-west-2"
+  region = "us-west-2"
 }
 
 variable "sematext_index_name" {}
