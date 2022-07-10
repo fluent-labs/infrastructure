@@ -35,14 +35,6 @@ provider "kubernetes" {
   )
 }
 
-provider "kubernetes-alpha" {
-  host  = data.digitalocean_kubernetes_cluster.prod.endpoint
-  token = data.digitalocean_kubernetes_cluster.prod.kube_config[0].token
-  cluster_ca_certificate = base64decode(
-    data.digitalocean_kubernetes_cluster.prod.kube_config[0].cluster_ca_certificate
-  )
-}
-
 provider "helm" {
   kubernetes {
     host  = data.digitalocean_kubernetes_cluster.prod.endpoint
@@ -119,6 +111,21 @@ module "monitoring" {
   source              = "./monitoring"
   sematext_index_name = var.sematext_index_name
 }
+
+# Workflow orchestration
+resource "helm_release" "jenkins" {
+  name       = "jenkins"
+  repository = "https://raw.githubusercontent.com/jenkinsci/kubernetes-operator/master/chart"
+  chart      = "jenkins-operator"
+  version    = "0.6.2"
+}
+
+# Note - this will fail plans until the helm release is installed. Fun times.
+# resource "kubernetes_manifest" "jenkins" {
+#   manifest = yamldecode(file("${path.module}/jenkins.yml"))
+
+#   depends_on = [helm_release.jenkins]
+# }
 
 # Ingress
 # Handles traffic going in to the cluster
