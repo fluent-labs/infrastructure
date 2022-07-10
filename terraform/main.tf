@@ -120,11 +120,12 @@ resource "helm_release" "jenkins" {
   version    = "0.6.2"
 }
 
-resource "kubernetes_manifest" "jenkins" {
-  manifest = yamldecode(file("${path.module}/jenkins.yml"))
+# Note - this will fail plans until the helm release is installed. Fun times.
+# resource "kubernetes_manifest" "jenkins" {
+#   manifest = yamldecode(file("${path.module}/jenkins.yml"))
 
-  depends_on = [helm_release.jenkins]
-}
+#   depends_on = [helm_release.jenkins]
+# }
 
 # Ingress
 # Handles traffic going in to the cluster
