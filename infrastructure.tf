@@ -39,7 +39,7 @@ variable "sematext_index_name" {}
 
 module "infrastructure" {
   source              = "./terraform"
-  cluster_name        = "fluentlabsprod"
+  cluster_name        = digitalocean_kubernetes_cluster.prod.name
   digitalocean_token  = var.digitalocean_token
   sematext_index_name = var.sematext_index_name
 }

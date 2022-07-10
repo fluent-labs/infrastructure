@@ -23,6 +23,9 @@ provider "aws" {
 
 # Hold K8s configuration in an intermediate level
 # Terraform currently cannot create a cluster and use it to set up a provider on the same level.
+data "digitalocean_kubernetes_cluster" "prod" {
+  name = var.cluster_name
+}
 
 provider "kubernetes" {
   host  = data.digitalocean_kubernetes_cluster.prod.endpoint
