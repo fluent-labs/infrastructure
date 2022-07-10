@@ -4,11 +4,6 @@
 
 # Spark config
 
-resource "digitalocean_container_registry" "spark" {
-  name                   = "spark"
-  subscription_tier_slug = "starter"
-}
-
 resource "helm_release" "spark" {
   name       = "spark"
   repository = "https://googlecloudplatform.github.io/spark-on-k8s-operator"
