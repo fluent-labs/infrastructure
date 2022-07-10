@@ -21,6 +21,18 @@ resource "aws_s3_bucket" "main" {
   }
 }
 
+resource "aws_s3_bucket_website_configuration" "main" {
+  bucket = aws_s3_bucket.main.bucket
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "404.html"
+  }
+}
+
 # TODO add push permissions to the deploy user
 
 resource "aws_s3_bucket_policy" "public_access" {
