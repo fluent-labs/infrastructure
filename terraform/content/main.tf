@@ -4,12 +4,44 @@
 
 # Spark config
 
+resource "kubernetes_namespace" "content" {
+  metadata {
+    name = "content"
+  }
+}
+
 resource "helm_release" "spark" {
   name       = "spark"
   repository = "https://googlecloudplatform.github.io/spark-on-k8s-operator"
   chart      = "spark-operator"
   version    = "1.1.25"
   values     = [file("${path.module}/spark.yml")]
+}
+
+# Service user for the jobs to run
+
+resource "kubernetes_service_account" "spark" {
+  metadata {
+    name      = "spark-jenkins"
+    namespace = "content"
+  }
+}
+
+resource "kubernetes_role_binding" "example" {
+  metadata {
+    name      = "terraform-example"
+    namespace = "content"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "Role"
+    name      = "cluster-admin"
+  }
+  subject {
+    kind      = "ServiceAccount"
+    name      = "spark-jenkins"
+    namespace = "content"
+  }
 }
 
 # Content buckets for spark to read
