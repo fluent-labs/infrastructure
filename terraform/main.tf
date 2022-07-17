@@ -114,7 +114,8 @@ module "monitoring" {
 
 # Workflow orchestration
 module "jobs" {
-  source = "./jobs"
+  source         = "./jobs"
+  job_namespaces = ["content"]
 }
 
 # Ingress

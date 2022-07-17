@@ -12,10 +12,20 @@ resource "helm_release" "jenkins" {
   values     = [file("${path.module}/jenkins.yml")]
 }
 
-resource "kubernetes_role" "jenkins" {
+data "kubernetes_service_account" "jenkins" {
   metadata {
     name      = "jenkins-operator-jenkins"
     namespace = "jobs"
+  }
+  depends_on = [helm_release.jenkins]
+}
+
+resource "kubernetes_role" "jenkins" {
+  for_each = toset(var.job_namespaces)
+
+  metadata {
+    name      = "jenkins-operator-jenkins"
+    namespace = each.value
   }
 
   rule {
@@ -67,5 +77,24 @@ resource "kubernetes_role" "jenkins" {
     api_groups = ["build.openshift.io"]
     resources  = ["builds"]
     verbs      = ["get", "list", "watch"]
+  }
+}
+
+resource "kubernetes_role_binding" "jenkins" {
+  for_each = toset(var.job_namespaces)
+
+  metadata {
+    name      = "jenkins-operator-jenkins"
+    namespace = each.value
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "Role"
+    name      = "jenkins-operator-jenkins"
+  }
+  subject {
+    kind      = "ServiceAccount"
+    name      = data.kubernetes_service_account.jenkins
+    namespace = "jobs"
   }
 }
