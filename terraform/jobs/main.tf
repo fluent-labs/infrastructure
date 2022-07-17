@@ -6,10 +6,13 @@ resource "kubernetes_namespace" "jobs" {
 
 resource "helm_release" "jenkins" {
   name       = "jenkins"
+  namespace  = "jobs"
   repository = "https://raw.githubusercontent.com/jenkinsci/kubernetes-operator/master/chart"
   chart      = "jenkins-operator"
   version    = "0.6.2"
   values     = [file("${path.module}/jenkins.yml")]
+
+  depends_on = [kubernetes_namespace.jobs]
 }
 
 data "kubernetes_service_account" "jenkins" {
