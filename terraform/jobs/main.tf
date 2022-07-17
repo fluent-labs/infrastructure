@@ -92,10 +92,10 @@ resource "kubernetes_role_binding" "jenkins" {
     kind      = "Role"
     name      = "jenkins-operator-jenkins"
   }
+  # Intentionally using the variable just to make terraform understand the dependency graph.
   subject {
     kind      = "ServiceAccount"
-    # Intentionally using the variable just to make terraform understand the dependency graph.
-    name      = data.kubernetes_service_account.jenkins.metadata.name
+    name      = data.kubernetes_service_account.jenkins.metadata[0].name
     namespace = "jobs"
   }
 }
