@@ -15,14 +15,6 @@ resource "helm_release" "jenkins" {
   depends_on = [kubernetes_namespace.jobs]
 }
 
-data "kubernetes_service_account" "jenkins" {
-  metadata {
-    name      = "jenkins-operator-jenkins"
-    namespace = "jobs"
-  }
-  depends_on = [helm_release.jenkins]
-}
-
 resource "kubernetes_role" "jenkins" {
   for_each = toset(var.job_namespaces)
 
@@ -95,10 +87,11 @@ resource "kubernetes_role_binding" "jenkins" {
     kind      = "Role"
     name      = "jenkins-operator-jenkins"
   }
-  # Intentionally using the variable just to make terraform understand the dependency graph.
   subject {
     kind      = "ServiceAccount"
-    name      = data.kubernetes_service_account.jenkins.metadata[0].name
-    namespace = "jobs"
+    name      = "jenkins-operator-jenkins"
+    namespace = "default"
   }
+
+  depends_on = [helm_release.jenkins]
 }
