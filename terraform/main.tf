@@ -113,16 +113,8 @@ module "monitoring" {
 }
 
 # Workflow orchestration
-resource "helm_release" "jenkins" {
-  name       = "jenkins"
-  repository = "https://raw.githubusercontent.com/jenkinsci/kubernetes-operator/master/chart"
-  chart      = "jenkins-operator"
-  version    = "0.6.2"
-
-  set {
-    name  = "name"
-    value = "fluentlabs"
-  }
+module "jobs" {
+  source = "./jobs"
 }
 
 # Ingress

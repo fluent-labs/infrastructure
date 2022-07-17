@@ -1,0 +1,5 @@
+name: fluentlabs
+namespace: jobs
+plugins:
+  - name: kubernetes-cli
+    version: 1.10.3
