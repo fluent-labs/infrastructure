@@ -19,6 +19,46 @@ resource "helm_release" "spark" {
   values     = [file("${path.module}/spark.yml")]
 }
 
+# Service user for jenkins to launch content jobs
+
+resource "kubernetes_role" "jenkins" {
+  metadata {
+    name      = "jenkins-spark-job"
+    namespace = "content"
+  }
+
+  rule {
+    api_groups = ["sparkoperator.k8s.io"]
+    resources  = ["sparkapplications"]
+    verbs      = ["create", "delete", "get", "list", "patch", "update", "watch"]
+  }
+}
+
+resource "kubernetes_service_account" "jenkins" {
+  metadata {
+    name      = "jenkins-spark-job"
+    namespace = "content"
+  }
+}
+
+resource "kubernetes_role_binding" "jenkins" {
+  metadata {
+    name      = "jenkins-spark-job"
+    namespace = "content"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "Role"
+    name      = "jenkins-spark-job"
+  }
+  subject {
+    kind      = "ServiceAccount"
+    name      = "jenkins-spark-job"
+    namespace = "default"
+  }
+}
+
+
 # Content buckets for spark to read
 
 resource "aws_s3_bucket" "content" {
