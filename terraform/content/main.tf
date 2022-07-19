@@ -2,6 +2,15 @@
 # Content requires long running jobs that could be split into parallel
 # This is a good use case for spark.
 
+terraform {
+  required_providers {
+    digitalocean = {
+      source  = "digitalocean/digitalocean"
+      version = "2.21.0"
+    }
+  }
+}
+
 # Spark config
 
 resource "kubernetes_namespace" "content" {
@@ -58,6 +67,30 @@ resource "kubernetes_role_binding" "jenkins" {
   }
 }
 
+# DigitalOcean buckets
+
+resource "digitalocean_spaces_bucket" "definitions" {
+  name   = "definitions"
+  region = "fra1"
+  acl    = "private"
+
+  lifecycle_rule {
+    enabled                                = true
+    abort_incomplete_multipart_upload_days = 1
+
+    expiration {
+      days = 30
+    }
+
+    noncurrent_version_expiration {
+      days = 7
+    }
+  }
+
+  versioning {
+    enabled = true
+  }
+}
 
 # Content buckets for spark to read
 
