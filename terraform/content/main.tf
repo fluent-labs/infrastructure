@@ -58,6 +58,30 @@ resource "kubernetes_role_binding" "jenkins" {
   }
 }
 
+# DigitalOcean buckets
+
+resource "digitalocean_spaces_bucket" "definitions" {
+  name   = "definitions"
+  region = "fra1"
+  acl    = "private"
+
+  lifecycle_rule {
+    enabled                                = true
+    abort_incomplete_multipart_upload_days = 1
+
+    expiration {
+      days = 30
+    }
+
+    noncurrent_version_expiration {
+      days = 7
+    }
+  }
+
+  versioning {
+    enabled = true
+  }
+}
 
 # Content buckets for spark to read
 
