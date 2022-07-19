@@ -2,6 +2,15 @@
 # Content requires long running jobs that could be split into parallel
 # This is a good use case for spark.
 
+terraform {
+  required_providers {
+    digitalocean = {
+      source  = "digitalocean/digitalocean"
+      version = "2.21.0"
+    }
+  }
+}
+
 # Spark config
 
 resource "kubernetes_namespace" "content" {
