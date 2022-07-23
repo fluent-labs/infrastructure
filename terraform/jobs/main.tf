@@ -103,7 +103,7 @@ resource "kubernetes_persistent_volume" "example" {
   }
   spec {
     capacity = {
-      storage = "5Gi"
+      storage = "10Gi"
     }
     access_modes = ["ReadWriteOnce"]
     persistent_volume_source {
@@ -124,7 +124,7 @@ resource "kubernetes_persistent_volume_claim" "sbt" {
     access_modes = ["ReadWriteOnce"]
     resources {
       requests = {
-        storage = "5Gi"
+        storage = "10Gi"
       }
     }
     volume_name = "sbt_cache"
