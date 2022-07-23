@@ -67,7 +67,7 @@ resource "kubernetes_ingress_v1" "ingress" {
 
   spec {
     tls {
-      hosts       = ["api.fluentlabs.io"]
+      hosts       = ["api.fluentlabs.io", "jobs.fluentlabs.io"]
       secret_name = "nginx-certificate"
     }
 
@@ -80,6 +80,22 @@ resource "kubernetes_ingress_v1" "ingress" {
               name = "api"
               port {
                 number = 9000
+              }
+            }
+          }
+        }
+      }
+    }
+
+    rule {
+      host = "jobs.fluentlabs.io"
+      http {
+        path {
+          backend {
+            service {
+              name = "jenkins-operator-http-jenkins"
+              port {
+                number = 8080
               }
             }
           }
