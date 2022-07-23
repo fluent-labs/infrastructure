@@ -95,3 +95,38 @@ resource "kubernetes_role_binding" "jenkins" {
 
   depends_on = [helm_release.jenkins]
 }
+
+resource "kubernetes_persistent_volume" "example" {
+  metadata {
+    name      = "sbt-cache"
+    namespace = "jobs"
+  }
+  spec {
+    capacity = {
+      storage = "5Gi"
+    }
+    access_modes = ["ReadWriteOnce"]
+    persistent_volume_source {
+      csi {
+        driver        = "dobs.csi.digitalocean.com"
+        volume_handle = "jenkins-sbt-cache"
+      }
+    }
+  }
+}
+
+resource "kubernetes_persistent_volume_claim" "sbt" {
+  metadata {
+    name      = "sbt-cache"
+    namespace = "jobs"
+  }
+  spec {
+    access_modes = ["ReadWriteOnce"]
+    resources {
+      requests = {
+        storage = "5Gi"
+      }
+    }
+    volume_name = "sbt_cache"
+  }
+}
