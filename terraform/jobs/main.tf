@@ -112,7 +112,7 @@ resource "kubernetes_persistent_volume" "cache" {
     persistent_volume_source {
       csi {
         driver        = "dobs.csi.digitalocean.com"
-        volume_handle = "jenkins-${each.value}-cache"
+        volume_handle = "${each.value}-cache"
       }
     }
   }
