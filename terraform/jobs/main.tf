@@ -99,7 +99,6 @@ resource "kubernetes_role_binding" "jenkins" {
 resource "kubernetes_persistent_volume" "example" {
   metadata {
     name      = "sbt-cache"
-    namespace = "jobs"
   }
   spec {
     capacity = {
