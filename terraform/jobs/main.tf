@@ -96,28 +96,6 @@ resource "kubernetes_role_binding" "jenkins" {
   depends_on = [helm_release.jenkins]
 }
 
-resource "kubernetes_persistent_volume" "cache" {
-  for_each = toset(var.job_caches)
-
-  metadata {
-    name = "${each.value}-cache"
-  }
-  spec {
-    capacity = {
-      storage = "10Gi"
-    }
-    access_modes       = ["ReadWriteOnce"]
-    storage_class_name = "do-block-storage"
-
-    persistent_volume_source {
-      csi {
-        driver        = "dobs.csi.digitalocean.com"
-        volume_handle = "${each.value}-cache"
-      }
-    }
-  }
-}
-
 resource "kubernetes_persistent_volume_claim" "cache" {
   for_each = toset(var.job_caches)
 
@@ -126,12 +104,13 @@ resource "kubernetes_persistent_volume_claim" "cache" {
     namespace = "jobs"
   }
   spec {
-    access_modes = ["ReadWriteOnce"]
+    access_modes       = ["ReadWriteOnce"]
+    storage_class_name = "do-block-storage"
+
     resources {
       requests = {
         storage = "10Gi"
       }
     }
-    volume_name = "${each.value}-cache"
   }
 }
