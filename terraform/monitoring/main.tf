@@ -9,22 +9,22 @@ resource "helm_release" "metrics_server" {
 # Logging configuration
 # Every node has a log collection agent that posts logs to elasticsearch
 
-resource "helm_release" "sematext_logagent" {
-  name       = "sematext"
-  repository = "https://cdn.sematext.com/helm-charts"
-  chart      = "sematext-agent"
-  version    = "1.0.46"
+# resource "helm_release" "sematext_logagent" {
+#   name       = "sematext"
+#   repository = "https://cdn.sematext.com/helm-charts"
+#   chart      = "sematext-agent"
+#   version    = "1.0.46"
 
-  set {
-    name  = "region"
-    value = "US"
-  }
+#   set {
+#     name  = "region"
+#     value = "US"
+#   }
 
-  set_sensitive {
-    name  = "infraToken"
-    value = var.sematext_index_name
-  }
-}
+#   set_sensitive {
+#     name  = "infraToken"
+#     value = var.sematext_index_name
+#   }
+# }
 
 # Monitoring from Prometheus
 
