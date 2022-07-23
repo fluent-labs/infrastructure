@@ -106,7 +106,9 @@ resource "kubernetes_persistent_volume" "cache" {
     capacity = {
       storage = "10Gi"
     }
-    access_modes = ["ReadWriteOnce"]
+    access_modes       = ["ReadWriteOnce"]
+    storage_class_name = "do-block-storage"
+
     persistent_volume_source {
       csi {
         driver        = "dobs.csi.digitalocean.com"
