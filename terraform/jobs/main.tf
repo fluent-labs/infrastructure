@@ -96,9 +96,11 @@ resource "kubernetes_role_binding" "jenkins" {
   depends_on = [helm_release.jenkins]
 }
 
-resource "kubernetes_persistent_volume" "example" {
+resource "kubernetes_persistent_volume" "cache" {
+  for_each = toset(var.job_caches)
+
   metadata {
-    name = "sbt-cache"
+    name = "${each.value}-cache"
   }
   spec {
     capacity = {
@@ -108,15 +110,17 @@ resource "kubernetes_persistent_volume" "example" {
     persistent_volume_source {
       csi {
         driver        = "dobs.csi.digitalocean.com"
-        volume_handle = "jenkins-sbt-cache"
+        volume_handle = "jenkins-${each.value}-cache"
       }
     }
   }
 }
 
-resource "kubernetes_persistent_volume_claim" "sbt" {
+resource "kubernetes_persistent_volume_claim" "cache" {
+  for_each = toset(var.job_caches)
+
   metadata {
-    name      = "sbt-cache"
+    name      = "${each.value}-cache"
     namespace = "jobs"
   }
   spec {
@@ -126,6 +130,6 @@ resource "kubernetes_persistent_volume_claim" "sbt" {
         storage = "10Gi"
       }
     }
-    volume_name = "sbt_cache"
+    volume_name = "${each.value}-cache"
   }
 }

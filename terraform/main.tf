@@ -116,6 +116,7 @@ module "monitoring" {
 module "jobs" {
   source         = "./jobs"
   job_namespaces = ["content", "jobs"]
+  job_caches     = ["sbt"]
 }
 
 # Ingress
