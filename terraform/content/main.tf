@@ -46,7 +46,7 @@ resource "kubernetes_role" "jenkins" {
 resource "kubernetes_service_account" "jenkins" {
   metadata {
     name      = "jenkins-spark-job"
-    namespace = "default"
+    namespace = "content"
   }
 }
 
