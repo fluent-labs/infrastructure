@@ -10,5 +10,4 @@ jenkins:
     targets: "jobs/*.jenkins"
     description: "Fluentlabs seed jobs"
     repositoryBranch: main
-    repositoryUrl: 
-    - https://github.com/fluent-labs/jenkins.git
+    repositoryUrl: https://github.com/fluent-labs/jenkins.git
