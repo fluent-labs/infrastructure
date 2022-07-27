@@ -19,7 +19,7 @@ resource "kubernetes_role" "jenkins" {
   for_each = toset(var.job_namespaces)
 
   metadata {
-    name      = "jenkins-operator-jenkins"
+    name      = "jenkins-operator-fluentlabs"
     namespace = each.value
   }
 
@@ -79,17 +79,17 @@ resource "kubernetes_role_binding" "jenkins" {
   for_each = toset(var.job_namespaces)
 
   metadata {
-    name      = "jenkins-operator-jenkins"
+    name      = "jenkins-operator-fluentlabs"
     namespace = each.value
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "Role"
-    name      = "jenkins-operator-jenkins"
+    name      = "jenkins-operator-fluentlabs"
   }
   subject {
     kind      = "ServiceAccount"
-    name      = "jenkins-operator-jenkins"
+    name      = "jenkins-operator-fluentlabs"
     namespace = "default"
   }
 
