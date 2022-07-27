@@ -93,7 +93,7 @@ resource "kubernetes_ingress_v1" "ingress" {
         path {
           backend {
             service {
-              name = "jenkins-operator-http-jenkins"
+              name = "jenkins-operator-http-fluentlabs"
               port {
                 number = 8080
               }
