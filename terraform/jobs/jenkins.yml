@@ -1,5 +1,14 @@
 name: fluentlabs
 namespace: jobs
-plugins:
-  - name: kubernetes-cli
-    version: 1.10.3
+jenkins:
+  name: fluentlabs
+  plugins:
+    - name: kubernetes-cli
+      version: 1.10.3
+  seedJobs:
+  - id: jenkins-operator
+    targets: "jobs/*.jenkins"
+    description: "Fluentlabs seed jobs"
+    repositoryBranch: main
+    repositoryUrl: 
+    - https://github.com/fluent-labs/jenkins.git
