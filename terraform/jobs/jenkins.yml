@@ -2,6 +2,9 @@ name: fluentlabs
 namespace: jobs
 jenkins:
   name: fluentlabs
+  configurationAsCode:
+    configurations: 
+    - name: jenkins-operator-user-configuration
   plugins:
     - name: kubernetes-cli
       version: 1.10.3

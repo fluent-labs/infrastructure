@@ -1,0 +1,7 @@
+security:
+  scriptApproval:
+    approvedSignatures:
+    - "method groovy.lang.GroovyObject getProperty java.lang.String"
+    - "method groovy.util.XmlSlurper parseText java.lang.String"
+    - "method groovy.util.slurpersupport.GPathResult text"
+    - "new groovy.util.XmlSlurper"
