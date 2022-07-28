@@ -15,6 +15,16 @@ resource "helm_release" "jenkins" {
   depends_on = [kubernetes_namespace.jobs]
 }
 
+resource "kubernetes_config_map" "jenkins" {
+  metadata {
+    name = "jenkins-config-as-code"
+  }
+
+  data = {
+    "1-jenkins-config.yaml" = file("${path.module}/jenkins.yml")
+  }
+}
+
 resource "kubernetes_role" "jenkins" {
   for_each = toset(var.job_namespaces)
 
