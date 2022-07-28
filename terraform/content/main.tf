@@ -63,7 +63,7 @@ resource "kubernetes_role_binding" "jenkins" {
   subject {
     kind      = "ServiceAccount"
     name      = "jenkins-spark-job"
-    namespace = "default"
+    namespace = "content"
   }
 }
 
