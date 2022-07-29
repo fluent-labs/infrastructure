@@ -1,10 +1,10 @@
 apiVersion: kibana.k8s.elastic.co/v1
 kind: Kibana
 metadata:
-  name: kibana
+  name: monitoring
   namespace: default
 spec:
-  version: 7.10.1
+  version: 8.3.3
   count: 1
   elasticsearchRef:
     name: elastic
@@ -12,6 +12,3 @@ spec:
     tls:
       certificate:
         secretName: nginx-certificate
-    service:
-      spec:
-        type: LoadBalancer 

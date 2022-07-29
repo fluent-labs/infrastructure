@@ -179,3 +179,10 @@ resource "aws_acm_certificate" "cert" {
     create_before_destroy = true
   }
 }
+
+// Shared between elasticsearch and monitoring module
+resource "kubernetes_namespace" "monitoring" {
+  metadata {
+    name = "monitoring"
+  }
+}

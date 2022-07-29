@@ -2,21 +2,18 @@ apiVersion: elasticsearch.k8s.elastic.co/v1
 kind: Elasticsearch
 metadata:
   name: elastic
-  namespace: default
+  namespace: monitoring
 spec:
-  version: 7.10.1
+  version: 8.3.3
   auth:
     roles:
     - secretName: elasticsearch-roles
-  secureSettings:
-  - secretName: elasticsearch-s3-creds
+  # secureSettings:
+  # - secretName: elasticsearch-s3-creds
   http:
     tls:
       certificate:
         secretName: nginx-certificate
-    service:
-      spec:
-        type: LoadBalancer 
   nodeSets:
   - name: elastic
     count: 1
@@ -42,5 +39,5 @@ spec:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 100Gi
+            storage: 50Gi
         storageClassName: do-block-storage
