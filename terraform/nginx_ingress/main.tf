@@ -30,7 +30,7 @@ data "kubernetes_service" "nginx" {
 }
 
 resource "kubernetes_secret" "nginx_certificate" {
-  for_each = toset(locals.certificate_namespaces)
+  for_each = toset(local.certificate_namespaces)
   metadata {
     name      = "nginx-certificate"
     namespace = each.value
