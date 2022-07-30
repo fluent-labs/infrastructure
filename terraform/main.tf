@@ -98,6 +98,12 @@ module "content" {
   source = "./content"
 }
 
+# Contains logging and monitoring configuration
+module "monitoring" {
+  source              = "./monitoring"
+  sematext_index_name = var.sematext_index_name
+}
+
 # Workflow orchestration
 module "jobs" {
   source         = "./jobs"
