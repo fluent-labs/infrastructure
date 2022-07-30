@@ -7,6 +7,10 @@ terraform {
   }
 }
 
+locals {
+  certificate_namespaces = concat([var.namespace], var.additional_certificate_namespaces)
+}
+
 resource "helm_release" "nginx_ingress" {
   name       = "nginx-ingress"
   repository = "https://helm.nginx.com/stable"
@@ -26,9 +30,10 @@ data "kubernetes_service" "nginx" {
 }
 
 resource "kubernetes_secret" "nginx_certificate" {
+  for_each = toset(local.certificate_namespaces)
   metadata {
     name      = "nginx-certificate"
-    namespace = var.namespace
+    namespace = each.value
   }
 
   data = {
