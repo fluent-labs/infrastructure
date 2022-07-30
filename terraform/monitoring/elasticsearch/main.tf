@@ -16,17 +16,17 @@ resource "helm_release" "elasticsearch" {
   version    = "2.3.0"
 }
 
-# resource "kubernetes_manifest" "elasticsearch" {
-#   manifest = yamldecode(file("${path.module}/elasticsearch.yml"))
+resource "kubernetes_manifest" "elasticsearch" {
+  manifest = yamldecode(file("${path.module}/elasticsearch.yml"))
 
-#   depends_on = [helm_release.elasticsearch]
-# }
+  depends_on = [helm_release.elasticsearch]
+}
 
-# resource "kubernetes_manifest" "kibana" {
-#   manifest = yamldecode(file("${path.module}/kibana.yml"))
+resource "kubernetes_manifest" "kibana" {
+  manifest = yamldecode(file("${path.module}/kibana.yml"))
 
-#   depends_on = [helm_release.elasticsearch]
-# }
+  depends_on = [helm_release.elasticsearch]
+}
 
 # Role configuration can be file based
 
