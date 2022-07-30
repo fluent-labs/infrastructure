@@ -118,7 +118,7 @@ module "jobs" {
 module "nginx_ingress" {
   source          = "./nginx_ingress"
   domain          = aws_route53_zone.main.name
-  subdomains      = ["api", "jobs"]
+  subdomains      = ["api", "jobs", "logs"]
   private_key_pem = acme_certificate.certificate_fluent_labs.private_key_pem
   certificate_pem = acme_certificate.certificate_fluent_labs.certificate_pem
   issuer_pem      = acme_certificate.certificate_fluent_labs.issuer_pem

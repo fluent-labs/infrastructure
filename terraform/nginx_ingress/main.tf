@@ -107,5 +107,21 @@ resource "kubernetes_ingress_v1" "ingress" {
         }
       }
     }
+
+    rule {
+      host = "logs.fluentlabs.io"
+      http {
+        path {
+          backend {
+            service {
+              name = "kibana-kb-http"
+              port {
+                number = 5601
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
