@@ -6,6 +6,17 @@ resource "helm_release" "metrics_server" {
   version    = "3.8.2"
 }
 
+// Shared between elasticsearch and monitoring module
+resource "kubernetes_namespace" "monitoring" {
+  metadata {
+    name = "monitoring"
+  }
+}
+
+module "elasticsearch" {
+  source = "./elasticsearch"
+}
+
 # Logging configuration
 # Every node has a log collection agent that posts logs to elasticsearch
 

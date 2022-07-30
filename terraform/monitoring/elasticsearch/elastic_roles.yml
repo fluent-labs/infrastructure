@@ -1,26 +1,26 @@
-api_qa:
-  run_as: []
-  cluster: []
-  indices:
-  - names: [ 'attempts', 'definitions-qa' ]
-    privileges:
-    - "index"
-    - "delete"
-    - "read"
-    - "write"
-    - "view_index_metadata"
+# api_qa:
+#   run_as: []
+#   cluster: []
+#   indices:
+#   - names: [ 'attempts', 'definitions-qa' ]
+#     privileges:
+#     - "index"
+#     - "delete"
+#     - "read"
+#     - "write"
+#     - "view_index_metadata"
 
-api_prod:
-  run_as: []
-  cluster: []
-  indices:
-  - names: [ 'attempts', 'definitions-default', 'definitions-prod' ]
-    privileges:
-    - "index"
-    - "delete"
-    - "read"
-    - "write"
-    - "view_index_metadata"
+# api_prod:
+#   run_as: []
+#   cluster: []
+#   indices:
+#   - names: [ 'attempts', 'definitions-default', 'definitions-prod' ]
+#     privileges:
+#     - "index"
+#     - "delete"
+#     - "read"
+#     - "write"
+#     - "view_index_metadata"
 
 fluentd:
   run_as: []
