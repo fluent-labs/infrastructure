@@ -17,6 +17,36 @@ module "elasticsearch" {
   source = "./elasticsearch"
 }
 
+resource "kubernetes_ingress_v1" "ingress" {
+  metadata {
+    name      = "monitoring-ingress"
+    namespace = "monitoring"
+
+    annotations = {
+      "kubernetes.io/ingress.class"             = "nginx"
+      "nginx.ingress.kubernetes.io/enable-cors" = "true"
+    }
+  }
+
+  spec {
+    rule {
+      host = "logs.fluentlabs.io"
+      http {
+        path {
+          backend {
+            service {
+              name = "kibana-kb-http"
+              port {
+                number = 5601
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 # Logging configuration
 # Every node has a log collection agent that posts logs to elasticsearch
 
