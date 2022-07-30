@@ -18,9 +18,6 @@ spec:
   - name: elastic
     count: 1
     config:
-      node.master: true
-      node.data: true
-      node.ingest: true
       node.store.allow_mmap: false
     podTemplate:
       spec:
