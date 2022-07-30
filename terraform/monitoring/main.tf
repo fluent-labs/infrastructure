@@ -23,8 +23,9 @@ resource "kubernetes_ingress_v1" "ingress" {
     namespace = "monitoring"
 
     annotations = {
-      "kubernetes.io/ingress.class"             = "nginx"
-      "nginx.ingress.kubernetes.io/enable-cors" = "true"
+      "kubernetes.io/ingress.class"                 = "nginx"
+      "nginx.ingress.kubernetes.io/enable-cors"     = "true"
+      "nginx.ingress.kubernetes.io/ssl-passthrough" = "true"
     }
   }
 
