@@ -40,6 +40,34 @@ resource "kubernetes_secret" "elasticsearch_roles" {
   }
 }
 
+resource "kubernetes_ingress_v1" "ingress" {
+  metadata {
+    name = "elastic-ingress"
+    annotations = {
+      "kubernetes.io/ingress.class"             = "nginx"
+      "nginx.ingress.kubernetes.io/enable-cors" = "true"
+    }
+  }
+
+  spec {
+    rule {
+      host = "logs.fluentlabs.io"
+      http {
+        path {
+          backend {
+            service {
+              name = "kibana-kb-http"
+              port {
+                number = 5601
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 // Configure elasticsearch after it's been created
 // In the same way that we provision kubernetes and then configure it in a submodule
 // This way we can guarantee that it's been created before we try to use it.
