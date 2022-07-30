@@ -8,7 +8,7 @@ terraform {
 }
 
 locals {
-  certificate_namespaces = concat([var.namespace] + var.additional_certificate_namespaces)
+  certificate_namespaces = concat([var.namespace], var.additional_certificate_namespaces)
 }
 
 resource "helm_release" "nginx_ingress" {
