@@ -98,20 +98,6 @@ module "content" {
   source = "./content"
 }
 
-# module "elasticsearch" {
-#   source           = "./elasticsearch"
-#   domain           = digitalocean_domain.fluentlabs.name
-#   api_password     = module.api.elasticsearch_password
-#   fluentd_password = module.monitoring.fluentd_password
-#   spark_password   = module.content.elasticsearch_password
-# }
-
-# Contains logging and monitoring configuration
-module "monitoring" {
-  source              = "./monitoring"
-  sematext_index_name = var.sematext_index_name
-}
-
 # Workflow orchestration
 module "jobs" {
   source         = "./jobs"
@@ -177,12 +163,5 @@ resource "aws_acm_certificate" "cert" {
 
   lifecycle {
     create_before_destroy = true
-  }
-}
-
-// Shared between elasticsearch and monitoring module
-resource "kubernetes_namespace" "monitoring" {
-  metadata {
-    name = "monitoring"
   }
 }
