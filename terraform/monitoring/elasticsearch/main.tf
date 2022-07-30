@@ -16,17 +16,17 @@ resource "helm_release" "elasticsearch" {
   version    = "2.3.0"
 }
 
-resource "kubernetes_manifest" "elasticsearch" {
-  manifest = yamldecode(file("${path.module}/elasticsearch.yml"))
+# resource "kubernetes_manifest" "elasticsearch" {
+#   manifest = yamldecode(file("${path.module}/elasticsearch.yml"))
 
-  depends_on = [helm_release.elasticsearch]
-}
+#   depends_on = [helm_release.elasticsearch]
+# }
 
-resource "kubernetes_manifest" "kibana" {
-  manifest = yamldecode(file("${path.module}/kibana.yml"))
+# resource "kubernetes_manifest" "kibana" {
+#   manifest = yamldecode(file("${path.module}/kibana.yml"))
 
-  depends_on = [helm_release.elasticsearch]
-}
+#   depends_on = [helm_release.elasticsearch]
+# }
 
 # Role configuration can be file based
 
@@ -43,11 +43,11 @@ resource "kubernetes_secret" "elasticsearch_roles" {
 // Configure elasticsearch after it's been created
 // In the same way that we provision kubernetes and then configure it in a submodule
 // This way we can guarantee that it's been created before we try to use it.
-module "elasticsearch_config" {
-  source = "./elasticsearch_config"
+# module "elasticsearch_config" {
+#   source = "./elasticsearch_config"
 
-  depends_on = [kubernetes_manifest.elasticsearch, kubernetes_manifest.kibana]
-}
+#   depends_on = [kubernetes_manifest.elasticsearch, kubernetes_manifest.kibana]
+# }
 
 # Backups in S3
 
