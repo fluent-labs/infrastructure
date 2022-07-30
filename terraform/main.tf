@@ -123,6 +123,8 @@ module "nginx_ingress" {
   certificate_pem = acme_certificate.certificate_fluent_labs.certificate_pem
   issuer_pem      = acme_certificate.certificate_fluent_labs.issuer_pem
   namespace       = "default"
+
+  additional_certificate_namespaces = ["monitoring"]
 }
 
 

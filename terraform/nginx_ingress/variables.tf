@@ -15,3 +15,7 @@ variable "issuer_pem" {}
 variable "namespace" {
   description = "The kubernetes namespace to install in"
 }
+
+variable "additional_certificate_namespaces" {
+  description = "Additional namespaces to make the fluentlabs certificate available in."
+}
