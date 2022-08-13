@@ -61,16 +61,9 @@ resource "digitalocean_kubernetes_cluster" "prod" {
 
   node_pool {
     name       = "default"
-    size       = "s-2vcpu-4gb"
+    size       = "s-4vcpu-8gb"
     auto_scale = true
     min_nodes  = 1
     max_nodes  = 5
-  }
-
-
-  node_pool {
-    name       = "high-memory"
-    size       = "s-4vcpu-8gb"
-    node_count = 2
   }
 }
