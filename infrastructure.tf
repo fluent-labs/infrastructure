@@ -66,4 +66,11 @@ resource "digitalocean_kubernetes_cluster" "prod" {
     min_nodes  = 1
     max_nodes  = 5
   }
+
+
+  node_pool {
+    name       = "high-memory"
+    size       = "s-4vcpu-8gb"
+    node_count = 2
+  }
 }
