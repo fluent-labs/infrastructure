@@ -26,6 +26,9 @@ resource "helm_release" "spark" {
   chart      = "spark-operator"
   version    = "1.1.25"
   values     = [file("${path.module}/spark.yml")]
+
+  # Need to delete this before deleting the namespace or else deletion will fail.
+  depends_on = [kubernetes_namespace.content]
 }
 
 # Service user for jenkins to launch content jobs
