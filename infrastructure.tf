@@ -36,34 +36,34 @@ provider "aws" {
 
 variable "sematext_index_name" {}
 
-module "infrastructure" {
-  source              = "./terraform"
-  cluster_name        = digitalocean_kubernetes_cluster.prod.name
-  digitalocean_token  = var.digitalocean_token
-  sematext_index_name = var.sematext_index_name
-}
+# module "infrastructure" {
+#   source              = "./terraform"
+#   cluster_name        = digitalocean_kubernetes_cluster.prod.name
+#   digitalocean_token  = var.digitalocean_token
+#   sematext_index_name = var.sematext_index_name
+# }
 
 # Held here so that Helm and K8s providers can be initialized to work on this cluster
 data "digitalocean_kubernetes_versions" "kubernetes_1_22" {
   version_prefix = "1.22."
 }
 
-resource "digitalocean_kubernetes_cluster" "prod" {
-  name         = "prod"
-  region       = "lon1"
-  auto_upgrade = true
-  version      = data.digitalocean_kubernetes_versions.kubernetes_1_22.latest_version
+# resource "digitalocean_kubernetes_cluster" "prod" {
+#   name         = "prod"
+#   region       = "lon1"
+#   auto_upgrade = true
+#   version      = data.digitalocean_kubernetes_versions.kubernetes_1_22.latest_version
 
-  maintenance_policy {
-    start_time = "04:00"
-    day        = "sunday"
-  }
+#   maintenance_policy {
+#     start_time = "04:00"
+#     day        = "sunday"
+#   }
 
-  node_pool {
-    name       = "default"
-    size       = "s-4vcpu-8gb"
-    auto_scale = true
-    min_nodes  = 1
-    max_nodes  = 5
-  }
-}
+#   node_pool {
+#     name       = "default"
+#     size       = "s-4vcpu-8gb"
+#     auto_scale = true
+#     min_nodes  = 1
+#     max_nodes  = 5
+#   }
+# }
