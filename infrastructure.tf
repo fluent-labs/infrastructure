@@ -44,15 +44,15 @@ module "infrastructure" {
 }
 
 # Held here so that Helm and K8s providers can be initialized to work on this cluster
-data "digitalocean_kubernetes_versions" "kubernetes_1_22" {
-  version_prefix = "1.22."
+data "digitalocean_kubernetes_versions" "kubernetes_1_24" {
+  version_prefix = "1.24."
 }
 
 resource "digitalocean_kubernetes_cluster" "prod" {
   name         = "prod"
   region       = "lon1"
   auto_upgrade = true
-  version      = data.digitalocean_kubernetes_versions.kubernetes_1_22.latest_version
+  version      = data.digitalocean_kubernetes_versions.kubernetes_1_24.latest_version
 
   maintenance_policy {
     start_time = "04:00"
