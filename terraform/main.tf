@@ -94,38 +94,38 @@ module "frontend_preprod_fluent_labs" {
 # Should also have job triggers
 # And potentially example sentences in the future
 
-module "content" {
-  source = "./content"
-}
+# module "content" {
+#   source = "./content"
+# }
 
 # Contains logging and monitoring configuration
-module "monitoring" {
-  source              = "./monitoring"
-  sematext_index_name = var.sematext_index_name
-}
+# module "monitoring" {
+#   source              = "./monitoring"
+#   sematext_index_name = var.sematext_index_name
+# }
 
 # Workflow orchestration
-module "jobs" {
-  source         = "./jobs"
-  job_namespaces = ["content", "jobs"]
-  job_caches     = ["sbt"]
-}
+# module "jobs" {
+#   source         = "./jobs"
+#   job_namespaces = ["content", "jobs"]
+#   job_caches     = ["sbt"]
+# }
 
 # Ingress
 # Handles traffic going in to the cluster
 # Proxies everything through a load balancer and nginx
 
-module "nginx_ingress" {
-  source          = "./nginx_ingress"
-  domain          = aws_route53_zone.main.name
-  subdomains      = ["api", "jobs", "logs"]
-  private_key_pem = acme_certificate.certificate_fluent_labs.private_key_pem
-  certificate_pem = acme_certificate.certificate_fluent_labs.certificate_pem
-  issuer_pem      = acme_certificate.certificate_fluent_labs.issuer_pem
-  namespace       = "default"
+# module "nginx_ingress" {
+#   source          = "./nginx_ingress"
+#   domain          = aws_route53_zone.main.name
+#   subdomains      = ["api", "jobs", "logs"]
+#   private_key_pem = acme_certificate.certificate_fluent_labs.private_key_pem
+#   certificate_pem = acme_certificate.certificate_fluent_labs.certificate_pem
+#   issuer_pem      = acme_certificate.certificate_fluent_labs.issuer_pem
+#   namespace       = "default"
 
-  additional_certificate_namespaces = ["monitoring"]
-}
+#   additional_certificate_namespaces = ["monitoring"]
+# }
 
 
 # Shared resources for the cluster go down here.
